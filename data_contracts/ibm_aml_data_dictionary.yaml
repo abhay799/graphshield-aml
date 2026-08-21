@@ -1,0 +1,64 @@
+dataset:
+  name: IBM AML LI-Small
+  file: LI-Small_Trans.csv
+  purpose: Synthetic transaction data for AML research and portfolio development
+
+columns:
+
+  Timestamp:
+    role: feature
+    semantic_type: transaction_timestamp
+    description: Time at which the transaction occurred
+
+  From Bank:
+    role: feature
+    semantic_type: sender_bank
+    description: Bank associated with the sending account
+
+  Account:
+    role: feature
+    semantic_type: sender_account
+    description: Account from which funds are sent
+
+  To Bank:
+    role: feature
+    semantic_type: receiver_bank
+    description: Bank associated with the receiving account
+
+  Account_duplicated_0:
+    role: feature
+    semantic_type: receiver_account
+    description: Account receiving the funds
+
+  Amount Received:
+    role: feature
+    semantic_type: monetary_amount
+    description: Amount received by the destination
+
+  Receiving Currency:
+    role: feature
+    semantic_type: currency
+    description: Currency in which funds are received
+
+  Amount Paid:
+    role: feature
+    semantic_type: monetary_amount
+    description: Amount paid by the sender
+
+  Payment Currency:
+    role: feature
+    semantic_type: currency
+    description: Currency used by the sender
+
+  Payment Format:
+    role: feature
+    semantic_type: payment_channel
+    description: Method or format used for the payment
+
+  Is Laundering:
+    role: target
+    semantic_type: binary_label
+    description: Synthetic laundering label
+    values:
+      0: non_laundering
+      1: laundering
