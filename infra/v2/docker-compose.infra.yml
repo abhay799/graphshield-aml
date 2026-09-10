@@ -156,6 +156,23 @@ services:
     networks:
       - graphshield-v2
 
+  neo4j:
+    image: neo4j:5-community
+    container_name: graphshield-neo4j
+    profiles: ["graph"]
+    environment:
+      NEO4J_AUTH: neo4j/${GS_NEO4J_PASSWORD}
+      NEO4J_server_memory_heap_initial__size: 256m
+      NEO4J_server_memory_heap_max__size: 512m
+      NEO4J_server_memory_pagecache_size: 256m
+    ports:
+      - "127.0.0.1:7474:7474"
+      - "127.0.0.1:7687:7687"
+    volumes:
+      - graphshield-neo4j-data:/data
+    networks:
+      - graphshield-v2
+
 volumes:
   graphshield-redis-data:
   graphshield-redpanda-data:
@@ -164,3 +181,4 @@ volumes:
   graphshield-prometheus-data:
   graphshield-grafana-data:
   graphshield-keycloak-data:
+  graphshield-neo4j-data:
