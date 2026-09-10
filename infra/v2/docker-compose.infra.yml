@@ -140,6 +140,22 @@ services:
     depends_on:
       - prometheus
 
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.7.2
+    container_name: graphshield-keycloak
+    profiles: ["security"]
+    command: ["start-dev"]
+    environment:
+      KC_BOOTSTRAP_ADMIN_USERNAME: ${GS_KEYCLOAK_ADMIN}
+      KC_BOOTSTRAP_ADMIN_PASSWORD: ${GS_KEYCLOAK_ADMIN_PASSWORD}
+      KC_HEALTH_ENABLED: "true"
+    ports:
+      - "127.0.0.1:8080:8080"
+    volumes:
+      - graphshield-keycloak-data:/opt/keycloak/data
+    networks:
+      - graphshield-v2
+
 volumes:
   graphshield-redis-data:
   graphshield-redpanda-data:
@@ -147,3 +163,4 @@ volumes:
   graphshield-mlflow-db:
   graphshield-prometheus-data:
   graphshield-grafana-data:
+  graphshield-keycloak-data:
