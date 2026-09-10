@@ -1,0 +1,10 @@
+profile: tgn_full
+seed: 42
+device: auto
+env:
+  GS_TGN_MAX_TRAIN_EVENTS: 0
+  GS_TGN_MAX_VAL_EVENTS: 0
+  GS_TGN_MAX_TEST_EVENTS: 0
+  GS_TGN_EPOCHS: 10
+  GS_TGN_PATIENCE: 3
+  GS_TGN_LR: 0.001

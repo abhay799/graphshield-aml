@@ -1,0 +1,10 @@
+profile: tgn_smoke
+seed: 42
+device: auto
+env:
+  GS_TGN_MAX_TRAIN_EVENTS: 50000
+  GS_TGN_MAX_VAL_EVENTS: 10000
+  GS_TGN_MAX_TEST_EVENTS: 10000
+  GS_TGN_EPOCHS: 1
+  GS_TGN_PATIENCE: 1
+  GS_TGN_LR: 0.001
