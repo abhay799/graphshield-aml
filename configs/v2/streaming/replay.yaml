@@ -1,0 +1,20 @@
+source: data/processed/silver/transactions.parquet
+bootstrap_servers: 127.0.0.1:19092
+topic: graphshield.transactions.v1
+ordering:
+  - event_ts
+  - source_row_number
+  - transaction_id
+checkpoint_every: 10000
+producer_batch_size: 1000
+modes:
+  1x:
+    speed_factor: 1
+  10x:
+    speed_factor: 10
+  100x:
+    speed_factor: 100
+  burst:
+    speed_factor: 0
+excluded_event_fields:
+  - is_laundering
