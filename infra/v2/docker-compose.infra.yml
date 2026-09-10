@@ -1,0 +1,114 @@
+name: graphshield-v2-infra
+
+networks:
+  graphshield-v2:
+    name: graphshield-v2
+
+services:
+  redis:
+    image: redis:7.4-alpine
+    container_name: graphshield-redis
+    command: ["redis-server","--appendonly","yes"]
+    profiles: ["online","streaming"]
+    ports:
+      - "127.0.0.1:6379:6379"
+    volumes:
+      - graphshield-redis-data:/data
+    networks:
+      - graphshield-v2
+    healthcheck:
+      test: ["CMD","redis-cli","ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redpanda:
+    image: docker.redpanda.com/redpandadata/redpanda:v26.2.2
+    container_name: graphshield-redpanda
+    profiles: ["streaming"]
+    command:
+      - redpanda
+      - start
+      - --kafka-addr
+      - internal://0.0.0.0:9092,external://0.0.0.0:19092
+      - --advertise-kafka-addr
+      - internal://redpanda:9092,external://localhost:19092
+      - --rpc-addr
+      - redpanda:33145
+      - --advertise-rpc-addr
+      - redpanda:33145
+      - --mode
+      - dev-container
+      - --smp
+      - "1"
+    ports:
+      - "127.0.0.1:19092:19092"
+      - "127.0.0.1:19644:9644"
+    volumes:
+      - graphshield-redpanda-data:/var/lib/redpanda/data
+    networks:
+      - graphshield-v2
+    healthcheck:
+      test: ["CMD-SHELL","rpk cluster health | grep -E 'Healthy:.+true' || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 8
+
+  minio:
+    image: minio/minio:latest
+    container_name: graphshield-minio
+    profiles: ["mlops"]
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: ${GS_MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${GS_MINIO_ROOT_PASSWORD}
+    ports:
+      - "127.0.0.1:9000:9000"
+      - "127.0.0.1:9001:9001"
+    volumes:
+      - graphshield-minio-data:/data
+    networks:
+      - graphshield-v2
+    healthcheck:
+      test: ["CMD","curl","-f","http://localhost:9000/minio/health/live"]
+      interval: 15s
+      timeout: 5s
+      retries: 8
+
+  mlflow:
+    build:
+      context: ../..
+      dockerfile: infra/v2/mlflow.Dockerfile
+    image: graphshield-mlflow:v2
+    container_name: graphshield-mlflow
+    profiles: ["mlops"]
+    environment:
+      AWS_ACCESS_KEY_ID: ${GS_MINIO_ROOT_USER}
+      AWS_SECRET_ACCESS_KEY: ${GS_MINIO_ROOT_PASSWORD}
+      MLFLOW_S3_ENDPOINT_URL: http://minio:9000
+    command:
+      - mlflow
+      - server
+      - --host
+      - 0.0.0.0
+      - --port
+      - "5000"
+      - --backend-store-uri
+      - sqlite:////mlflow/db/mlflow.db
+      - --artifacts-destination
+      - s3://graphshield-mlflow-artifacts
+    ports:
+      - "127.0.0.1:5000:5000"
+    volumes:
+      - graphshield-mlflow-db:/mlflow/db
+    depends_on:
+      minio:
+        condition: service_healthy
+    networks:
+      - graphshield-v2
+
+volumes:
+  graphshield-redis-data:
+  graphshield-redpanda-data:
+  graphshield-minio-data:
+  graphshield-mlflow-db:
