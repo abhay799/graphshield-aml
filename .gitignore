@@ -5,3 +5,65 @@ __pycache__/
 .env
 data/raw/
 data/processed/
+
+
+# Virtual environment
+.venv/
+
+# Python
+__pycache__/
+*.pyc
+
+# Raw datasets
+data/raw/*
+
+# Processed datasets
+data/processed/*
+
+# Keep folder structure
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+
+# Environment secrets
+.env
+
+# IDE
+.vscode/
+
+# OS
+Thumbs.db
+
+# Logs
+*.log
+# GraphShield runtime/data artifacts
+data/**
+!data/.gitkeep
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+
+# Trained model artifacts
+models/**
+!models/.gitkeep
+
+# Mutable analyst state
+*.sqlite
+*.db
+
+# Model/checkpoint binaries
+*.joblib
+*.pkl
+*.pickle
+*.cbm
+*.pt
+*.pth
+*.onnx
+
+# Development backup / recovery files
+**/*_before_*
+**/*_backup.*
+**/*_stale_*
+**/*.bak
+**/*.pre_*
+
+# Runtime reports/log state
+reports/phase7_runtime/

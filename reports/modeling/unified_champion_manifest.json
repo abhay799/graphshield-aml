@@ -1,0 +1,15 @@
+{
+  "model_name": "lightgbm_graph",
+  "selection_source": "reports/modeling/tgn_hybrid_fusion.json",
+  "selected_on_split": "validation",
+  "selection_metric": "average_precision",
+  "test_used_for_selection": false,
+  "prediction_artifact": "data/processed/modeling/graph_ablation_test_predictions.parquet",
+  "queue_capacity_fraction": 0.01,
+  "purpose": "analyst investigation prioritization only",
+  "autonomous_regulatory_action": false,
+  "created_at_utc": "2026-09-09T10:02:51.898203+00:00",
+  "prediction_split": "test",
+  "score_column": "graph_score",
+  "selected_validation_average_precision": 0.0230150388548912
+}

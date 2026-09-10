@@ -1,0 +1,8 @@
+{
+  "strategy": "chronological",
+  "target_train_fraction": 0.7,
+  "target_validation_fraction": 0.15,
+  "target_test_fraction": 0.15,
+  "train_cutoff_int": 1662562500000000,
+  "validation_cutoff_int": 1662693360000000
+}

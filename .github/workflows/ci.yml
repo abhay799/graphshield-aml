@@ -1,0 +1,50 @@
+name: GraphShield AML CI
+
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+    branches: [master, main]
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install lightweight CI dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install pytest pyyaml
+
+      - name: Compile source
+        run: python -m compileall -q src tests
+
+      - name: Validate Python syntax
+        run: |
+          python -m py_compile src/api/app.py
+          python -m py_compile src/api/observability.py
+          python -m py_compile src/services/graphshield_service.py
+          python -m py_compile src/services/case_intelligence.py
+
+      - name: Validate repository safety
+        run: |
+          test ! -f .env
+          test ! -d .venv
+          echo 'Repository safety checks passed'
+
+      - name: Validate Docker Compose
+        run: docker compose config
+
+      - name: Show test inventory
+        run: find tests -maxdepth 1 -name 'test_*.py' -print
+
+      - name: CI summary
+        run: echo 'GraphShield AML CI validation passed'

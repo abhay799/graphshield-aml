@@ -1,0 +1,80 @@
+model_features:
+  numerical:
+    - hour_of_day
+    - day_of_week
+    - is_weekend
+    - cross_bank
+    - cross_currency
+
+    - amount_paid
+    - amount_received
+    - log_amount_paid
+    - log_amount_received
+
+    - sender_prior_tx_count
+    - sender_prior_amount_sum
+    - sender_prior_amount_avg
+    - sender_seconds_since_previous
+
+    - receiver_prior_tx_count
+    - receiver_prior_amount_sum
+    - receiver_prior_amount_avg
+    - receiver_seconds_since_previous
+
+    - sender_tx_count_1h
+    - sender_tx_count_24h
+    - sender_tx_count_7d
+
+    - receiver_tx_count_1h
+    - receiver_tx_count_24h
+    - receiver_tx_count_7d
+
+    - sender_unique_receivers_1h
+    - sender_unique_receivers_24h
+    - sender_unique_receivers_7d
+
+    - receiver_unique_senders_1h
+    - receiver_unique_senders_24h
+    - receiver_unique_senders_7d
+
+    - sender_fanout_ratio_1h
+    - sender_fanout_ratio_24h
+    - receiver_fanin_ratio_1h
+    - receiver_fanin_ratio_24h
+
+    - new_receiver_for_sender
+    - new_sender_for_receiver
+
+    - sender_recent_inbound_count_1h
+    - sender_recent_inbound_count_24h
+    - recent_inbound_coverage_1h
+    - seconds_since_last_inbound_1h
+    - rapid_pass_through_candidate
+
+  categorical:
+    - payment_format
+    - payment_currency
+    - receiving_currency
+
+context_only:
+  - transaction_id
+  - event_ts
+  - from_bank
+  - from_account
+  - from_account_key
+  - to_bank
+  - to_account
+  - to_account_key
+
+target:
+  - is_laundering
+
+prohibited_from_model:
+  - rule_high_velocity
+  - rule_rapid_fan_out
+  - rule_rapid_fan_in
+  - rule_rapid_pass_through
+  - rule_hit_count
+  - any_rule_hit
+  - sender_receiver_first_seen_ts
+  - receiver_sender_first_seen_ts

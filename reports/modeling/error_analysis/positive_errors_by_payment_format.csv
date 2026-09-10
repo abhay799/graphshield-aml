@@ -1,0 +1,5 @@
+payment_format,operational_outcome,transactions
+ACH,missed_positive,29
+Cheque,missed_positive,2
+Credit Card,missed_positive,1
+Cash,missed_positive,1

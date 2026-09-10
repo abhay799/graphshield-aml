@@ -1,0 +1,190 @@
+{
+  "project": "GraphShield AML",
+  "phase": 7,
+  "created_at_utc": "2026-09-09T14:39:22.472546+00:00",
+  "status": "CERTIFIED",
+  "certification_scope": "Full Integration & Analyst Workbench",
+  "phase1_6": {
+    "status": "CERTIFIED",
+    "freeze_record": "reports/final/phases_1_6_artifact_freeze.json",
+    "artifact_count": 29,
+    "all_frozen_artifacts_reverified": true,
+    "artifacts_modified_by_phase7": false
+  },
+  "phase7_capabilities": {
+    "read_only_graphshield_service": true,
+    "fastapi_backend": true,
+    "streamlit_analyst_workbench": true,
+    "prioritized_case_queue": true,
+    "investigation_snapshot": true,
+    "interactive_case_graph": true,
+    "case_evidence_retrieval": true,
+    "authoritative_policy_retrieval": true,
+    "unified_case_intelligence": true,
+    "analyst_review_state": true,
+    "analyst_notes": true,
+    "append_only_audit_events": true,
+    "governance_controls": true
+  },
+  "investigation_scope": {
+    "authoritative_queue_cases": 7617,
+    "queue_capacity_fraction": 0.01,
+    "eager_materialized_cases": 374,
+    "remaining_cases": 7243,
+    "remaining_case_strategy": "on-demand investigation materialization"
+  },
+  "governance": {
+    "mode": "decision_support_only",
+    "human_review_required": true,
+    "autonomous_account_blocking": false,
+    "autonomous_case_closure": false,
+    "autonomous_regulatory_filing": false,
+    "phase1_6_artifacts": "read_only"
+  },
+  "step125_audit": {
+    "path": "reports/phase7/phase7_integration_audit.json",
+    "all_passed": true,
+    "gates": {
+      "health": true,
+      "governance": true,
+      "queue": true,
+      "case_lookup": true,
+      "investigation_snapshot": true,
+      "case_graph": true,
+      "case_evidence": true,
+      "policy_retrieval": true,
+      "unified_case_intelligence": true,
+      "analyst_state_write": true,
+      "analyst_state_persistence": true,
+      "audit_trail": true,
+      "invalid_state_rejection": true,
+      "unknown_case_rejection": true,
+      "request_validation": true,
+      "phase1_6_freeze_present": true,
+      "operational_state_separation": true
+    }
+  },
+  "phase7_artifacts": {
+    "graphshield_service": {
+      "path": "src/services/graphshield_service.py",
+      "sha256": "a400d4daf46ecc5fe11df3be0f9cc515bcb1aa7d94e2ef81f7ee53a290ee97bb",
+      "size_bytes": 7857,
+      "modified_utc": "2026-09-09T11:05:10.462021+00:00",
+      "classification": "phase7_authoritative_code_or_report"
+    },
+    "analyst_state_service": {
+      "path": "src/services/analyst_state.py",
+      "sha256": "f0994bdfe44f8baa08866873a68b8dd5d7699f9f647d41ad11daf31250d01cf2",
+      "size_bytes": 8258,
+      "modified_utc": "2026-09-09T11:13:40.952049+00:00",
+      "classification": "phase7_authoritative_code_or_report"
+    },
+    "case_graph_service": {
+      "path": "src/services/case_graph_service.py",
+      "sha256": "ce7c3173994846b013382505fe614a7147aba9b9be6b8759352bfff5de449c34",
+      "size_bytes": 10522,
+      "modified_utc": "2026-09-09T14:31:36.277043+00:00",
+      "classification": "phase7_authoritative_code_or_report"
+    },
+    "case_intelligence_service": {
+      "path": "src/services/case_intelligence.py",
+      "sha256": "151396511c38af8a74ef0e0b78547f5e3faf567881d943de94e7d44be32c9917",
+      "size_bytes": 7167,
+      "modified_utc": "2026-09-09T14:34:04.763204+00:00",
+      "classification": "phase7_authoritative_code_or_report"
+    },
+    "api_application": {
+      "path": "src/api/app.py",
+      "sha256": "7046856a4deabcf1ee2a28babc57311e6bc2e1e51d269d687fa01a14c452a7f3",
+      "size_bytes": 7344,
+      "modified_utc": "2026-09-09T14:34:04.869414+00:00",
+      "classification": "phase7_authoritative_code_or_report"
+    },
+    "analyst_routes": {
+      "path": "src/api/analyst_routes.py",
+      "sha256": "c01afbe4c2eafbcc7d49e24a4a5435743e9b90fd6794e072d3d3dbea41781ef9",
+      "size_bytes": 2746,
+      "modified_utc": "2026-09-09T11:13:40.962610+00:00",
+      "classification": "phase7_authoritative_code_or_report"
+    },
+    "graph_routes": {
+      "path": "src/api/graph_routes.py",
+      "sha256": "e3b172e83be7d07f49e21eaa9a509ae2a0773e32c519336841a2d6b36eaf2cd1",
+      "size_bytes": 1199,
+      "modified_utc": "2026-09-09T14:23:54.143758+00:00",
+      "classification": "phase7_authoritative_code_or_report"
+    },
+    "intelligence_routes": {
+      "path": "src/api/intelligence_routes.py",
+      "sha256": "f5f3f10b6ef27ebfca3150b7480724905f231baddf4132f6c93fa83fa38ad453",
+      "size_bytes": 1816,
+      "modified_utc": "2026-09-09T14:34:04.768117+00:00",
+      "classification": "phase7_authoritative_code_or_report"
+    },
+    "workbench_api_client": {
+      "path": "src/workbench/api_client.py",
+      "sha256": "a3615910649065a58045358da2a0c699f446ce49908f8aa002ec74a5d25f9d0b",
+      "size_bytes": 6432,
+      "modified_utc": "2026-09-09T14:34:05.013361+00:00",
+      "classification": "phase7_authoritative_code_or_report"
+    },
+    "workbench_graph_view": {
+      "path": "src/workbench/graph_view.py",
+      "sha256": "2b9aa2fa7e26f3eadd63736cdfefbe928027b85f46ba3e643afaf1676456a9ca",
+      "size_bytes": 3114,
+      "modified_utc": "2026-09-09T14:23:54.473532+00:00",
+      "classification": "phase7_authoritative_code_or_report"
+    },
+    "workbench_application": {
+      "path": "src/workbench/app.py",
+      "sha256": "dc2c08745f6892a86b90a133e9ba5053640cb6375ff1c01f58a1d6da0f676eec",
+      "size_bytes": 26225,
+      "modified_utc": "2026-09-09T14:28:29.297955+00:00",
+      "classification": "phase7_authoritative_code_or_report"
+    },
+    "phase7_validator": {
+      "path": "src/validation/validate_phase7_integration.py",
+      "sha256": "8ff0984eff4dec2688fd6a29b5f8610f674e163b345dbb8e49c9185962699b3c",
+      "size_bytes": 14481,
+      "modified_utc": "2026-09-09T14:36:06.630263+00:00",
+      "classification": "phase7_authoritative_code_or_report"
+    },
+    "phase7_integration_audit": {
+      "path": "reports/phase7/phase7_integration_audit.json",
+      "sha256": "84d3a79203be8d3039f0f4cdcf36685324a3c1061306eed14dfffa824e89b3a8",
+      "size_bytes": 1163,
+      "modified_utc": "2026-09-09T14:37:00.196607+00:00",
+      "classification": "phase7_authoritative_code_or_report"
+    },
+    "phase7_integration_audit_markdown": {
+      "path": "reports/phase7/phase7_integration_audit.md",
+      "sha256": "dca0762d2f74003dcdeb88bb53ef5a369bf4fd9063ba82b8d365b1af91bf4fc3",
+      "size_bytes": 786,
+      "modified_utc": "2026-09-09T14:37:00.207140+00:00",
+      "classification": "phase7_authoritative_code_or_report"
+    },
+    "phase7_environment": {
+      "path": "reports/phase7/environment_freeze.txt",
+      "sha256": "05fe62388b2a509f0a1d5d0bcb8d0ee4b934e88f588adb8fa0b8e9d75bd3c56e",
+      "size_bytes": 3573,
+      "modified_utc": "2026-09-09T14:39:12.510954+00:00",
+      "classification": "phase7_authoritative_code_or_report"
+    },
+    "phase7_python_version": {
+      "path": "reports/phase7/python_version.txt",
+      "sha256": "b7e91dcfc6f0b268e5985a972aa62527fb241a2a7952bf77b627d8aa18ba3910",
+      "size_bytes": 18,
+      "modified_utc": "2026-09-09T14:39:11.239655+00:00",
+      "classification": "phase7_authoritative_code_or_report"
+    }
+  },
+  "operational_state": {
+    "path": "data/phase7/analyst_workbench.sqlite",
+    "snapshot_sha256": "ff16601fd17c46e8064b70a9127cf48926bbdd70c8247a4384f63e6c416df948",
+    "analyst_case_state_rows": 1,
+    "audit_event_rows": 4,
+    "classification": "mutable_phase7_operational_state",
+    "immutable": false,
+    "note": "This database is expected to change as analysts review cases. The SHA-256 is a certification-time snapshot only."
+  }
+}

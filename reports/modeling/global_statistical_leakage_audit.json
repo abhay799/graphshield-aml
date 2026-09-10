@@ -1,0 +1,76 @@
+{
+  "audit_version": "global_statistical_leakage_v1",
+  "locked_test": {
+    "rows": 761639,
+    "positives": 1561,
+    "prediction_sha256": "9d9dcb975793401eec2c0906956d5a11a08a0100d177e725606f14f7cdeb44fa"
+  },
+  "champion_governance": {
+    "model_name": "lightgbm_graph",
+    "selected_on_split": "validation",
+    "selection_metric": "average_precision",
+    "test_used_for_selection": false,
+    "frozen_validation_average_precision": 0.0230150388548912,
+    "selection_source": "reports\\modeling\\tgn_hybrid_fusion.json",
+    "selection_source_match": "validation_graph.average_precision",
+    "graph_ablation_report_validation_ap": 0.0228225805914592,
+    "validation_ap_report_difference": 0.00019245826343200143
+  },
+  "component_leakage": {
+    "dataset_component_columns": [],
+    "model_component_features": [],
+    "analysis_only_component_features_used": false
+  },
+  "entity_overlap_audit": {
+    "report": "reports\\modeling\\phase2_entity_overlap_audit.csv",
+    "present": true
+  },
+  "test_point_estimates": {
+    "baseline_average_precision": 0.001673758584395262,
+    "graph_average_precision": 0.0545211397049114,
+    "paired_delta_average_precision": 0.052847381120516145,
+    "baseline_recall_at_1pct": 0.014093529788597053,
+    "graph_recall_at_1pct": 0.4606021780909673,
+    "paired_delta_recall_at_1pct": 0.44650864830237025
+  },
+  "bootstrap": {
+    "method": "paired transaction-level nonparametric bootstrap",
+    "replicates": 100,
+    "seed": 42,
+    "confidence_level": 0.95,
+    "baseline_average_precision": {
+      "lower_95": 0.0015662005368480816,
+      "upper_95": 0.001805169110824582
+    },
+    "graph_average_precision": {
+      "lower_95": 0.049032629367860486,
+      "upper_95": 0.058814367049623964
+    },
+    "paired_delta_average_precision": {
+      "lower_95": 0.04744660822212123,
+      "upper_95": 0.05711177735955815
+    },
+    "baseline_recall_at_1pct": {
+      "lower_95": 0.009630770944327906,
+      "upper_95": 0.02054718850355923
+    },
+    "graph_recall_at_1pct": {
+      "lower_95": 0.4093828638155014,
+      "upper_95": 0.4532688654669857
+    },
+    "paired_delta_recall_at_1pct": {
+      "lower_95": 0.39484042093608196,
+      "upper_95": 0.43844677320163555
+    }
+  },
+  "gates": {
+    "point_in_time_leakage": true,
+    "entity_overlap_audited": true,
+    "graph_dataset_validation": true,
+    "component_feature_isolation": true,
+    "validation_only_champion_selection": true,
+    "test_not_used_for_selection": true,
+    "paired_ap_improvement": true,
+    "paired_recall_at_capacity_improvement": true
+  }
+}

@@ -1,0 +1,114 @@
+﻿{
+    "project":  "GraphShield AML",
+    "phase":  8,
+    "certification_status":  "CERTIFIED",
+    "champion":  "lightgbm_graph",
+    "case_queue_rows":  7617,
+    "regression_tests_passed":  16,
+    "python_version":  "Python 3.14.5",
+    "docker_image":  "graphshield-aml:phase8",
+    "docker_image_id":  "sha256:f0a83eab2ad0d3ae01a242c38df68fb8393e1f35b411077de6fe9e0eb962b857",
+    "governance":  {
+                       "human_review_required":  true,
+                       "autonomous_account_blocking":  false,
+                       "autonomous_case_closure":  false,
+                       "autonomous_regulatory_filing":  false
+                   },
+    "disclosures":  {
+                        "tree_training":  "25% deterministic hash sample of training split",
+                        "tgn_training":  "250000-event chronological prefix, 1 epoch, CPU",
+                        "test_used_for_model_selection":  false
+                    },
+    "artifacts":  [
+                      {
+                          "path":  "README.md",
+                          "sha256":  "c6930d95dcf2515b869aeeab46547bb4f09036212a063fe7c90c1bd48ec85529",
+                          "bytes":  6905
+                      },
+                      {
+                          "path":  "requirements-runtime.txt",
+                          "sha256":  "57dbf7f518245405e9a3376fb45f464dc2f3093dfaa63aac887ad6865645a43e",
+                          "bytes":  301
+                      },
+                      {
+                          "path":  "Dockerfile",
+                          "sha256":  "2d5c6c8928dcfcf3dfa98af4b0c357b5f9e4459f588cfbed29874c77d69b35b5",
+                          "bytes":  861
+                      },
+                      {
+                          "path":  "docker-compose.yml",
+                          "sha256":  "26434f8917425a5bbb974e9ec8996417e928453e460e0b804b08f7acff3465cf",
+                          "bytes":  1337
+                      },
+                      {
+                          "path":  ".dockerignore",
+                          "sha256":  "f683bf8c1f5f5f52eb454820b54d53b6e73883747edcb87c0f8fac638efd96c1",
+                          "bytes":  128
+                      },
+                      {
+                          "path":  ".env.example",
+                          "sha256":  "2f158a77215fc369035ccb44852a6f7430d59fd24d44e371d42b02b49e64d25f",
+                          "bytes":  274
+                      },
+                      {
+                          "path":  ".github\\workflows\\ci.yml",
+                          "sha256":  "16ff2d58260a36bdf075a096eea14dd380d54a476ed719bce75cbc0d6119f3e0",
+                          "bytes":  1321
+                      },
+                      {
+                          "path":  "pytest.ini",
+                          "sha256":  "766548e000d1a1dd7658184e139a855276a1a020577eae0d1d25d5844d9d2ea0",
+                          "bytes":  121
+                      },
+                      {
+                          "path":  "src\\api\\app.py",
+                          "sha256":  "9aca9acd3127e96c7fb9e7f31f3a95c6ebc4ec3d334b943164638a68420f7995",
+                          "bytes":  7541
+                      },
+                      {
+                          "path":  "src\\api\\observability.py",
+                          "sha256":  "dd117c876a38535e58854ebb7dd44513dc1cc4bfce47465cab152b1578b73f4f",
+                          "bytes":  2108
+                      },
+                      {
+                          "path":  "src\\api\\security.py",
+                          "sha256":  "285ecdbbd1b1c4e7dd7be4ae8b980a45dad3d9f1e3c8946d46e37fe45a9dd48b",
+                          "bytes":  957
+                      },
+                      {
+                          "path":  "scripts\\demo\\start.ps1",
+                          "sha256":  "7638fdbf06636b4fc152c614dd3f9d03ae5af38d74849a85cd578fa158f18fcd",
+                          "bytes":  648
+                      },
+                      {
+                          "path":  "scripts\\demo\\status.ps1",
+                          "sha256":  "f22b8141a8dc4edb5e7101650301655626592f7585dec39aef395e9731bc8473",
+                          "bytes":  611
+                      },
+                      {
+                          "path":  "scripts\\demo\\stop.ps1",
+                          "sha256":  "90396a39c1bb4ceed6b782c258ac7de8ac75110322911a49067ee8705c5ed770",
+                          "bytes":  229
+                      },
+                      {
+                          "path":  "reports\\final\\phases_1_6_artifact_freeze.json",
+                          "sha256":  "e805f302143a8aac888836205ee61fb0db01be381debd810622b3fa706e7de3f",
+                          "bytes":  12407
+                      },
+                      {
+                          "path":  "reports\\final\\phases_1_6_certification.md",
+                          "sha256":  "b3e45123949f639c50da669675c063335dd964c433db73df80b80605ee51bef2",
+                          "bytes":  1806
+                      },
+                      {
+                          "path":  "reports\\final\\phase7_artifact_freeze.json",
+                          "sha256":  "869b36890454f38661e31ad218d9b3f3f8daeeca4d823b7ea4e31750cb951621",
+                          "bytes":  7835
+                      },
+                      {
+                          "path":  "reports\\final\\phase7_certification.md",
+                          "sha256":  "1eeec6d339bc57ebebda628377e5675921fa684560ca90121e364eece243f181",
+                          "bytes":  2330
+                      }
+                  ]
+}

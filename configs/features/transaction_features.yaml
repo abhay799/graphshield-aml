@@ -1,0 +1,209 @@
+from pathlib import Path
+
+import polars as pl
+
+
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+
+SILVER_PATH = (
+    PROJECT_ROOT
+    / "data"
+    / "processed"
+    / "silver"
+    / "transactions.parquet"
+)
+
+GOLD_DIR = (
+    PROJECT_ROOT
+    / "data"
+    / "processed"
+    / "gold"
+)
+
+OUTPUT_PATH = (
+    GOLD_DIR
+    / "transaction_features_v1.parquet"
+)
+
+
+def main():
+
+    print("=" * 75)
+    print("GraphShield AML - Transaction Feature Engineering")
+    print("=" * 75)
+
+    if not SILVER_PATH.exists():
+
+        print("\nERROR: Silver dataset not found.")
+        print(SILVER_PATH)
+
+        return
+
+    GOLD_DIR.mkdir(
+        parents=True,
+        exist_ok=True
+    )
+
+    print("\nSilver dataset:")
+    print(SILVER_PATH)
+
+    # --------------------------------------------------
+    # Load lazily
+    # --------------------------------------------------
+
+    lf = pl.scan_parquet(
+        SILVER_PATH
+    )
+
+    # --------------------------------------------------
+    # Transaction-level features
+    # --------------------------------------------------
+
+    lf = lf.with_columns(
+
+        # Time features
+        pl.col("event_ts")
+        .dt.hour()
+        .alias("hour_of_day"),
+
+        pl.col("event_ts")
+        .dt.weekday()
+        .alias("day_of_week"),
+
+        # Bank relationship
+        (
+            pl.col("from_bank")
+            == pl.col("to_bank")
+        )
+        .cast(pl.UInt8)
+        .alias("same_bank"),
+
+        (
+            pl.col("from_bank")
+            != pl.col("to_bank")
+        )
+        .cast(pl.UInt8)
+        .alias("cross_bank"),
+
+        # Currency relationship
+        (
+            pl.col("payment_currency")
+            == pl.col("receiving_currency")
+        )
+        .cast(pl.UInt8)
+        .alias("same_currency"),
+
+        (
+            pl.col("payment_currency")
+            != pl.col("receiving_currency")
+        )
+        .cast(pl.UInt8)
+        .alias("cross_currency"),
+
+        # Log amount
+        pl.col("amount_paid")
+        .log1p()
+        .alias("log_amount_paid"),
+
+        pl.col("amount_received")
+        .log1p()
+        .alias("log_amount_received"),
+
+        # Absolute amount difference
+        (
+            pl.col("amount_paid")
+            - pl.col("amount_received")
+        )
+        .abs()
+        .alias("amount_difference"),
+    )
+
+    # --------------------------------------------------
+    # Weekend feature
+    # --------------------------------------------------
+
+    lf = lf.with_columns(
+
+        pl.col("day_of_week")
+        .is_in([6, 7])
+        .cast(pl.UInt8)
+        .alias("is_weekend")
+    )
+
+    # --------------------------------------------------
+    # Select output
+    # --------------------------------------------------
+
+    lf = lf.select(
+        [
+            # Identity / lineage
+            "transaction_id",
+            "event_ts",
+
+            # Raw information retained for later pipeline
+            "from_bank",
+            "from_account",
+            "to_bank",
+            "to_account",
+
+            "amount_paid",
+            "amount_received",
+
+            "payment_currency",
+            "receiving_currency",
+            "payment_format",
+
+            # Engineered features
+            "hour_of_day",
+            "day_of_week",
+            "is_weekend",
+
+            "same_bank",
+            "cross_bank",
+
+            "same_currency",
+            "cross_currency",
+
+            "log_amount_paid",
+            "log_amount_received",
+
+            "amount_difference",
+
+            # Target kept for offline training/evaluation
+            "is_laundering",
+        ]
+    )
+
+    print("\n--- FEATURE SCHEMA ---")
+
+    schema = lf.collect_schema()
+
+    for column in schema.names():
+
+        print(
+            f"{column:<28}"
+            f"{schema[column]}"
+        )
+
+    # --------------------------------------------------
+    # Write Gold dataset
+    # --------------------------------------------------
+
+    print("\nWriting transaction feature dataset...")
+
+    lf.sink_parquet(
+        OUTPUT_PATH,
+        compression="zstd"
+    )
+
+    print("\nFeature dataset created:")
+
+    print(OUTPUT_PATH)
+
+    print("\n" + "=" * 75)
+    print("TRANSACTION FEATURE BUILD COMPLETE")
+    print("=" * 75)
+
+
+if __name__ == "__main__":
+    main()

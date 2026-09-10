@@ -1,0 +1,338 @@
+
+Path                                                                 LineNumber Line
+----                                                                 ---------- ----
+C:\Users\DELL\graphshield-aml\src\modeling\analyze_splits.py                 27     # Validation/debug timestamps
+C:\Users\DELL\graphshield-aml\src\modeling\analyze_splits.py                 29     "receiver_prev_event_ts",
+C:\Users\DELL\graphshield-aml\src\modeling\analyze_splits.py                 43     "receiving_currency",
+C:\Users\DELL\graphshield-aml\src\modeling\baseline_no_skill.py              62         "validation",
+C:\Users\DELL\graphshield-aml\src\modeling\baseline_no_skill.py              63         "test",
+C:\Users\DELL\graphshield-aml\src\modeling\baseline_no_skill.py             110                 "average_precision"
+C:\Users\DELL\graphshield-aml\src\modeling\calibrate_champion.py              3 import joblib
+C:\Users\DELL\graphshield-aml\src\modeling\calibrate_champion.py              7 from catboost import (
+C:\Users\DELL\graphshield-aml\src\modeling\calibrate_champion.py              8     CatBoostClassifier,
+C:\Users\DELL\graphshield-aml\src\modeling\calibrate_champion.py             12     LogisticRegression,
+C:\Users\DELL\graphshield-aml\src\modeling\calibrate_champion.py             57 def catboost_ready(
+C:\Users\DELL\graphshield-aml\src\modeling\calibrate_champion.py             79     print("GraphShield AML - Champi...
+C:\Users\DELL\graphshield-aml\src\modeling\calibrate_champion.py             84         / "lightgbm_validation.json"
+C:\Users\DELL\graphshield-aml\src\modeling\calibrate_champion.py             89         / "catboost_validation.json"
+C:\Users\DELL\graphshield-aml\src\modeling\calibrate_champion.py             93         "lightgbm": lgb_metrics,
+C:\Users\DELL\graphshield-aml\src\modeling\calibrate_champion.py             94         "catboost": cat_metrics,
+C:\Users\DELL\graphshield-aml\src\modeling\calibrate_champion.py             97     champion_name = max(
+C:\Users\DELL\graphshield-aml\src\modeling\calibrate_champion.py            101                 "average_precision"
+C:\Users\DELL\graphshield-aml\src\modeling\calibrate_champion.py            111         "\nSelected champion:",
+C:\Users\DELL\graphshield-aml\src\modeling\calibrate_champion.py            112         champion_name,
+C:\Users\DELL\graphshield-aml\src\modeling\calibrate_champion.py            121             "validation",
+C:\Users\DELL\graphshield-aml\src\modeling\calibrate_champion.py            128     ids_test, X_test, y_test = (
+C:\Users\DELL\graphshield-aml\src\modeling\calibrate_champion.py            130             "test",
+C:\Users\DELL\graphshield-aml\src\modeling\calibrate_champion.py            138     # Load champion
+C:\Users\DELL\graphshield-aml\src\modeling\calibrate_champion.py            141     if champion_name == "lightgbm":
+C:\Users\DELL\graphshield-aml\src\modeling\calibrate_champion.py            143         model = joblib.load(
+C:\Users\DELL\graphshield-aml\src\modeling\calibrate_champion.py            145             / "lightgbm_v1.joblib"
+C:\Users\DELL\graphshield-aml\src\modeling\calibrate_champion.py            150         model = CatBoostClassifier()
+C:\Users\DELL\graphshield-aml\src\modeling\calibrate_champion.py            155                 / "catboost_v1.cbm"
+C:\Users\DELL\graphshield-aml\src\modeling\calibrate_champion.py            159         X_val = catboost_ready(
+C:\Users\DELL\graphshield-aml\src\modeling\calibrate_champion.py            164         X_test = catboost_ready(
+C:\Users\DELL\graphshield-aml\src\modeling\calibrate_champion.py            165             X_test,
+C:\Users\DELL\graphshield-aml\src\modeling\calibrate_champion.py            170     # Raw validation scores
+C:\Users\DELL\graphshield-aml\src\modeling\calibrate_champion.py            182     # Fit ONLY on validation.
+C:\Users\DELL\graphshield-aml\src\modeling\calibrate_champion.py            185     calibration_X = (
+C:\Users\DELL\graphshield-aml\src\modeling\calibrate_champion.py            190     calibrator = LogisticRegression(
+C:\Users\DELL\graphshield-aml\src\modeling\calibrate_champion.py            196     calibrator.fit(
+C:\Users\DELL\graphshield-aml\src\modeling\calibrate_champion.py            197         calibration_X,
+C:\Users\DELL\graphshield-aml\src\modeling\calibrate_champion.py            202     # Final untouched TEST
+C:\Users\DELL\graphshield-aml\src\modeling\calibrate_champion.py            205     raw_test = (
+C:\Users\DELL\graphshield-aml\src\modeling\calibrate_champion.py            207             X_test
+C:\Users\DELL\graphshield-aml\src\modeling\calibrate_champion.py            211     calibrated_test = (
+C:\Users\DELL\graphshield-aml\src\modeling\calibrate_champion.py            212         calibrator.predict_proba(
+C:\Users\DELL\graphshield-aml\src\modeling\calibrate_champion.py            214                 raw_test
+C:\Users\DELL\graphshield-aml\src\modeling\calibrate_champion.py            221         y_test,
+C:\Users\DELL\graphshield-aml\src\modeling\calibrate_champion.py            222         raw_test,
+C:\Users\DELL\graphshield-aml\src\modeling\calibrate_champion.py            225     calibrated_metrics = (
+C:\Users\DELL\graphshield-aml\src\modeling\calibrate_champion.py            227             y_test,
+C:\Users\DELL\graphshield-aml\src\modeling\calibrate_champion.py            228             calibrated_test,
+C:\Users\DELL\graphshield-aml\src\modeling\calibrate_champion.py            233         "\nRaw Brier:",
+C:\Users\DELL\graphshield-aml\src\modeling\calibrate_champion.py            235             "brier_score"
+C:\Users\DELL\graphshield-aml\src\modeling\calibrate_champion.py            240         "Calibrated Brier:",
+C:\Users\DELL\graphshield-aml\src\modeling\calibrate_champion.py            241         calibrated_metrics[
+C:\Users\DELL\graphshield-aml\src\modeling\calibrate_champion.py            242             "brier_score"
+C:\Users\DELL\graphshield-aml\src\modeling\calibrate_champion.py            247         "\nRaw ECE:",
+C:\Users\DELL\graphshield-aml\src\modeling\calibrate_champion.py            249             "ece_10_bins"
+C:\Users\DELL\graphshield-aml\src\modeling\calibrate_champion.py            254         "Calibrated ECE:",
+C:\Users\DELL\graphshield-aml\src\modeling\calibrate_champion.py            255         calibrated_metrics[
+C:\Users\DELL\graphshield-aml\src\modeling\calibrate_champion.py            256             "ece_10_bins"
+C:\Users\DELL\graphshield-aml\src\modeling\calibrate_champion.py            262         / "champion_test_metrics.js...
+C:\Users\DELL\graphshield-aml\src\modeling\calibrate_champion.py            264             "champion": (
+C:\Users\DELL\graphshield-aml\src\modeling\calibrate_champion.py            265                 champion_name
+C:\Users\DELL\graphshield-aml\src\modeling\calibrate_champion.py            272             "calibrated": (
+C:\Users\DELL\graphshield-aml\src\modeling\calibrate_champion.py            273                 calibrated_metrics
+C:\Users\DELL\graphshield-aml\src\modeling\calibrate_champion.py            278     joblib.dump(
+C:\Users\DELL\graphshield-aml\src\modeling\calibrate_champion.py            280             "champion": champion_name,
+C:\Users\DELL\graphshield-aml\src\modeling\calibrate_champion.py            281             "calibrator": calibrator,
+C:\Users\DELL\graphshield-aml\src\modeling\calibrate_champion.py            284         / "probability_calibrator.j...
+C:\Users\DELL\graphshield-aml\src\modeling\calibrate_champion.py            289         / "champion_name.txt"
+C:\Users\DELL\graphshield-aml\src\modeling\calibrate_champion.py            291         champion_name,
+C:\Users\DELL\graphshield-aml\src\modeling\calibrate_champion.py            298                 ids_test.to_numpy()
+C:\Users\DELL\graphshield-aml\src\modeling\calibrate_champion.py            302                 y_test
+C:\Users\DELL\graphshield-aml\src\modeling\calibrate_champion.py            306                 raw_test
+C:\Users\DELL\graphshield-aml\src\modeling\calibrate_champion.py            309             "risk_score_calibrated": (
+C:\Users\DELL\graphshield-aml\src\modeling\calibrate_champion.py            310                 calibrated_test
+C:\Users\DELL\graphshield-aml\src\modeling\calibrate_champion.py            315         / "champion_test_prediction...
+C:\Users\DELL\graphshield-aml\src\modeling\calibrate_champion.py            320         "\nFinal test predictions s...
+C:\Users\DELL\graphshield-aml\src\modeling\common.py                         39     "receiving_currency",
+C:\Users\DELL\graphshield-aml\src\modeling\common.py                         50     # Leakage-validation only
+C:\Users\DELL\graphshield-aml\src\modeling\common.py                         52     "receiver_prev_event_ts",
+C:\Users\DELL\graphshield-aml\src\modeling\common.py                        134     # Validation/test are always ke...
+C:\Users\DELL\graphshield-aml\src\modeling\compare_rules_vs_ml.py            31     / "champion_test_predictions.pa...
+C:\Users\DELL\graphshield-aml\src\modeling\compare_rules_vs_ml.py            45     / "rules_vs_ml_test.parquet"
+C:\Users\DELL\graphshield-aml\src\modeling\compare_rules_vs_ml.py           158     # TEST transactions only
+C:\Users\DELL\graphshield-aml\src\modeling\compare_rules_vs_ml.py           161     test = (
+C:\Users\DELL\graphshield-aml\src\modeling\compare_rules_vs_ml.py           167             == "test"
+C:\Users\DELL\graphshield-aml\src\modeling\compare_rules_vs_ml.py           204     # Higher severity rules receive...
+C:\Users\DELL\graphshield-aml\src\modeling\compare_rules_vs_ml.py           236                 "risk_score_calibra...
+C:\Users\DELL\graphshield-aml\src\modeling\compare_rules_vs_ml.py           242         test
+C:\Users\DELL\graphshield-aml\src\modeling\compare_rules_vs_ml.py           257         f"\nTest transactions: "
+C:\Users\DELL\graphshield-aml\src\modeling\compare_rules_vs_ml.py           262         "Test positives:",
+C:\Users\DELL\graphshield-aml\src\modeling\compare_rules_vs_ml.py           285                 "risk_score_calibra...
+C:\Users\DELL\graphshield-aml\src\modeling\compare_rules_vs_ml.py           311         "risk_score_calibrated",
+C:\Users\DELL\graphshield-aml\src\modeling\compare_rules_vs_ml.py           315         "test_rows": (
+C:\Users\DELL\graphshield-aml\src\modeling\compare_rules_vs_ml.py           319         "test_positives": int(
+C:\Users\DELL\graphshield-aml\src\modeling\error_analysis.py                 24     / "champion_test_predictions.pa...
+C:\Users\DELL\graphshield-aml\src\modeling\error_analysis.py                 51     # TEST feature data
+C:\Users\DELL\graphshield-aml\src\modeling\error_analysis.py                 60             == "test"
+C:\Users\DELL\graphshield-aml\src\modeling\error_analysis.py                 71                 "risk_score_calibra...
+C:\Users\DELL\graphshield-aml\src\modeling\error_analysis.py                 87         f"\nTest rows: "
+C:\Users\DELL\graphshield-aml\src\modeling\error_analysis.py                107             "risk_score_calibrated",
+C:\Users\DELL\graphshield-aml\src\modeling\error_analysis.py                205                     "risk_score_cal...
+C:\Users\DELL\graphshield-aml\src\modeling\error_analysis.py                229                     "sender_unique_...
+C:\Users\DELL\graphshield-aml\src\modeling\error_analysis.py                233                     "avg_unique_rec...
+C:\Users\DELL\graphshield-aml\src\modeling\error_analysis.py                237                     "recent_inbound...
+C:\Users\DELL\graphshield-aml\src\modeling\error_analysis.py                274             "risk_score_calibrated",
+C:\Users\DELL\graphshield-aml\src\modeling\error_analysis.py                440                     "receiver_tx_co...
+C:\Users\DELL\graphshield-aml\src\modeling\error_analysis.py                444                     "avg_receiver_t...
+C:\Users\DELL\graphshield-aml\src\modeling\error_analysis.py                448                     "sender_unique_...
+C:\Users\DELL\graphshield-aml\src\modeling\error_analysis.py                452                     "avg_sender_uni...
+C:\Users\DELL\graphshield-aml\src\modeling\error_analysis.py                456                     "receiver_uniqu...
+C:\Users\DELL\graphshield-aml\src\modeling\error_analysis.py                460                     "avg_receiver_u...
+C:\Users\DELL\graphshield-aml\src\modeling\error_analysis.py                464                     "new_receiver_f...
+C:\Users\DELL\graphshield-aml\src\modeling\explain_shap.py                    1 import joblib
+C:\Users\DELL\graphshield-aml\src\modeling\explain_shap.py                    6 from catboost import (
+C:\Users\DELL\graphshield-aml\src\modeling\explain_shap.py                    7     CatBoostClassifier,
+C:\Users\DELL\graphshield-aml\src\modeling\explain_shap.py                   23 def catboost_ready(
+C:\Users\DELL\graphshield-aml\src\modeling\explain_shap.py                   48     champion_name = (
+C:\Users\DELL\graphshield-aml\src\modeling\explain_shap.py                   50         / "champion_name.txt"
+C:\Users\DELL\graphshield-aml\src\modeling\explain_shap.py                   56         "\nChampion:",
+C:\Users\DELL\graphshield-aml\src\modeling\explain_shap.py                   57         champion_name,
+C:\Users\DELL\graphshield-aml\src\modeling\explain_shap.py                   64     ids, X_test, y_test = (
+C:\Users\DELL\graphshield-aml\src\modeling\explain_shap.py                   66             "test",
+C:\Users\DELL\graphshield-aml\src\modeling\explain_shap.py                   74     # Deterministic test sample
+C:\Users\DELL\graphshield-aml\src\modeling\explain_shap.py                   81         len(X_test),
+C:\Users\DELL\graphshield-aml\src\modeling\explain_shap.py                   85         len(X_test),
+C:\Users\DELL\graphshield-aml\src\modeling\explain_shap.py                   91         X_test.iloc[
+C:\Users\DELL\graphshield-aml\src\modeling\explain_shap.py                  110     if champion_name == "lightgbm":
+C:\Users\DELL\graphshield-aml\src\modeling\explain_shap.py                  112         model = joblib.load(
+C:\Users\DELL\graphshield-aml\src\modeling\explain_shap.py                  114             / "lightgbm_v1.joblib"
+C:\Users\DELL\graphshield-aml\src\modeling\explain_shap.py                  138         model = CatBoostClassifier()
+C:\Users\DELL\graphshield-aml\src\modeling\explain_shap.py                  143                 / "catboost_v1.cbm"
+C:\Users\DELL\graphshield-aml\src\modeling\explain_shap.py                  147         X_sample = catboost_ready(
+C:\Users\DELL\graphshield-aml\src\modeling\generate_phase3_report.py         42     champion_selection = load_json(
+C:\Users\DELL\graphshield-aml\src\modeling\generate_phase3_report.py         43         "final_champion_selection.j...
+C:\Users\DELL\graphshield-aml\src\modeling\generate_phase3_report.py         46     champion_test = load_json(
+C:\Users\DELL\graphshield-aml\src\modeling\generate_phase3_report.py         47         "champion_test_metrics.json"
+C:\Users\DELL\graphshield-aml\src\modeling\generate_phase3_report.py         54     if champion_selection is None:
+C:\Users\DELL\graphshield-aml\src\modeling\generate_phase3_report.py         57             "ERROR: Champion select...
+C:\Users\DELL\graphshield-aml\src\modeling\generate_phase3_report.py         62     champion = (
+C:\Users\DELL\graphshield-aml\src\modeling\generate_phase3_report.py         63         champion_selection[
+C:\Users\DELL\graphshield-aml\src\modeling\generate_phase3_report.py         64             "champion"
+C:\Users\DELL\graphshield-aml\src\modeling\generate_phase3_report.py        104         f"Champion: **{champion}**"
+C:\Users\DELL\graphshield-aml\src\modeling\generate_phase3_report.py        110         "Selection was performed us...
+C:\Users\DELL\graphshield-aml\src\modeling\generate_phase3_report.py        128         "## Validation Candidates"
+C:\Users\DELL\graphshield-aml\src\modeling\generate_phase3_report.py        142         champion_selection[
+C:\Users\DELL\graphshield-aml\src\modeling\generate_phase3_report.py        149             f"| {metrics['average_p...
+C:\Users\DELL\graphshield-aml\src\modeling\generate_phase3_report.py        155     if champion_test:
+C:\Users\DELL\graphshield-aml\src\modeling\generate_phase3_report.py        157         calibrated = (
+C:\Users\DELL\graphshield-aml\src\modeling\generate_phase3_report.py        158             champion_test[
+C:\Users\DELL\graphshield-aml\src\modeling\generate_phase3_report.py        159                 "calibrated"
+C:\Users\DELL\graphshield-aml\src\modeling\generate_phase3_report.py        166             "## Final Test Performa...
+C:\Users\DELL\graphshield-aml\src\modeling\generate_phase3_report.py        173             f"{calibrated['average_...
+C:\Users\DELL\graphshield-aml\src\modeling\generate_phase3_report.py        178             f"{calibrated['roc_auc'...
+C:\Users\DELL\graphshield-aml\src\modeling\generate_phase3_report.py        183             f"{calibrated['recall_a...
+C:\Users\DELL\graphshield-aml\src\modeling\generate_phase3_report.py        188             f"{calibrated['recall_a...
+C:\Users\DELL\graphshield-aml\src\modeling\generate_phase3_report.py        193             f"{calibrated['recall_a...
+C:\Users\DELL\graphshield-aml\src\modeling\generate_phase3_report.py        197             f"- Brier Score: "
+C:\Users\DELL\graphshield-aml\src\modeling\generate_phase3_report.py        198             f"{calibrated['brier_sc...
+C:\Users\DELL\graphshield-aml\src\modeling\generate_phase3_report.py        202             f"- ECE: "
+C:\Users\DELL\graphshield-aml\src\modeling\generate_phase3_report.py        203             f"{calibrated['ece_10_b...
+C:\Users\DELL\graphshield-aml\src\modeling\metrics.py                         7     average_precision_score,
+C:\Users\DELL\graphshield-aml\src\modeling\metrics.py                         8     brier_score_loss,
+C:\Users\DELL\graphshield-aml\src\modeling\metrics.py                        13     roc_auc_score,
+C:\Users\DELL\graphshield-aml\src\modeling\metrics.py                        17 def expected_calibration_error(
+C:\Users\DELL\graphshield-aml\src\modeling\metrics.py                        32     ece = 0.0
+C:\Users\DELL\graphshield-aml\src\modeling\metrics.py                        63         ece += (
+C:\Users\DELL\graphshield-aml\src\modeling\metrics.py                        70     return float(ece)
+C:\Users\DELL\graphshield-aml\src\modeling\metrics.py                       113         "roc_auc": float(
+C:\Users\DELL\graphshield-aml\src\modeling\metrics.py                       114             roc_auc_score(
+C:\Users\DELL\graphshield-aml\src\modeling\metrics.py                       120         "average_precision": float(
+C:\Users\DELL\graphshield-aml\src\modeling\metrics.py                       121             average_precision_score(
+C:\Users\DELL\graphshield-aml\src\modeling\metrics.py                       134         "brier_score": float(
+C:\Users\DELL\graphshield-aml\src\modeling\metrics.py                       135             brier_score_loss(
+C:\Users\DELL\graphshield-aml\src\modeling\metrics.py                       141         "ece_10_bins": (
+C:\Users\DELL\graphshield-aml\src\modeling\metrics.py                       142             expected_calibration_er...
+C:\Users\DELL\graphshield-aml\src\modeling\select_champion.py                34     print("GraphShield AML - Final ...
+C:\Users\DELL\graphshield-aml\src\modeling\select_champion.py                38     # Logistic
+C:\Users\DELL\graphshield-aml\src\modeling\select_champion.py                41     logistic = read_json(
+C:\Users\DELL\graphshield-aml\src\modeling\select_champion.py                43         / "logistic_metrics.json"
+C:\Users\DELL\graphshield-aml\src\modeling\select_champion.py                46     logistic_name = (
+C:\Users\DELL\graphshield-aml\src\modeling\select_champion.py                47         logistic[
+C:\Users\DELL\graphshield-aml\src\modeling\select_champion.py                52     logistic_metrics = (
+C:\Users\DELL\graphshield-aml\src\modeling\select_champion.py                53         logistic[
+C:\Users\DELL\graphshield-aml\src\modeling\select_champion.py                54             "validation_candidates"
+C:\Users\DELL\graphshield-aml\src\modeling\select_champion.py                56             logistic_name
+C:\Users\DELL\graphshield-aml\src\modeling\select_champion.py                61     # LightGBM
+C:\Users\DELL\graphshield-aml\src\modeling\select_champion.py                64     lightgbm = read_json(
+C:\Users\DELL\graphshield-aml\src\modeling\select_champion.py                66         / "lightgbm_validation.json"
+C:\Users\DELL\graphshield-aml\src\modeling\select_champion.py                70     # CatBoost
+C:\Users\DELL\graphshield-aml\src\modeling\select_champion.py                73     catboost = read_json(
+C:\Users\DELL\graphshield-aml\src\modeling\select_champion.py                75         / "catboost_validation.json"
+C:\Users\DELL\graphshield-aml\src\modeling\select_champion.py                79         "logistic": (
+C:\Users\DELL\graphshield-aml\src\modeling\select_champion.py                80             logistic_metrics
+C:\Users\DELL\graphshield-aml\src\modeling\select_champion.py                83         "lightgbm": (
+C:\Users\DELL\graphshield-aml\src\modeling\select_champion.py                84             lightgbm
+C:\Users\DELL\graphshield-aml\src\modeling\select_champion.py                87         "catboost": (
+C:\Users\DELL\graphshield-aml\src\modeling\select_champion.py                88             catboost
+C:\Users\DELL\graphshield-aml\src\modeling\select_champion.py                93         "\n--- VALIDATION COMPARISO...
+C:\Users\DELL\graphshield-aml\src\modeling\select_champion.py               107                 "average_precision"
+C:\Users\DELL\graphshield-aml\src\modeling\select_champion.py               135                 "roc_auc"
+C:\Users\DELL\graphshield-aml\src\modeling\select_champion.py               140     # Champion
+C:\Users\DELL\graphshield-aml\src\modeling\select_champion.py               143     champion = max(
+C:\Users\DELL\graphshield-aml\src\modeling\select_champion.py               147                 "average_precision"
+C:\Users\DELL\graphshield-aml\src\modeling\select_champion.py               165         "FINAL PHASE 3 CHAMPION:",
+C:\Users\DELL\graphshield-aml\src\modeling\select_champion.py               166         champion.upper(),
+C:\Users\DELL\graphshield-aml\src\modeling\select_champion.py               175             "validation"
+C:\Users\DELL\graphshield-aml\src\modeling\select_champion.py               179             "average_precision"
+C:\Users\DELL\graphshield-aml\src\modeling\select_champion.py               190         "champion": champion,
+C:\Users\DELL\graphshield-aml\src\modeling\select_champion.py               197         / "final_champion_selection...
+C:\Users\DELL\graphshield-aml\src\modeling\select_champion.py               210         / "final_champion_name.txt"
+C:\Users\DELL\graphshield-aml\src\modeling\select_champion.py               212         champion,
+C:\Users\DELL\graphshield-aml\src\modeling\select_champion.py               217         "\nSaved champion selection."
+C:\Users\DELL\graphshield-aml\src\modeling\train_catboost.py                  6 from catboost import (
+C:\Users\DELL\graphshield-aml\src\modeling\train_catboost.py                  7     CatBoostClassifier,
+C:\Users\DELL\graphshield-aml\src\modeling\train_catboost.py                 33 def make_catboost_ready(
+C:\Users\DELL\graphshield-aml\src\modeling\train_catboost.py                 55     print("GraphShield AML - CatBoo...
+C:\Users\DELL\graphshield-aml\src\modeling\train_catboost.py                 74             "validation",
+C:\Users\DELL\graphshield-aml\src\modeling\train_catboost.py                 81     X_train = make_catboost_ready(
+C:\Users\DELL\graphshield-aml\src\modeling\train_catboost.py                 86     X_val = make_catboost_ready(
+C:\Users\DELL\graphshield-aml\src\modeling\train_catboost.py                 91     model = CatBoostClassifier(
+C:\Users\DELL\graphshield-aml\src\modeling\train_catboost.py                128         early_stopping_rounds=100,
+C:\Users\DELL\graphshield-aml\src\modeling\train_catboost.py                143         "\nValidation AP:",
+C:\Users\DELL\graphshield-aml\src\modeling\train_catboost.py                145             "average_precision"
+C:\Users\DELL\graphshield-aml\src\modeling\train_catboost.py                150         "Validation Recall@Top1%:",
+C:\Users\DELL\graphshield-aml\src\modeling\train_catboost.py                159             / "catboost_v1.cbm"
+C:\Users\DELL\graphshield-aml\src\modeling\train_catboost.py                165         / "catboost_validation.json",
+C:\Users\DELL\graphshield-aml\src\modeling\train_catboost.py                167             "model": "catboost",
+C:\Users\DELL\graphshield-aml\src\modeling\train_catboost.py                191         / "catboost_validation.parq...
+C:\Users\DELL\graphshield-aml\src\modeling\train_catboost.py                196         "\nSaved CatBoost challenger."
+C:\Users\DELL\graphshield-aml\src\modeling\train_graph_ablation.py            4 import joblib
+C:\Users\DELL\graphshield-aml\src\modeling\train_graph_ablation.py            5 import lightgbm as lgb
+C:\Users\DELL\graphshield-aml\src\modeling\train_graph_ablation.py           37     "sender_prior_unique_receivers",
+C:\Users\DELL\graphshield-aml\src\modeling\train_graph_ablation.py           38     "receiver_prior_unique_senders",
+C:\Users\DELL\graphshield-aml\src\modeling\train_graph_ablation.py           47     "pair_share_of_receiver_history",
+C:\Users\DELL\graphshield-aml\src\modeling\train_graph_ablation.py           65     "receiver_prior_unique_receivers",
+C:\Users\DELL\graphshield-aml\src\modeling\train_graph_ablation.py           67     "receiver_bridge_degree",
+C:\Users\DELL\graphshield-aml\src\modeling\train_graph_ablation.py          158 def build_lightgbm(
+C:\Users\DELL\graphshield-aml\src\modeling\train_graph_ablation.py          208     # Read original LightGBM traini...
+C:\Users\DELL\graphshield-aml\src\modeling\train_graph_ablation.py          213         / "lightgbm_validation.json",
+C:\Users\DELL\graphshield-aml\src\modeling\train_graph_ablation.py          238     baseline_model = joblib.load(
+C:\Users\DELL\graphshield-aml\src\modeling\train_graph_ablation.py          240         / "lightgbm_v1.joblib"
+C:\Users\DELL\graphshield-aml\src\modeling\train_graph_ablation.py          247     # Validation baseline
+C:\Users\DELL\graphshield-aml\src\modeling\train_graph_ablation.py          250             "validation",
+C:\Users\DELL\graphshield-aml\src\modeling\train_graph_ablation.py          271     # Test baseline
+C:\Users\DELL\graphshield-aml\src\modeling\train_graph_ablation.py          272     _, X_base_test, y_test = (
+C:\Users\DELL\graphshield-aml\src\modeling\train_graph_ablation.py          274             "test",
+C:\Users\DELL\graphshield-aml\src\modeling\train_graph_ablation.py          281     baseline_test_scores = (
+C:\Users\DELL\graphshield-aml\src\modeling\train_graph_ablation.py          284             X_base_test
+C:\Users\DELL\graphshield-aml\src\modeling\train_graph_ablation.py          288     baseline_test_metrics = (
+C:\Users\DELL\graphshield-aml\src\modeling\train_graph_ablation.py          290             y_test,
+C:\Users\DELL\graphshield-aml\src\modeling\train_graph_ablation.py          291             baseline_test_scores,
+C:\Users\DELL\graphshield-aml\src\modeling\train_graph_ablation.py          323             "validation",
+C:\Users\DELL\graphshield-aml\src\modeling\train_graph_ablation.py          335     graph_model = build_lightgbm(
+C:\Users\DELL\graphshield-aml\src\modeling\train_graph_ablation.py          355             lgb.early_stopping(
+C:\Users\DELL\graphshield-aml\src\modeling\train_graph_ablation.py          380     # Test graph model
+C:\Users\DELL\graphshield-aml\src\modeling\train_graph_ablation.py          383     ids_test, X_test, y_graph_test = (
+C:\Users\DELL\graphshield-aml\src\modeling\train_graph_ablation.py          385             "test",
+C:\Users\DELL\graphshield-aml\src\modeling\train_graph_ablation.py          392     graph_test_scores = (
+C:\Users\DELL\graphshield-aml\src\modeling\train_graph_ablation.py          395             X_test
+C:\Users\DELL\graphshield-aml\src\modeling\train_graph_ablation.py          399     graph_test_metrics = (
+C:\Users\DELL\graphshield-aml\src\modeling\train_graph_ablation.py          401             y_graph_test,
+C:\Users\DELL\graphshield-aml\src\modeling\train_graph_ablation.py          402             graph_test_scores,
+C:\Users\DELL\graphshield-aml\src\modeling\train_graph_ablation.py          410     joblib.dump(
+C:\Users\DELL\graphshield-aml\src\modeling\train_graph_ablation.py          413         / "lightgbm_graph_v1.joblib",
+C:\Users\DELL\graphshield-aml\src\modeling\train_graph_ablation.py          421         "baseline_validation": (
+C:\Users\DELL\graphshield-aml\src\modeling\train_graph_ablation.py          425         "graph_validation": (
+C:\Users\DELL\graphshield-aml\src\modeling\train_graph_ablation.py          429         "baseline_test": (
+C:\Users\DELL\graphshield-aml\src\modeling\train_graph_ablation.py          430             baseline_test_metrics
+C:\Users\DELL\graphshield-aml\src\modeling\train_graph_ablation.py          433         "graph_test": (
+C:\Users\DELL\graphshield-aml\src\modeling\train_graph_ablation.py          434             graph_test_metrics
+C:\Users\DELL\graphshield-aml\src\modeling\train_graph_ablation.py          451                 ids_test.to_numpy(),
+C:\Users\DELL\graphshield-aml\src\modeling\train_graph_ablation.py          454                 y_graph_test,
+C:\Users\DELL\graphshield-aml\src\modeling\train_graph_ablation.py          457                 baseline_test_scores,
+C:\Users\DELL\graphshield-aml\src\modeling\train_graph_ablation.py          460                 graph_test_scores,
+C:\Users\DELL\graphshield-aml\src\modeling\train_graph_ablation.py          467         / "graph_ablation_test_pred...
+C:\Users\DELL\graphshield-aml\src\modeling\train_graph_ablation.py          471     print("\n--- VALIDATION ---")
+C:\Users\DELL\graphshield-aml\src\modeling\train_graph_ablation.py          476             "average_precision"
+C:\Users\DELL\graphshield-aml\src\modeling\train_graph_ablation.py          483             "average_precision"
+C:\Users\DELL\graphshield-aml\src\modeling\train_lightgbm.py                  3 import joblib
+C:\Users\DELL\graphshield-aml\src\modeling\train_lightgbm.py                  4 import lightgbm as lgb
+C:\Users\DELL\graphshield-aml\src\modeling\train_lightgbm.py                 36     print("GraphShield AML - LightG...
+C:\Users\DELL\graphshield-aml\src\modeling\train_lightgbm.py                 55             "validation",
+C:\Users\DELL\graphshield-aml\src\modeling\train_lightgbm.py                140             lgb.early_stopping(
+C:\Users\DELL\graphshield-aml\src\modeling\train_lightgbm.py                162         "\nValidation AP:",
+C:\Users\DELL\graphshield-aml\src\modeling\train_lightgbm.py                164             "average_precision"
+C:\Users\DELL\graphshield-aml\src\modeling\train_lightgbm.py                169         "Validation Recall@Top1%:",
+C:\Users\DELL\graphshield-aml\src\modeling\train_lightgbm.py                175     joblib.dump(
+C:\Users\DELL\graphshield-aml\src\modeling\train_lightgbm.py                178         / "lightgbm_v1.joblib",
+C:\Users\DELL\graphshield-aml\src\modeling\train_lightgbm.py                183         / "lightgbm_validation.json",
+C:\Users\DELL\graphshield-aml\src\modeling\train_lightgbm.py                185             "model": "lightgbm",
+C:\Users\DELL\graphshield-aml\src\modeling\train_lightgbm.py                211         / "lightgbm_validation.parq...
+C:\Users\DELL\graphshield-aml\src\modeling\train_lightgbm.py                216         "\nSaved LightGBM model."
+C:\Users\DELL\graphshield-aml\src\modeling\train_logistic.py                  3 import joblib
+C:\Users\DELL\graphshield-aml\src\modeling\train_logistic.py                  6 from sklearn.linear_model import SG...
+C:\Users\DELL\graphshield-aml\src\modeling\train_logistic.py                 26         "GS_LOGISTIC_TRAIN_FRACTION",
+C:\Users\DELL\graphshield-aml\src\modeling\train_logistic.py                 50                 SGDClassifier(
+C:\Users\DELL\graphshield-aml\src\modeling\train_logistic.py                 68     print("GraphShield AML - Logist...
+C:\Users\DELL\graphshield-aml\src\modeling\train_logistic.py                 95             "validation",
+C:\Users\DELL\graphshield-aml\src\modeling\train_logistic.py                113     # 3.3 Standard logistic baseline
+C:\Users\DELL\graphshield-aml\src\modeling\train_logistic.py                118             "logistic_unweighted",
+C:\Users\DELL\graphshield-aml\src\modeling\train_logistic.py                122             "logistic_balanced",
+C:\Users\DELL\graphshield-aml\src\modeling\train_logistic.py                157             "Validation AP:",
+C:\Users\DELL\graphshield-aml\src\modeling\train_logistic.py                159                 "average_precision"
+C:\Users\DELL\graphshield-aml\src\modeling\train_logistic.py                170         joblib.dump(
+C:\Users\DELL\graphshield-aml\src\modeling\train_logistic.py                173             / f"{name}.joblib",
+C:\Users\DELL\graphshield-aml\src\modeling\train_logistic.py                177     # Choose using VALIDATION only
+C:\Users\DELL\graphshield-aml\src\modeling\train_logistic.py                180     champion_name = max(
+C:\Users\DELL\graphshield-aml\src\modeling\train_logistic.py                186                 "average_precision"
+C:\Users\DELL\graphshield-aml\src\modeling\train_logistic.py                197         "\nLogistic champion:",
+C:\Users\DELL\graphshield-aml\src\modeling\train_logistic.py                198         champion_name,
+C:\Users\DELL\graphshield-aml\src\modeling\train_logistic.py                201     champion = candidates[
+C:\Users\DELL\graphshield-aml\src\modeling\train_logistic.py                202         champion_name
+C:\Users\DELL\graphshield-aml\src\modeling\train_logistic.py                205     # Test only the selected logist...
+C:\Users\DELL\graphshield-aml\src\modeling\train_logistic.py                206     _, X_test, y_test = (
+C:\Users\DELL\graphshield-aml\src\modeling\train_logistic.py                208             "test",
+C:\Users\DELL\graphshield-aml\src\modeling\train_logistic.py                213     test_probability = (
+C:\Users\DELL\graphshield-aml\src\modeling\train_logistic.py                214         champion.predict_proba(
+C:\Users\DELL\graphshield-aml\src\modeling\train_logistic.py                215             X_test
+C:\Users\DELL\graphshield-aml\src\modeling\train_logistic.py                219     test_metrics = evaluate_binary(
+C:\Users\DELL\graphshield-aml\src\modeling\train_logistic.py                220         y_test,
+C:\Users\DELL\graphshield-aml\src\modeling\train_logistic.py                221         test_probability,
+C:\Users\DELL\graphshield-aml\src\modeling\train_logistic.py                233         "validation_candidates": {
+C:\Users\DELL\graphshield-aml\src\modeling\train_logistic.py                240             champion_name
+C:\Users\DELL\graphshield-aml\src\modeling\train_logistic.py                243         "selected_test_metrics": (
+C:\Users\DELL\graphshield-aml\src\modeling\train_logistic.py                244             test_metrics
+C:\Users\DELL\graphshield-aml\src\modeling\train_logistic.py                250         / "logistic_metrics.json",
+C:\Users\DELL\graphshield-aml\src\modeling\train_logistic.py                254     joblib.dump(
+C:\Users\DELL\graphshield-aml\src\modeling\train_logistic.py                255         champion,
+C:\Users\DELL\graphshield-aml\src\modeling\train_logistic.py                257         / "logistic_champion.joblib",
+C:\Users\DELL\graphshield-aml\src\modeling\train_logistic.py                261         "\nTest AP:",
+C:\Users\DELL\graphshield-aml\src\modeling\train_logistic.py                262         test_metrics[
+C:\Users\DELL\graphshield-aml\src\modeling\train_logistic.py                263             "average_precision"
+C:\Users\DELL\graphshield-aml\src\modeling\train_logistic.py                268         "Test Recall@Top1%:",
+C:\Users\DELL\graphshield-aml\src\modeling\train_logistic.py                269         test_metrics[

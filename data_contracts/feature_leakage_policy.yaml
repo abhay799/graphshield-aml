@@ -1,0 +1,36 @@
+prediction_unit:
+  entity: transaction
+  prediction_time: event_ts
+
+allowed_current_transaction_fields:
+  - event_ts
+  - from_bank
+  - from_account
+  - to_bank
+  - to_account
+  - amount_paid
+  - amount_received
+  - payment_currency
+  - receiving_currency
+  - payment_format
+
+allowed_historical_information:
+  - sender_transactions_before_event
+  - receiver_transactions_before_event
+  - sender_amount_before_event
+  - receiver_amount_before_event
+  - counterparties_seen_before_event
+  - graph_edges_before_event
+
+prohibited_features:
+  - is_laundering
+  - future_transactions
+  - future_graph_edges
+  - future_account_aggregates
+  - investigator_disposition
+  - case_status
+  - regulatory_report_outcome
+
+evaluation_policy:
+  split_strategy: chronological
+  random_split_only_for_debugging: true

@@ -1,0 +1,38 @@
+{
+  "project": "GraphShield AML",
+  "phase": 7,
+  "audit": "end_to_end_integration",
+  "created_at_utc": "2026-09-09T14:37:00.206060+00:00",
+  "test_case_id": "CASE_IBM_LI_SMALL_4310302",
+  "results": {
+    "health": true,
+    "governance": true,
+    "queue": true,
+    "case_lookup": true,
+    "investigation_snapshot": true,
+    "case_graph": true,
+    "case_evidence": true,
+    "policy_retrieval": true,
+    "unified_case_intelligence": true,
+    "analyst_state_write": true,
+    "analyst_state_persistence": true,
+    "audit_trail": true,
+    "invalid_state_rejection": true,
+    "unknown_case_rejection": true,
+    "request_validation": true,
+    "phase1_6_freeze_present": true,
+    "operational_state_separation": true
+  },
+  "all_passed": true,
+  "governance": {
+    "decision_support_only": true,
+    "human_review_required": true,
+    "autonomous_account_blocking": false,
+    "autonomous_case_closure": false,
+    "autonomous_regulatory_filing": false
+  },
+  "architecture": {
+    "phase1_6": "certified read-only intelligence artifacts",
+    "phase7": "API, Workbench and separate operational analyst state"
+  }
+}

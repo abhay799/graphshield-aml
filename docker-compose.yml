@@ -1,0 +1,41 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: graphshield-aml:phase8
+    container_name: graphshield-api
+    command: ["python", "-m", "uvicorn", "api.app:app", "--host", "0.0.0.0", "--port", "8000"]
+    environment:
+      PYTHONPATH: /app/src
+      HF_HUB_OFFLINE: "1"
+      TRANSFORMERS_OFFLINE: "1"
+      GS_ALLOWED_HOSTS: "127.0.0.1,localhost,api"
+    volumes:
+      - ./data/processed:/app/data/processed:ro
+      - ./data/policy:/app/data/policy:ro
+      - ./data/phase7:/app/data/phase7
+    ports:
+      - "127.0.0.1:8000:8000"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=10)"]
+      interval: 20s
+      timeout: 10s
+      retries: 5
+      start_period: 40s
+
+  workbench:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: graphshield-aml:phase8
+    container_name: graphshield-workbench
+    command: ["python", "-m", "streamlit", "run", "src/workbench/app.py", "--server.address", "0.0.0.0", "--server.port", "8501", "--server.headless", "true"]
+    environment:
+      PYTHONPATH: /app/src
+      GRAPHSHIELD_API_URL: http://api:8000
+    depends_on:
+      api:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:8501:8501"

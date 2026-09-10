@@ -1,0 +1,5 @@
+artifact_name,required,status,path,size_bytes,size_human_readable,last_modified_utc
+Phase 2 split model dataset,True,PASS,C:\Users\DELL\graphshield-aml\data\processed\gold\model_features_v1_split.parquet,14521849,13.85 MB,2026-08-22T12:16:43.534575+00:00
+Phase 2 entity overlap audit,True,PASS,C:\Users\DELL\graphshield-aml\reports\modeling\phase2_entity_overlap_audit.csv,260,260.00 B,2026-08-22T12:17:54.034614+00:00
+Phase 2 leakage console output,False,PASS,C:\Users\DELL\graphshield-aml\reports\modeling\phase2_leakage_console.txt,12576,12.28 KB,2026-08-22T12:01:01.330849+00:00
+Phase 2 temporal split report,False,MISSING,C:\Users\DELL\graphshield-aml\reports\modeling\phase2_temporal_split_report.csv,,,

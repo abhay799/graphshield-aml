@@ -1,0 +1,106 @@
+==========================================================================================
+GRAPHSHIELD AML - PHASE 8 PRODUCTIZATION PREFLIGHT
+==========================================================================================
+
+=== PYTHON ===
+3.14.5 (tags/v3.14.5:5607950, May 10 2026, 10:43:50) [MSC v.1944 64 bit (AMD64)]
+
+=== CORE PROJECT FILES ===
+pyproject.toml: EXISTS
+README.md: EXISTS
+.gitignore: EXISTS
+Dockerfile: MISSING
+docker-compose.yml: MISSING
+docker-compose.yaml: MISSING
+.dockerignore: MISSING
+requirements.txt: EXISTS
+src/api/app.py: EXISTS
+src/workbench/app.py: EXISTS
+src/services/graphshield_service.py: EXISTS
+src/services/analyst_state.py: EXISTS
+src/services/case_graph_service.py: EXISTS
+src/services/case_intelligence.py: EXISTS
+src/validation/validate_phase7_integration.py: EXISTS
+reports/final/phase7_artifact_freeze.json: EXISTS
+reports/final/phase7_certification.md: EXISTS
+
+=== TEST INVENTORY ===
+Test files: 0
+
+=== PYTEST COLLECTION ===
+Exit code: 5
+no tests collected in 9.40s
+
+=== TOOLING ===
+Git: AVAILABLE
+  git version 2.55.0.windows.3
+Docker: AVAILABLE
+  Docker version 29.6.2, build dfc4efb
+Docker Compose: AVAILABLE
+  Docker Compose version v5.3.1
+
+=== GIT ===
+Repository detected: True
+Branch: master
+Working tree:
+M .gitignore
+ M data_contracts/canonical_transaction_schema.yaml
+ M src/canonical/build_silver.py
+?? configs/
+?? data/
+?? data_contracts/feature_leakage_policy.yaml
+?? data_contracts/source_registry.yaml
+?? models/
+?? reports/final/
+?? reports/investigation/
+?? reports/modeling/
+?? reports/phase3_modeling_report.md
+?? reports/phase5_temporal_graph_report.md
+?? reports/phase6_investigation_rag_report.md
+?? reports/phase6_investigation_rag_report_stale_20260909_160942.md
+?? reports/phase7/
+?? reports/phase7_runtime/
+?? reports/temporal_split_manifest.json
+?? src/api/
+?? src/entity/
+?? src/features/
+?? src/graph/
+?? src/investigation/
+?? src/modeling/
+?? src/retrieval/
+?? src/rules/apply_rules.py
+?? src/rules/generate_alerts.py
+?? src/services/
+?? src/temporal/
+?? src/validation/audit_phase2_artifact_sizes.py
+?? src/validation/run_validate_leakage_utf8.py
+?? src/validation/validate_counterparty_features.py
+?? src/validation/validate_entity_overlap.py
+?? src/validation/validate_entity_registry.py
+?? src/validation/validate_graph_features.py
+?? src/validation/validate_graph_model_dataset.py
+?? src/validation/validate_graph_model_dataset_before_state_ts_fix.py
+?? src/validation/validate_historical_features.py
+?? src/validation/validate_leakage.py
+?? src/validation/validate_phase1.py
+?? src/validation/validate_phase7_integration.py
+?? src/validation/validate_tgn_events.py
+?? src/validation/validate_transaction_features.py
+?? src/validation/validate_velocity_features.py
+?? src/workbench/
+
+=== CI/CD INVENTORY ===
+.github/workflows: MISSING
+
+=== PRODUCTIZATION FILE SEARCH ===
+prometheus: 0 file-name matches
+opentelemetry: 0 file-name matches
+logging: 0 file-name matches
+healthcheck: 0 file-name matches
+docker: 0 file-name matches
+kubernetes: 0 file-name matches
+gunicorn: 0 file-name matches
+uvicorn: 0 file-name matches
+
+=== CERTIFICATION BASELINE ===
+Phase 7 freeze: PRESENT

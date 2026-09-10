@@ -1,0 +1,56 @@
+{
+  "test_rows": 37380,
+  "test_positives": 33,
+  "rules": {
+    "top_1pct": {
+      "review_capacity": 0.01,
+      "reviewed_transactions": 374,
+      "captured_positives": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "lift": 0.0
+    },
+    "top_5pct": {
+      "review_capacity": 0.05,
+      "reviewed_transactions": 1869,
+      "captured_positives": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "lift": 0.0
+    },
+    "top_10pct": {
+      "review_capacity": 0.1,
+      "reviewed_transactions": 3738,
+      "captured_positives": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "lift": 0.0
+    }
+  },
+  "ml": {
+    "top_1pct": {
+      "review_capacity": 0.01,
+      "reviewed_transactions": 374,
+      "captured_positives": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "lift": 0.0
+    },
+    "top_5pct": {
+      "review_capacity": 0.05,
+      "reviewed_transactions": 1869,
+      "captured_positives": 7,
+      "precision": 0.003745318352059925,
+      "recall": 0.21212121212121213,
+      "lift": 4.242424242424242
+    },
+    "top_10pct": {
+      "review_capacity": 0.1,
+      "reviewed_transactions": 3738,
+      "captured_positives": 17,
+      "precision": 0.00454788657035848,
+      "recall": 0.5151515151515151,
+      "lift": 5.1515151515151505
+    }
+  }
+}

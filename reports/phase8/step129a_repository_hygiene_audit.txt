@@ -1,0 +1,85 @@
+==========================================================================================
+GRAPHSHIELD AML - STEP 129A REPOSITORY HYGIENE AUDIT
+==========================================================================================
+
+=== CURRENT .gitignore ===
+.venv/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.env
+data/raw/
+data/processed/
+
+
+# Virtual environment
+.venv/
+
+# Python
+__pycache__/
+*.pyc
+
+# Raw datasets
+data/raw/*
+
+# Processed datasets
+data/processed/*
+
+# Keep folder structure
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+
+# Environment secrets
+.env
+
+# IDE
+.vscode/
+
+# OS
+Thumbs.db
+
+# Logs
+*.log
+
+=== TRACKED FILES ===
+Tracked files: 35
+  src: 26
+  reports: 3
+  data_contracts: 2
+  .gitignore: 1
+  README.md: 1
+  pyproject.toml: 1
+  requirements.txt: 1
+
+=== TRACKED DATA / MODELS / ENVIRONMENT ===
+.venv/: 0 tracked files
+data/: 0 tracked files
+models/: 0 tracked files
+__pycache__/: 0 tracked files
+
+=== UNTRACKED FILES ===
+Untracked files: 222
+  src: 120
+  reports: 63
+  data: 16
+  models: 12
+  tests: 5
+  configs: 3
+  data_contracts: 2
+  pytest.ini: 1
+
+=== LARGE UNTRACKED FILES ===
+Untracked files >=10 MB: 1
+     13.63 MB  data/policy/raw/fiu_ind_aml_cft_guidelines_2026.pdf
+
+=== POSSIBLE SECRET / LOCAL CONFIG FILES ===
+No obvious secret filenames found.
+
+=== IMPORTANT AREAS THAT SHOULD REMAIN VERSIONABLE ===
+src: 189 files
+tests: 15 files
+configs: 3 files
+data_contracts: 4 files
+reports/final: 6 files
+reports/phase7: 4 files
+reports/phase8: 2 files

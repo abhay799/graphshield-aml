@@ -1,0 +1,11 @@
+{
+  "provider": "Mistral AI",
+  "account_tier": "Free",
+  "capability": "Chat Completions API",
+  "direct_http_test_status": 400,
+  "sdk_test_status": 400,
+  "provider_status": "Free Tier Temporarily Disabled",
+  "phase6_llm_generation_certification": "BLOCKED_EXTERNAL_PROVIDER",
+  "graphshield_code_failure": false,
+  "created_at_utc": "2026-09-08T23:06:06.906448+00:00"
+}

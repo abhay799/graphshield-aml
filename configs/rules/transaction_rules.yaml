@@ -1,0 +1,24 @@
+rules:
+  HIGH_VELOCITY:
+    enabled: true
+    severity: medium
+    sender_tx_count_1h_min: 20
+
+  RAPID_FAN_OUT:
+    enabled: true
+    severity: high
+    sender_tx_count_1h_min: 5
+    sender_unique_receivers_1h_min: 5
+    sender_fanout_ratio_1h_min: 0.80
+
+  RAPID_FAN_IN:
+    enabled: true
+    severity: high
+    receiver_tx_count_1h_min: 5
+    receiver_unique_senders_1h_min: 5
+    receiver_fanin_ratio_1h_min: 0.80
+
+  RAPID_PASS_THROUGH:
+    enabled: true
+    severity: high
+    rapid_pass_through_candidate_required: 1

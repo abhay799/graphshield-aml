@@ -1,0 +1,296 @@
+{
+  "project": "GraphShield AML",
+  "freeze_scope": "Phases 1-6",
+  "created_at_utc": "2026-09-09T11:00:05.764233+00:00",
+  "status": "CERTIFIED",
+  "raw_dataset": {
+    "name": "IBM AML LI-Small",
+    "rows": 5078345,
+    "positives": 5177,
+    "sha256": "b19d39f515523373f991b689c07e11e7b0b95c17a2c27a87d91584ae16c5b040"
+  },
+  "authoritative_champion": {
+    "model": "lightgbm_graph",
+    "selected_on": "validation",
+    "selection_metric": "average_precision",
+    "test_used_for_selection": false,
+    "queue_capacity_fraction": 0.01
+  },
+  "training_disclosures": {
+    "tree_training": "25% deterministic hash sample of training split; full validation and full test evaluation",
+    "tgn_training": "250,000 chronological training events, 1 epoch, CPU-constrained temporal candidate; full validation and test evaluation",
+    "tgn_role": "research/ablation component; not authoritative champion"
+  },
+  "phase6_materialization": {
+    "authoritative_queue_cases": 7617,
+    "queue_capacity_fraction": 0.01,
+    "eager_materialized_cases": 374,
+    "remaining_cases": 7243,
+    "strategy": "top-374 eager materialization; remaining queued cases may be investigated on demand"
+  },
+  "rag": {
+    "case_hit_at_5": 1.0,
+    "case_mrr": 0.8125,
+    "policy_hit_at_5": 1.0,
+    "policy_mrr": 1.0,
+    "live_llm_required_for_core_certification": false
+  },
+  "governance": {
+    "decision_support_only": true,
+    "autonomous_account_blocking": false,
+    "autonomous_case_closure": false,
+    "autonomous_regulatory_filing": false
+  },
+  "statistical_audit": {
+    "audit_version": "global_statistical_leakage_v1",
+    "locked_test": {
+      "rows": 761639,
+      "positives": 1561,
+      "prediction_sha256": "9d9dcb975793401eec2c0906956d5a11a08a0100d177e725606f14f7cdeb44fa"
+    },
+    "champion_governance": {
+      "model_name": "lightgbm_graph",
+      "selected_on_split": "validation",
+      "selection_metric": "average_precision",
+      "test_used_for_selection": false,
+      "frozen_validation_average_precision": 0.0230150388548912,
+      "selection_source": "reports\\modeling\\tgn_hybrid_fusion.json",
+      "selection_source_match": "validation_graph.average_precision",
+      "graph_ablation_report_validation_ap": 0.0228225805914592,
+      "validation_ap_report_difference": 0.00019245826343200143
+    },
+    "component_leakage": {
+      "dataset_component_columns": [],
+      "model_component_features": [],
+      "analysis_only_component_features_used": false
+    },
+    "entity_overlap_audit": {
+      "report": "reports\\modeling\\phase2_entity_overlap_audit.csv",
+      "present": true
+    },
+    "test_point_estimates": {
+      "baseline_average_precision": 0.001673758584395262,
+      "graph_average_precision": 0.0545211397049114,
+      "paired_delta_average_precision": 0.052847381120516145,
+      "baseline_recall_at_1pct": 0.014093529788597053,
+      "graph_recall_at_1pct": 0.4606021780909673,
+      "paired_delta_recall_at_1pct": 0.44650864830237025
+    },
+    "bootstrap": {
+      "method": "paired transaction-level nonparametric bootstrap",
+      "replicates": 100,
+      "seed": 42,
+      "confidence_level": 0.95,
+      "baseline_average_precision": {
+        "lower_95": 0.0015662005368480816,
+        "upper_95": 0.001805169110824582
+      },
+      "graph_average_precision": {
+        "lower_95": 0.049032629367860486,
+        "upper_95": 0.058814367049623964
+      },
+      "paired_delta_average_precision": {
+        "lower_95": 0.04744660822212123,
+        "upper_95": 0.05711177735955815
+      },
+      "baseline_recall_at_1pct": {
+        "lower_95": 0.009630770944327906,
+        "upper_95": 0.02054718850355923
+      },
+      "graph_recall_at_1pct": {
+        "lower_95": 0.4093828638155014,
+        "upper_95": 0.4532688654669857
+      },
+      "paired_delta_recall_at_1pct": {
+        "lower_95": 0.39484042093608196,
+        "upper_95": 0.43844677320163555
+      }
+    },
+    "gates": {
+      "point_in_time_leakage": true,
+      "entity_overlap_audited": true,
+      "graph_dataset_validation": true,
+      "component_feature_isolation": true,
+      "validation_only_champion_selection": true,
+      "test_not_used_for_selection": true,
+      "paired_ap_improvement": true,
+      "paired_recall_at_capacity_improvement": true
+    }
+  },
+  "artifacts": {
+    "phase1_raw_dataset": {
+      "path": "data/raw/LI-Small_Trans.csv",
+      "sha256": "b19d39f515523373f991b689c07e11e7b0b95c17a2c27a87d91584ae16c5b040",
+      "size_bytes": 475664283,
+      "modified_utc": "2026-08-20T22:29:14.656685+00:00"
+    },
+    "phase1_silver": {
+      "path": "data/processed/silver/transactions.parquet",
+      "sha256": "d6c11cd8fd51c1b5c34acb3c62de83ea5023b46f817f93799930cd94e64d422c",
+      "size_bytes": 118450421,
+      "modified_utc": "2026-08-22T05:52:09.996929+00:00"
+    },
+    "phase2_rules_gold": {
+      "path": "data/processed/gold/transaction_features_v6_rules.parquet",
+      "sha256": "7dc331030da402c39d869a1782b219e6197cd0500253acc7604262ed1d0bb5c8",
+      "size_bytes": 616372095,
+      "modified_utc": "2026-09-08T23:45:50.299796+00:00"
+    },
+    "phase3_model_split": {
+      "path": "data/processed/gold/model_features_v1_split.parquet",
+      "sha256": "31debf90e68179464365c59ce6f681b5ab55f04bf9af9b1f8a49d4a788574b99",
+      "size_bytes": 413954643,
+      "modified_utc": "2026-09-08T09:34:32.683328+00:00"
+    },
+    "phase3_champion_predictions": {
+      "path": "data/processed/modeling/champion_test_predictions.parquet",
+      "sha256": "1e9b8e9e6de843a0f20c8ddc4bdd3301f53039d73ead7dec3f3988400de852bf",
+      "size_bytes": 417484,
+      "modified_utc": "2026-08-21T20:25:38.328361+00:00"
+    },
+    "phase4_graph_model_split": {
+      "path": "data/processed/gold/model_features_v2_graph_split.parquet",
+      "sha256": "94e18220f74f79f6afcd3ab395a78170124b5c3be87693310c9c5ae448268c73",
+      "size_bytes": 650736884,
+      "modified_utc": "2026-09-09T09:20:18.017105+00:00"
+    },
+    "phase4_graph_predictions": {
+      "path": "data/processed/modeling/graph_ablation_test_predictions.parquet",
+      "sha256": "9d9dcb975793401eec2c0906956d5a11a08a0100d177e725606f14f7cdeb44fa",
+      "size_bytes": 3710371,
+      "modified_utc": "2026-09-09T09:38:18.109700+00:00"
+    },
+    "phase4_graph_model": {
+      "path": "models/lightgbm_graph_v1.joblib",
+      "sha256": "55f6dabc77b96f5176cabb2354b0432f2060f8a01d99a8880ea54d464f98de35",
+      "size_bytes": 20454,
+      "modified_utc": "2026-09-09T09:38:17.714142+00:00"
+    },
+    "phase4_graph_metrics": {
+      "path": "reports/modeling/graph_ablation_metrics.json",
+      "sha256": "8a93395149d92961dc30144459e7ac15ca2a622d0d51ffa4a8c9980ded5229ae",
+      "size_bytes": 4498,
+      "modified_utc": "2026-09-09T09:38:17.716151+00:00"
+    },
+    "phase5_tgn_events": {
+      "path": "data/processed/temporal/tgn_events.parquet",
+      "sha256": "d1e9d5fc133fe487bc5dd39a5d18ac744e01521513c6e5ac0bc38089e3de8788",
+      "size_bytes": 86697983,
+      "modified_utc": "2026-09-09T09:20:27.809902+00:00"
+    },
+    "phase5_tgn_model": {
+      "path": "models/tgn_risk_v1.pt",
+      "sha256": "99435ef17f30b6f67b7bdbbd53ff0c926589d1a4ca37f1cab8f0ac6bf6f2162e",
+      "size_bytes": 103378,
+      "modified_utc": "2026-09-09T09:49:44.748593+00:00"
+    },
+    "phase5_tgn_validation_predictions": {
+      "path": "data/processed/modeling/tgn_validation_predictions.parquet",
+      "sha256": "aa4d77d51f39215fcdfa6c59a0d30140e8eeaa61e87ebce762f287e2e57f9b0a",
+      "size_bytes": 4741056,
+      "modified_utc": "2026-09-09T09:56:14.402428+00:00"
+    },
+    "phase5_tgn_test_predictions": {
+      "path": "data/processed/modeling/tgn_test_predictions.parquet",
+      "sha256": "b39be088337f872f7a411f4cd568f10629bfab2224839f4a5c82e39674514ae9",
+      "size_bytes": 4729209,
+      "modified_utc": "2026-09-09T09:56:14.502345+00:00"
+    },
+    "phase5_tgn_metrics": {
+      "path": "reports/modeling/tgn_metrics.json",
+      "sha256": "684e41bb14f3e615608744a6ebc9be1e62abe24455e77d762db15c546d4b350f",
+      "size_bytes": 2654,
+      "modified_utc": "2026-09-09T09:56:14.502345+00:00"
+    },
+    "phase5_fusion_report": {
+      "path": "reports/modeling/tgn_hybrid_fusion.json",
+      "sha256": "4e5a8397dc3fc41132c8c76b30630f1b896a38d6a559e9cd34b3c981a1fc4f28",
+      "size_bytes": 21248,
+      "modified_utc": "2026-09-09T09:58:47.406881+00:00"
+    },
+    "authoritative_champion_manifest": {
+      "path": "reports/modeling/unified_champion_manifest.json",
+      "sha256": "b8d4e27db06b25dca8deea11e3cfe631ee05398169bd8f3a5d931b5517769654",
+      "size_bytes": 641,
+      "modified_utc": "2026-09-09T10:02:51.898598+00:00"
+    },
+    "phase6_case_queue": {
+      "path": "data/processed/cases/case_queue.parquet",
+      "sha256": "5c61a7ce7294f55f6dbb644a0a29c5608d05c440a7b12f60c7c660c3878b5544",
+      "size_bytes": 346564,
+      "modified_utc": "2026-09-09T10:02:56.664041+00:00"
+    },
+    "phase6_subgraph_manifest": {
+      "path": "data/processed/cases/subgraph_manifest.parquet",
+      "sha256": "b1919df0ebeed6cfa35bbc0a45d4d853f33f0c20ea250373fe00eb20b515298b",
+      "size_bytes": 11349,
+      "modified_utc": "2026-09-09T10:20:10.132391+00:00"
+    },
+    "phase6_case_paths": {
+      "path": "data/processed/cases/case_paths.jsonl",
+      "sha256": "8fd59f9c1d4017774f2361429dfca7c5dbab383a2335f501a8e73392574a3109",
+      "size_bytes": 172440,
+      "modified_utc": "2026-09-09T10:32:01.123065+00:00"
+    },
+    "phase6_bundle_index": {
+      "path": "data/processed/cases/case_bundle_index.jsonl",
+      "sha256": "fcb0ea8c9b9a55497049884f9009ba7020a760511789cb370294c9c994901af7",
+      "size_bytes": 74800,
+      "modified_utc": "2026-09-09T10:33:21.489201+00:00"
+    },
+    "phase6_evidence_documents": {
+      "path": "data/processed/cases/evidence_documents.parquet",
+      "sha256": "f65549a86ced5b8e91b11f4cb4e893632f58165b078e62a0328805c29332afc9",
+      "size_bytes": 1264171,
+      "modified_utc": "2026-09-09T10:35:09.362244+00:00"
+    },
+    "phase6_policy_registry": {
+      "path": "data/policy/source_registry.yaml",
+      "sha256": "55943e285811ba2b77a2899935428bdebeed7e9a21cb314fd8916e6a686e0c52",
+      "size_bytes": 2815,
+      "modified_utc": "2026-09-08T15:40:55.744932+00:00"
+    },
+    "phase6_policy_corpus": {
+      "path": "data/policy/processed/policy_corpus.parquet",
+      "sha256": "6edd17e946a6ece9bc373fc5be230256f5ba966155beb2948bae3301dad50ee6",
+      "size_bytes": 253343,
+      "modified_utc": "2026-09-08T16:30:32.630975+00:00"
+    },
+    "phase6_rag_evaluation": {
+      "path": "reports/investigation/rag_evaluation.json",
+      "sha256": "769514e54e621dbaf88ee164a8fd7d18ce8c661c756d3c1c0a2c1cbd314678fa",
+      "size_bytes": 12070,
+      "modified_utc": "2026-09-09T10:40:37.547375+00:00"
+    },
+    "phase6_adversarial_evaluation": {
+      "path": "reports/investigation/adversarial_rag_evaluation.json",
+      "sha256": "d5d47e4ad275007cbfba91f6de6421c00398fa8a2f8c61150ba39d798abf6e22",
+      "size_bytes": 4066,
+      "modified_utc": "2026-09-09T10:46:47.227871+00:00"
+    },
+    "global_statistical_leakage_audit": {
+      "path": "reports/modeling/global_statistical_leakage_audit.json",
+      "sha256": "431dc0bcfd7ad90ae4f310e70142c37849f277afc3a97ada1367e0aeff0f12d2",
+      "size_bytes": 2649,
+      "modified_utc": "2026-09-09T10:57:06.133519+00:00"
+    },
+    "entity_overlap_audit": {
+      "path": "reports/modeling/phase2_entity_overlap_audit.csv",
+      "sha256": "172da84c391cb168ba692a5b3ea6a4e3dd1207f6d066b599dc5b974841da30bd",
+      "size_bytes": 259,
+      "modified_utc": "2026-09-09T10:53:06.935148+00:00"
+    },
+    "environment_freeze": {
+      "path": "reports/final/environment_freeze.txt",
+      "sha256": "0b548aee27125fbd0fb8323a3b051307083012acf276ed8b44b969b0e2482b5d",
+      "size_bytes": 3304,
+      "modified_utc": "2026-09-09T10:59:43.961892+00:00"
+    },
+    "python_version": {
+      "path": "reports/final/python_version.txt",
+      "sha256": "b7e91dcfc6f0b268e5985a972aa62527fb241a2a7952bf77b627d8aa18ba3910",
+      "size_bytes": 18,
+      "modified_utc": "2026-09-09T10:59:42.592592+00:00"
+    }
+  }
+}

@@ -1,0 +1,11 @@
+payment_currency,operational_outcome,transactions
+US Dollar,missed_positive,11
+Euro,missed_positive,8
+Saudi Riyal,missed_positive,4
+Yuan,missed_positive,2
+Yen,missed_positive,2
+Rupee,missed_positive,2
+Australian Dollar,missed_positive,1
+Shekel,missed_positive,1
+Canadian Dollar,missed_positive,1
+Swiss Franc,missed_positive,1

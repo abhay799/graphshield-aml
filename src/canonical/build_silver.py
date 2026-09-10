@@ -2,275 +2,328 @@ from pathlib import Path
 
 import polars as pl
 
-from schema import CANONICAL_COLUMNS, COLUMN_MAPPING
-
-
-# ==========================================================
-# Project paths
-# ==========================================================
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 
-RAW_PATH = (
+INPUT_PATH = (
     PROJECT_ROOT
     / "data"
     / "raw"
     / "LI-Small_Trans.csv"
 )
 
-SILVER_DIR = (
+OUTPUT_PATH = (
     PROJECT_ROOT
     / "data"
     / "processed"
     / "silver"
-)
-
-SILVER_PATH = (
-    SILVER_DIR
     / "transactions.parquet"
 )
 
 
 def main():
 
-    print("=" * 70)
-    print("GraphShield AML - Build Silver Canonical Dataset")
-    print("=" * 70)
+    print("=" * 80)
+    print("GraphShield AML - Canonical Silver Transaction Build")
+    print("=" * 80)
 
     # ======================================================
-    # 1. Check raw dataset
+    # Input validation
     # ======================================================
 
-    if not RAW_PATH.exists():
-        print("\nERROR: Raw dataset not found.")
-        print(RAW_PATH)
-        return
-
-    print("\nRaw dataset:")
-    print(RAW_PATH)
-
-    SILVER_DIR.mkdir(
-        parents=True,
-        exist_ok=True
-    )
-
-    # ======================================================
-    # 2. Scan raw CSV lazily
-    # ======================================================
-
-    print("\nScanning raw dataset...")
-
-    lf = pl.scan_csv(RAW_PATH)
-
-    # ======================================================
-    # 3. Add source row number
-    # ======================================================
-
-    lf = lf.with_row_index(
-        name="source_row_number",
-        offset=0,
-    )
-
-    # ======================================================
-    # 4. Rename raw columns
-    # ======================================================
-
-    lf = lf.rename(
-        COLUMN_MAPPING
-    )
-
-    # ======================================================
-    # 5. Canonical transformations
-    # ======================================================
-
-    lf = lf.with_columns(
-
-        # ----------------------------------------------
-        # Timestamp
-        # ----------------------------------------------
-
-        pl.col("event_ts")
-        .str.to_datetime(
-            strict=False
+    if not INPUT_PATH.exists():
+        raise FileNotFoundError(
+            f"Raw dataset not found:\n{INPUT_PATH}"
         )
-        .alias("event_ts"),
 
-        # ----------------------------------------------
-        # Identifiers
-        # ----------------------------------------------
-
-        pl.col("from_bank")
-        .cast(pl.String)
-        .str.strip_chars()
-        .alias("from_bank"),
-
-        pl.col("from_account")
-        .cast(pl.String)
-        .str.strip_chars()
-        .alias("from_account"),
-
-        pl.col("to_bank")
-        .cast(pl.String)
-        .str.strip_chars()
-        .alias("to_bank"),
-
-        pl.col("to_account")
-        .cast(pl.String)
-        .str.strip_chars()
-        .alias("to_account"),
-
-        # ----------------------------------------------
-        # Amount fields
-        # ----------------------------------------------
-
-        pl.col("amount_received")
-        .cast(pl.Float64)
-        .alias("amount_received"),
-
-        pl.col("amount_paid")
-        .cast(pl.Float64)
-        .alias("amount_paid"),
-
-        # ----------------------------------------------
-        # Categorical fields
-        # ----------------------------------------------
-
-        pl.col("receiving_currency")
-        .cast(pl.String)
-        .str.strip_chars()
-        .alias("receiving_currency"),
-
-        pl.col("payment_currency")
-        .cast(pl.String)
-        .str.strip_chars()
-        .alias("payment_currency"),
-
-        pl.col("payment_format")
-        .cast(pl.String)
-        .str.strip_chars()
-        .alias("payment_format"),
-
-        # ----------------------------------------------
-        # Target
-        # ----------------------------------------------
-
-        pl.col("is_laundering")
-        .cast(pl.UInt8)
-        .alias("is_laundering"),
+    OUTPUT_PATH.parent.mkdir(
+        parents=True,
+        exist_ok=True,
     )
 
+    print("\nInput:")
+    print(INPUT_PATH)
+
+    print("\nOutput:")
+    print(OUTPUT_PATH)
+
     # ======================================================
-    # 6. Add lineage fields
+    # Read immutable raw source
     # ======================================================
 
-    lf = lf.with_columns(
+    print("\nReading raw CSV with Polars Lazy API...")
 
-        pl.concat_str(
+    raw = (
+        pl.scan_csv(
+            INPUT_PATH
+        )
+        .with_row_index(
+            "source_row_number",
+            offset=0,
+        )
+    )
+
+    raw_schema = raw.collect_schema()
+
+    print("\nRaw columns:")
+
+    for column in raw_schema.names():
+        print(f"  - {column}")
+
+    # ======================================================
+    # Required source columns
+    # ======================================================
+
+    required_raw_columns = [
+        "Timestamp",
+        "From Bank",
+        "Account",
+        "To Bank",
+        "Account_duplicated_0",
+        "Amount Received",
+        "Receiving Currency",
+        "Amount Paid",
+        "Payment Currency",
+        "Payment Format",
+        "Is Laundering",
+    ]
+
+    missing_columns = [
+        column
+        for column in required_raw_columns
+        if column not in raw_schema.names()
+    ]
+
+    if missing_columns:
+        raise RuntimeError(
+            "Missing required raw columns:\n"
+            + "\n".join(
+                f"  - {column}"
+                for column in missing_columns
+            )
+        )
+
+    # ======================================================
+    # Build canonical Silver schema
+    # ======================================================
+
+    print("\nBuilding canonical transaction schema...")
+
+    silver = (
+        raw.select(
             [
-                pl.lit("IBM_LI_SMALL_"),
+                # Stable lineage-based ID
+                pl.concat_str(
+                    [
+                        pl.lit("IBM_LI_SMALL_"),
+                        pl.col(
+                            "source_row_number"
+                        ).cast(pl.String),
+                    ]
+                )
+                .alias(
+                    "transaction_id"
+                ),
 
-                pl.col("source_row_number")
-                .cast(pl.String),
+                # Explicit UTC interpretation of the
+                # timezone-naive synthetic source timestamp
+                pl.col("Timestamp")
+                .str.strptime(
+                    pl.Datetime,
+                    strict=True,
+                )
+                .dt.replace_time_zone(
+                    "UTC"
+                )
+                .alias(
+                    "event_ts"
+                ),
+
+                pl.col("From Bank")
+                .cast(pl.String)
+                .alias(
+                    "from_bank"
+                ),
+
+                pl.col("Account")
+                .cast(pl.String)
+                .alias(
+                    "from_account"
+                ),
+
+                pl.col("To Bank")
+                .cast(pl.String)
+                .alias(
+                    "to_bank"
+                ),
+
+                # IMPORTANT:
+                # Polars renamed the second raw Account column
+                # to Account_duplicated_0.
+                pl.col(
+                    "Account_duplicated_0"
+                )
+                .cast(pl.String)
+                .alias(
+                    "to_account"
+                ),
+
+                pl.col(
+                    "Amount Received"
+                )
+                .cast(pl.Float64)
+                .alias(
+                    "amount_received"
+                ),
+
+                pl.col(
+                    "Receiving Currency"
+                )
+                .cast(pl.String)
+                .alias(
+                    "receiving_currency"
+                ),
+
+                pl.col(
+                    "Amount Paid"
+                )
+                .cast(pl.Float64)
+                .alias(
+                    "amount_paid"
+                ),
+
+                pl.col(
+                    "Payment Currency"
+                )
+                .cast(pl.String)
+                .alias(
+                    "payment_currency"
+                ),
+
+                pl.col(
+                    "Payment Format"
+                )
+                .cast(pl.String)
+                .alias(
+                    "payment_format"
+                ),
+
+                pl.col(
+                    "Is Laundering"
+                )
+                .cast(pl.UInt8)
+                .alias(
+                    "is_laundering"
+                ),
+
+                pl.col(
+                    "source_row_number"
+                ),
+
+                pl.lit(
+                    "IBM_LI_SMALL"
+                )
+                .alias(
+                    "source_dataset"
+                ),
             ]
         )
-        .alias("transaction_id"),
-
-        pl.lit(
-            "IBM_LI_SMALL"
-        )
-        .alias("source_dataset"),
     )
 
     # ======================================================
-    # 7. Select canonical column order
+    # Schema check before writing
     # ======================================================
 
-    lf = lf.select(
-        CANONICAL_COLUMNS
-    )
+    print("\nOutput schema:")
 
-    # ======================================================
-    # 8. Check transformation schema
-    # ======================================================
+    schema = silver.collect_schema()
 
-    print("\n--- CANONICAL SCHEMA ---")
-
-    schema = lf.collect_schema()
-
-    for column in schema.names():
-
+    for name, dtype in schema.items():
         print(
-            f"{column:<25} "
-            f"{schema[column]}"
+            f"{name:<28} {dtype}"
         )
 
     # ======================================================
-    # 9. Check timestamp parsing before writing
+    # Write Silver
     # ======================================================
 
-    print("\nChecking timestamp parsing...")
+    print("\nWriting Silver Parquet...")
 
-    timestamp_check = (
-        lf.select(
+    silver.sink_parquet(
+        OUTPUT_PATH,
+        compression="zstd",
+    )
+
+    # ======================================================
+    # Verify written artifact
+    # ======================================================
+
+    written = pl.scan_parquet(
+        OUTPUT_PATH
+    )
+
+    summary = (
+        written.select(
             [
                 pl.len()
                 .alias("rows"),
 
-                pl.col("event_ts")
-                .null_count()
-                .alias("null_event_ts"),
+                pl.col(
+                    "transaction_id"
+                )
+                .n_unique()
+                .alias(
+                    "unique_transaction_ids"
+                ),
+
+                pl.col(
+                    "is_laundering"
+                )
+                .sum()
+                .alias(
+                    "positives"
+                ),
+
+                pl.col(
+                    "event_ts"
+                )
+                .min()
+                .alias(
+                    "start"
+                ),
+
+                pl.col(
+                    "event_ts"
+                )
+                .max()
+                .alias(
+                    "end"
+                ),
             ]
         )
         .collect()
     )
 
-    total_rows = timestamp_check["rows"][0]
-    timestamp_nulls = timestamp_check["null_event_ts"][0]
+    print("\n--- SILVER SUMMARY ---")
+    print(summary)
 
-    print(
-        f"Rows              : {total_rows:,}"
+    final_schema = (
+        written.collect_schema()
     )
 
     print(
-        f"Null timestamps   : {timestamp_nulls:,}"
+        "\nevent_ts dtype:",
+        final_schema[
+            "event_ts"
+        ],
     )
 
-    if timestamp_nulls > 0:
+    print("\nCreated:")
+    print(OUTPUT_PATH)
 
-        print("\nWARNING:")
-        print(
-            "Some timestamps could not be parsed."
-        )
-
-        print(
-            "Do not continue until they are investigated."
-        )
-
-        return
-
-    # ======================================================
-    # 10. Write Silver Parquet
-    # ======================================================
-
-    print("\nWriting Silver Parquet dataset...")
-
-    lf.sink_parquet(
-        SILVER_PATH,
-        compression="zstd",
-    )
-
-    # ======================================================
-    # Complete
-    # ======================================================
-
-    print("\nSilver dataset created successfully.")
-
-    print("\nOutput:")
-    print(SILVER_PATH)
-
-    print("\n" + "=" * 70)
+    print("\n" + "=" * 80)
     print("SILVER BUILD COMPLETE")
-    print("=" * 70)
+    print("=" * 80)
 
 
 if __name__ == "__main__":

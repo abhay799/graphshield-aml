@@ -1,0 +1,334 @@
+{
+  "case_retrieval": {
+    "queries": 40,
+    "hits": 40,
+    "hit_at_5": 1.0,
+    "mean_reciprocal_rank": 0.8125,
+    "details": [
+      {
+        "case_id": "CASE_IBM_LI_SMALL_4310302",
+        "question": "What was the focal transaction amount, currency, sender and receiver?",
+        "expected_source": "focal_transaction",
+        "found_rank": 4
+      },
+      {
+        "case_id": "CASE_IBM_LI_SMALL_4310302",
+        "question": "Which deterministic AML rules triggered for this case?",
+        "expected_source": "rule_evidence",
+        "found_rank": 1
+      },
+      {
+        "case_id": "CASE_IBM_LI_SMALL_4310302",
+        "question": "How large is the point-in-time investigation subgraph?",
+        "expected_source": "graph_summary",
+        "found_rank": 1
+      },
+      {
+        "case_id": "CASE_IBM_LI_SMALL_4310302",
+        "question": "Is there an alternate or reverse historical network path?",
+        "expected_source": "graph_path",
+        "found_rank": 1
+      },
+      {
+        "case_id": "CASE_IBM_LI_SMALL_4310637",
+        "question": "What was the focal transaction amount, currency, sender and receiver?",
+        "expected_source": "focal_transaction",
+        "found_rank": 4
+      },
+      {
+        "case_id": "CASE_IBM_LI_SMALL_4310637",
+        "question": "Which deterministic AML rules triggered for this case?",
+        "expected_source": "rule_evidence",
+        "found_rank": 1
+      },
+      {
+        "case_id": "CASE_IBM_LI_SMALL_4310637",
+        "question": "How large is the point-in-time investigation subgraph?",
+        "expected_source": "graph_summary",
+        "found_rank": 1
+      },
+      {
+        "case_id": "CASE_IBM_LI_SMALL_4310637",
+        "question": "Is there an alternate or reverse historical network path?",
+        "expected_source": "graph_path",
+        "found_rank": 1
+      },
+      {
+        "case_id": "CASE_IBM_LI_SMALL_4313856",
+        "question": "What was the focal transaction amount, currency, sender and receiver?",
+        "expected_source": "focal_transaction",
+        "found_rank": 4
+      },
+      {
+        "case_id": "CASE_IBM_LI_SMALL_4313856",
+        "question": "Which deterministic AML rules triggered for this case?",
+        "expected_source": "rule_evidence",
+        "found_rank": 1
+      },
+      {
+        "case_id": "CASE_IBM_LI_SMALL_4313856",
+        "question": "How large is the point-in-time investigation subgraph?",
+        "expected_source": "graph_summary",
+        "found_rank": 1
+      },
+      {
+        "case_id": "CASE_IBM_LI_SMALL_4313856",
+        "question": "Is there an alternate or reverse historical network path?",
+        "expected_source": "graph_path",
+        "found_rank": 1
+      },
+      {
+        "case_id": "CASE_IBM_LI_SMALL_4316801",
+        "question": "What was the focal transaction amount, currency, sender and receiver?",
+        "expected_source": "focal_transaction",
+        "found_rank": 4
+      },
+      {
+        "case_id": "CASE_IBM_LI_SMALL_4316801",
+        "question": "Which deterministic AML rules triggered for this case?",
+        "expected_source": "rule_evidence",
+        "found_rank": 1
+      },
+      {
+        "case_id": "CASE_IBM_LI_SMALL_4316801",
+        "question": "How large is the point-in-time investigation subgraph?",
+        "expected_source": "graph_summary",
+        "found_rank": 1
+      },
+      {
+        "case_id": "CASE_IBM_LI_SMALL_4316801",
+        "question": "Is there an alternate or reverse historical network path?",
+        "expected_source": "graph_path",
+        "found_rank": 1
+      },
+      {
+        "case_id": "CASE_IBM_LI_SMALL_4326023",
+        "question": "What was the focal transaction amount, currency, sender and receiver?",
+        "expected_source": "focal_transaction",
+        "found_rank": 4
+      },
+      {
+        "case_id": "CASE_IBM_LI_SMALL_4326023",
+        "question": "Which deterministic AML rules triggered for this case?",
+        "expected_source": "rule_evidence",
+        "found_rank": 1
+      },
+      {
+        "case_id": "CASE_IBM_LI_SMALL_4326023",
+        "question": "How large is the point-in-time investigation subgraph?",
+        "expected_source": "graph_summary",
+        "found_rank": 1
+      },
+      {
+        "case_id": "CASE_IBM_LI_SMALL_4326023",
+        "question": "Is there an alternate or reverse historical network path?",
+        "expected_source": "graph_path",
+        "found_rank": 1
+      },
+      {
+        "case_id": "CASE_IBM_LI_SMALL_4326407",
+        "question": "What was the focal transaction amount, currency, sender and receiver?",
+        "expected_source": "focal_transaction",
+        "found_rank": 4
+      },
+      {
+        "case_id": "CASE_IBM_LI_SMALL_4326407",
+        "question": "Which deterministic AML rules triggered for this case?",
+        "expected_source": "rule_evidence",
+        "found_rank": 1
+      },
+      {
+        "case_id": "CASE_IBM_LI_SMALL_4326407",
+        "question": "How large is the point-in-time investigation subgraph?",
+        "expected_source": "graph_summary",
+        "found_rank": 1
+      },
+      {
+        "case_id": "CASE_IBM_LI_SMALL_4326407",
+        "question": "Is there an alternate or reverse historical network path?",
+        "expected_source": "graph_path",
+        "found_rank": 1
+      },
+      {
+        "case_id": "CASE_IBM_LI_SMALL_4327049",
+        "question": "What was the focal transaction amount, currency, sender and receiver?",
+        "expected_source": "focal_transaction",
+        "found_rank": 4
+      },
+      {
+        "case_id": "CASE_IBM_LI_SMALL_4327049",
+        "question": "Which deterministic AML rules triggered for this case?",
+        "expected_source": "rule_evidence",
+        "found_rank": 1
+      },
+      {
+        "case_id": "CASE_IBM_LI_SMALL_4327049",
+        "question": "How large is the point-in-time investigation subgraph?",
+        "expected_source": "graph_summary",
+        "found_rank": 1
+      },
+      {
+        "case_id": "CASE_IBM_LI_SMALL_4327049",
+        "question": "Is there an alternate or reverse historical network path?",
+        "expected_source": "graph_path",
+        "found_rank": 1
+      },
+      {
+        "case_id": "CASE_IBM_LI_SMALL_4328318",
+        "question": "What was the focal transaction amount, currency, sender and receiver?",
+        "expected_source": "focal_transaction",
+        "found_rank": 4
+      },
+      {
+        "case_id": "CASE_IBM_LI_SMALL_4328318",
+        "question": "Which deterministic AML rules triggered for this case?",
+        "expected_source": "rule_evidence",
+        "found_rank": 1
+      },
+      {
+        "case_id": "CASE_IBM_LI_SMALL_4328318",
+        "question": "How large is the point-in-time investigation subgraph?",
+        "expected_source": "graph_summary",
+        "found_rank": 1
+      },
+      {
+        "case_id": "CASE_IBM_LI_SMALL_4328318",
+        "question": "Is there an alternate or reverse historical network path?",
+        "expected_source": "graph_path",
+        "found_rank": 1
+      },
+      {
+        "case_id": "CASE_IBM_LI_SMALL_4328531",
+        "question": "What was the focal transaction amount, currency, sender and receiver?",
+        "expected_source": "focal_transaction",
+        "found_rank": 4
+      },
+      {
+        "case_id": "CASE_IBM_LI_SMALL_4328531",
+        "question": "Which deterministic AML rules triggered for this case?",
+        "expected_source": "rule_evidence",
+        "found_rank": 1
+      },
+      {
+        "case_id": "CASE_IBM_LI_SMALL_4328531",
+        "question": "How large is the point-in-time investigation subgraph?",
+        "expected_source": "graph_summary",
+        "found_rank": 1
+      },
+      {
+        "case_id": "CASE_IBM_LI_SMALL_4328531",
+        "question": "Is there an alternate or reverse historical network path?",
+        "expected_source": "graph_path",
+        "found_rank": 1
+      },
+      {
+        "case_id": "CASE_IBM_LI_SMALL_4330557",
+        "question": "What was the focal transaction amount, currency, sender and receiver?",
+        "expected_source": "focal_transaction",
+        "found_rank": 4
+      },
+      {
+        "case_id": "CASE_IBM_LI_SMALL_4330557",
+        "question": "Which deterministic AML rules triggered for this case?",
+        "expected_source": "rule_evidence",
+        "found_rank": 1
+      },
+      {
+        "case_id": "CASE_IBM_LI_SMALL_4330557",
+        "question": "How large is the point-in-time investigation subgraph?",
+        "expected_source": "graph_summary",
+        "found_rank": 1
+      },
+      {
+        "case_id": "CASE_IBM_LI_SMALL_4330557",
+        "question": "Is there an alternate or reverse historical network path?",
+        "expected_source": "graph_path",
+        "found_rank": 1
+      }
+    ]
+  },
+  "policy_retrieval": {
+    "queries": 6,
+    "hits": 6,
+    "hit_at_5": 1.0,
+    "mean_reciprocal_rank": 1.0,
+    "details": [
+      {
+        "question": "According to the FATF Recommendations, what customer due diligence and ongoing monitoring requirements apply?",
+        "expected_document": "fatf_recommendations_2026",
+        "found_rank": 1,
+        "returned_documents": [
+          "fatf_recommendations_2026",
+          "fatf_recommendations_2026",
+          "fatf_recommendations_2026",
+          "fatf_recommendations_2026",
+          "fatf_recommendations_2026"
+        ]
+      },
+      {
+        "question": "What does FATF banking-sector guidance say about applying a risk-based approach?",
+        "expected_document": "fatf_rba_banking_2014",
+        "found_rank": 1,
+        "returned_documents": [
+          "fatf_rba_banking_2014",
+          "fatf_rba_banking_2014",
+          "fatf_rba_banking_2014",
+          "fatf_rba_banking_2014",
+          "fatf_rba_banking_2014"
+        ]
+      },
+      {
+        "question": "What are FinCEN's national AML and CFT priorities?",
+        "expected_document": "fincen_aml_cft_priorities_2021",
+        "found_rank": 1,
+        "returned_documents": [
+          "fincen_aml_cft_priorities_2021",
+          "fincen_aml_cft_priorities_2021",
+          "fincen_aml_cft_priorities_2021",
+          "fincen_aml_cft_priorities_2021",
+          "fincen_aml_cft_priorities_2021"
+        ]
+      },
+      {
+        "question": "What does FinCEN's October 2025 SAR FAQ say about suspicious activity reporting?",
+        "expected_document": "fincen_sar_faq_october_2025",
+        "found_rank": 1,
+        "returned_documents": [
+          "fincen_sar_faq_october_2025",
+          "fincen_sar_faq_october_2025",
+          "fincen_sar_faq_october_2025",
+          "fincen_sar_faq_october_2025",
+          "fincen_aml_cft_priorities_2021"
+        ]
+      },
+      {
+        "question": "What AML and CFT guidance applies to reporting entities providing virtual digital asset services in India?",
+        "expected_document": "fiu_ind_aml_cft_guidelines_2026",
+        "found_rank": 1,
+        "returned_documents": [
+          "fiu_ind_aml_cft_guidelines_2026",
+          "fiu_ind_aml_cft_guidelines_2026",
+          "fiu_ind_aml_cft_guidelines_2026",
+          "fiu_ind_aml_cft_guidelines_2026",
+          "fiu_ind_aml_cft_guidelines_2026"
+        ]
+      },
+      {
+        "question": "What does RBI's KYC Master Direction say about customer due diligence and ongoing monitoring?",
+        "expected_document": "rbi_kyc_master_direction",
+        "found_rank": 1,
+        "returned_documents": [
+          "rbi_kyc_master_direction",
+          "rbi_kyc_master_direction",
+          "rbi_kyc_master_direction",
+          "rbi_kyc_master_direction",
+          "rbi_kyc_master_direction"
+        ]
+      }
+    ]
+  },
+  "citations": {
+    "available": false,
+    "reason": "No RAG interaction log exists yet."
+  }
+}

@@ -1,0 +1,2 @@
+operational_outcome,transactions,avg_amount_paid,avg_sender_tx_24h,avg_receiver_tx_24h,avg_sender_unique_receivers,avg_receiver_unique_senders,new_counterparty_rate,pass_through_rate
+missed_positive,33,270666.44393939397,190.9090909090909,2.242424242424242,69.03030303030303,0.48484848484848486,0.9090909090909091,0.0

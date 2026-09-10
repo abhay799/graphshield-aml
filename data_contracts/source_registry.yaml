@@ -1,0 +1,55 @@
+version: "1.0"
+
+sources:
+  ibm_li_small:
+    dataset_name: "IBM AML-Data LI-Small"
+    source_dataset_id: "ibm_aml_li_small"
+
+    source_file:
+      path: "data/raw/LI-Small_Trans.csv"
+
+    source_type:
+      synthetic: true
+      real_customer_data: false
+
+    provenance:
+      provider: "IBM AML-Data"
+      dataset_family: "AML-Data"
+      licence: "CDLA-Sharing-1.0"
+      source_version: "local_pinned_snapshot"
+      retrieved_at_utc: null
+      sha256: "  b19d39f515523373f991b689c07e11e7b0b95c17a2c27a87d91584ae16c5b040 "
+
+    schema:
+      schema_version: "1.0"
+      raw_columns:
+        - "Timestamp"
+        - "From Bank"
+        - "Account"
+        - "To Bank"
+        - "Account_duplicated_0"
+        - "Amount Received"
+        - "Receiving Currency"
+        - "Amount Paid"
+        - "Payment Currency"
+        - "Payment Format"
+        - "Is Laundering"
+
+    timestamp_policy:
+      source_timezone_available: false
+      canonical_timezone: "UTC"
+      assumption: >
+        The synthetic source timestamp has no explicit timezone.
+        For deterministic portfolio processing it is interpreted as UTC.
+
+    duplicate_policy:
+      raw_rows_are_immutable: true
+      automatic_content_deduplication: false
+      reason: >
+        The source does not provide a trustworthy external transaction ID.
+        Identical transaction attributes are reported as potential duplicates
+        but are not automatically deleted.
+
+    usage:
+      portfolio_research_only: true
+      production_compliance_claim: false

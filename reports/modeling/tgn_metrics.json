@@ -1,0 +1,75 @@
+{
+  "model": "TGN",
+  "selection_metric": "validation_average_precision",
+  "best_validation_ap": 0.0009407477022529927,
+  "config": {
+    "memory_dim": 32,
+    "time_dim": 16,
+    "embedding_dim": 32,
+    "neighbor_size": 10,
+    "learning_rate": 0.001,
+    "epochs": 1,
+    "patience": 1,
+    "max_train_events": 250000,
+    "max_val_events": null,
+    "max_test_events": null,
+    "pos_weight": 20832.333333333332
+  },
+  "training_history": [
+    {
+      "epoch": 1,
+      "train_loss": 1.3791211051635741,
+      "validation": {
+        "rows": 761749,
+        "positives": 760,
+        "prevalence": 0.0009977039681049794,
+        "average_precision": 0.0009407477022529927,
+        "brier_score": 0.09892205148935318,
+        "roc_auc": 0.4784267612693205,
+        "precision_at_top_1pct": 0.0006563402467839327,
+        "recall_at_top_1pct": 0.006578947368421052,
+        "lift_at_top_1pct": 0.6578506929571237,
+        "precision_at_top_5pct": 0.0006826296996429322,
+        "recall_at_top_5pct": 0.034210526315789476,
+        "lift_at_top_5pct": 0.6842006461490842,
+        "precision_at_top_10pct": 0.0010370856580242862,
+        "recall_at_top_10pct": 0.10394736842105264,
+        "lift_at_top_10pct": 1.0394723196241342
+      }
+    }
+  ],
+  "final_validation": {
+    "rows": 761749,
+    "positives": 760,
+    "prevalence": 0.0009977039681049794,
+    "average_precision": 0.0009438960036077543,
+    "brier_score": 0.0989602580666542,
+    "roc_auc": 0.4798472880616367,
+    "precision_at_top_1pct": 0.0006563402467839327,
+    "recall_at_top_1pct": 0.006578947368421052,
+    "lift_at_top_1pct": 0.6578506929571237,
+    "precision_at_top_5pct": 0.0006826296996429322,
+    "recall_at_top_5pct": 0.034210526315789476,
+    "lift_at_top_5pct": 0.6842006461490842,
+    "precision_at_top_10pct": 0.0010239579914670168,
+    "recall_at_top_10pct": 0.10263157894736842,
+    "lift_at_top_10pct": 1.0263144421605377
+  },
+  "final_test": {
+    "rows": 761639,
+    "positives": 1561,
+    "prevalence": 0.0020495274007764834,
+    "average_precision": 0.0016109586602384986,
+    "brier_score": 0.0974668636918068,
+    "roc_auc": 0.39486037551029923,
+    "precision_at_top_1pct": 0.0011815675462780622,
+    "recall_at_top_1pct": 0.005765534913516977,
+    "lift_at_top_1pct": 0.5765073186288769,
+    "precision_at_top_5pct": 0.0022057665038600913,
+    "recall_at_top_5pct": 0.053811659192825115,
+    "lift_at_top_5pct": 1.0762317708094145,
+    "precision_at_top_10pct": 0.0014967701276193477,
+    "recall_at_top_10pct": 0.07303010890454836,
+    "lift_at_top_10pct": 0.7303001301921027
+  }
+}

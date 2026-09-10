@@ -1,77 +1,17 @@
-dataset:
-  name: graphshield_transactions
-  layer: silver
-  version: 1
+event_ts:
 
-source:
-  dataset: IBM AML LI-Small
-  file: LI-Small_Trans.csv
-  synthetic: true
+  type: datetime
 
-columns:
+  nullable: false
 
-  transaction_id:
-    type: string
-    nullable: false
-    description: GraphShield-generated transaction identifier
+  timezone: UTC
 
-  event_ts:
-    type: datetime
-    nullable: false
-    source: Timestamp
+  source_column: Timestamp
 
-  from_bank:
-    type: string
-    source: From Bank
-    description: Sending bank identifier
+  semantics:
+    "Synthetic transaction event timestamp."
 
-  from_account:
-    type: string
-    source: Account
-    description: Sending account identifier
-
-  to_bank:
-    type: string
-    source: To Bank
-    description: Receiving bank identifier
-
-  to_account:
-    type: string
-    source: Account_duplicated_0
-    description: Receiving account identifier
-
-  amount_received:
-    type: float64
-    source: Amount Received
-
-  receiving_currency:
-    type: string
-    source: Receiving Currency
-
-  amount_paid:
-    type: float64
-    source: Amount Paid
-
-  payment_currency:
-    type: string
-    source: Payment Currency
-
-  payment_format:
-    type: string
-    source: Payment Format
-
-  is_laundering:
-    type: uint8
-    source: Is Laundering
-    role: target
-    allowed_values:
-      - 0
-      - 1
-
-  source_row_number:
-    type: uint64
-    description: Original row position used for lineage
-
-  source_dataset:
-    type: string
-    description: Dataset from which this transaction originated
+  timezone_policy:
+    source_timezone_available: false
+    interpretation: UTC
+    assumption_documented: true
