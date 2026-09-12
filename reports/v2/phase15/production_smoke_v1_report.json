@@ -1,0 +1,31 @@
+{
+  "schema_version": "phase15_production_smoke_v1",
+  "status": "PASS",
+  "checks": {
+    "/live": {
+      "status_code": 200,
+      "pass": true
+    },
+    "/ready": {
+      "status_code": 200,
+      "pass": true
+    },
+    "/deployment": {
+      "status_code": 200,
+      "pass": true
+    },
+    "/deployment/integrity": {
+      "status_code": 200,
+      "pass": true
+    }
+  },
+  "interpretation": {
+    "smoke_is_in_process_not_external_production_traffic": true,
+    "smoke_does_not_prove_end_to_end_cloud_networking": true
+  },
+  "governance": {
+    "read_only_smoke_checks_only": true,
+    "no_case_mutation": true,
+    "no_model_mutation": true
+  }
+}

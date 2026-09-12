@@ -1,0 +1,43 @@
+{
+  "schema_version": "phase15_final_certification_v1",
+  "status": "PASS",
+  "project": "GraphShield AML",
+  "certified_through_phase": 15,
+  "phase15": {
+    "slo_readiness": "PASS",
+    "failure_modes": "PASS",
+    "recovery_readiness": "PASS",
+    "production_smoke": "PASS",
+    "final_release_gate": "PASS"
+  },
+  "prior_phase_certifications": {
+    "phase10": "PASS",
+    "phase11": "PASS",
+    "phase12": "PASS",
+    "phase13": "PASS",
+    "phase14": "PASS"
+  },
+  "verified_phase15_modules": [
+    "src/reliability/phase15_slo_readiness.py",
+    "src/reliability/phase15_failure_modes.py",
+    "src/reliability/phase15_recovery_verifier.py",
+    "src/reliability/phase15_smoke.py",
+    "src/reliability/phase15_final_release_gate.py"
+  ],
+  "final_boundary": {
+    "decision_support_only": true,
+    "human_review_required": true,
+    "human_release_approval_required": true,
+    "certified_models_read_only": true,
+    "automatic_retraining": false,
+    "automatic_model_promotion": false,
+    "automatic_recalibration": false,
+    "automatic_threshold_change": false,
+    "automatic_account_blocking": false,
+    "automatic_case_closure": false,
+    "automatic_sar_str_filing": false,
+    "automatic_regulatory_submission": false,
+    "production_slo_attainment_claimed": false,
+    "external_cloud_smoke_claimed": false
+  }
+}

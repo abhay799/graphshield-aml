@@ -1,0 +1,35 @@
+{
+  "schema_version": "phase15_failure_mode_review_v1",
+  "status": "PASS",
+  "failure_modes": {
+    "missing_certified_artifact": {
+      "fail_closed": true,
+      "evidence": "readiness endpoint returns 503 when required artifacts are missing"
+    },
+    "artifact_tampering": {
+      "fail_closed": true,
+      "evidence": "artifact integrity verifier detects SHA-256 mismatch"
+    },
+    "container_restart": {
+      "fail_closed": true,
+      "evidence": "startup/liveness probes permit orchestrator recovery"
+    },
+    "rolling_release_failure": {
+      "fail_closed": true,
+      "evidence": "rolling update keeps zero intended unavailable replicas"
+    },
+    "voluntary_node_disruption": {
+      "fail_closed": true,
+      "evidence": "PodDisruptionBudget retains at least one replica"
+    },
+    "readiness_dependency_failure": {
+      "fail_closed": true,
+      "evidence": "strict readiness blocks service readiness on missing dependencies"
+    }
+  },
+  "governance": {
+    "review_is_static_and_does_not_inject_production_failures": true,
+    "no_chaos_action_against_live_system": true,
+    "no_artifact_mutation": true
+  }
+}
