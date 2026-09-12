@@ -1,0 +1,20 @@
+{
+  "status": "PASS",
+  "phase": 11,
+  "block": "explanation-contract",
+  "transaction_id": "IBM_LI_SMALL_4310126",
+  "checks": {
+    "schema_version_present": true,
+    "phase10_candidate_present": true,
+    "tree_shap_graph_only": true,
+    "tgn_not_shap": true,
+    "ground_truth_not_exposed": true,
+    "decision_support_only": true,
+    "human_review_required": true,
+    "phase10_read_only": true,
+    "autonomous_account_blocking_false": true,
+    "autonomous_case_closure_false": true,
+    "autonomous_regulatory_filing_false": true
+  },
+  "forbidden_keys_found": []
+}

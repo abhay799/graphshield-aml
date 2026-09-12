@@ -1,0 +1,52 @@
+{
+  "status": "PASS",
+  "phase": 11,
+  "name": "Explainable AML",
+  "transaction_id": "IBM_LI_SMALL_4310126",
+  "checks": {
+    "phase10_certification_pass": true,
+    "phase11_contract_pass": true,
+    "phase11_score_parity_pass": true,
+    "required_files_present": true,
+    "api_routes_registered": true,
+    "explanation_evidence_count": true,
+    "ground_truth_not_exposed": true,
+    "decision_support_only": true,
+    "human_review_required": true,
+    "phase10_artifacts_read_only": true,
+    "autonomous_account_blocking_false": true,
+    "autonomous_case_closure_false": true,
+    "autonomous_regulatory_filing_false": true
+  },
+  "required_files": {
+    "src\\explainability\\explanation_service.py": true,
+    "src\\explainability\\reason_codes.py": true,
+    "src\\explainability\\graph_evidence.py": true,
+    "src\\explainability\\temporal_evidence.py": true,
+    "src\\explainability\\explanation_bundle.py": true,
+    "src\\explainability\\case_explanation.py": true,
+    "src\\explainability\\explanation_evidence.py": true,
+    "src\\explainability\\analyst_summary.py": true,
+    "src\\explainability\\persist_explanation.py": true,
+    "src\\api\\explainability_routes.py": true,
+    "src\\services\\phase11_case_intelligence.py": true
+  },
+  "registered_explainability_paths": [
+    "/explainability/cases/{case_id}",
+    "/explainability/transactions/{transaction_id}"
+  ],
+  "scientific_boundaries": {
+    "tree_shap_scope": "frozen_lightgbm_graph_model_only",
+    "tgn_explanation": "component_score_plus_temporal_context",
+    "fusion": "frozen_phase10_candidate",
+    "test_data_used_for_phase11_tuning": false,
+    "phase10_models_modified": false
+  },
+  "governance": {
+    "mode": "decision_support_only",
+    "human_review_required": true,
+    "autonomous_account_blocking": false,
+    "autonomous_case_closure": false,
+    "autonomous_regulatory_filing": false
+  }
+}

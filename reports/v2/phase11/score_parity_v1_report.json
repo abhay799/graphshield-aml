@@ -1,0 +1,17 @@
+{
+  "status": "PASS",
+  "phase": 11,
+  "block": "score-parity",
+  "sample_size": 32,
+  "max_graph_raw_score_error": 0.0,
+  "max_graph_calibrated_score_error": 0.0,
+  "max_tree_shap_additivity_error": 6.892264536872972e-13,
+  "missing_transaction_ids": [],
+  "checks": {
+    "sample_complete": true,
+    "graph_raw_score_parity": true,
+    "graph_calibrated_score_parity": true,
+    "tree_shap_additivity": true,
+    "ground_truth_label_not_selected": true
+  }
+}

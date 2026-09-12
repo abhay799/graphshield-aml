@@ -470,3 +470,7 @@ from api.security import (
 install_security(
     app
 )
+
+# GraphShield Phase 11 explainability routes
+from api.explainability_routes import router as phase11_explainability_router
+app.include_router(phase11_explainability_router)
