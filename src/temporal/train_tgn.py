@@ -24,28 +24,32 @@ from tgn_common import (
 )
 
 
-MODEL_DIR = (
-    PROJECT_ROOT
-    / "models"
+MODEL_DIR = Path(
+    os.getenv(
+        "GS_TGN_MODEL_DIR",
+        str(PROJECT_ROOT / "models"),
+    )
 )
 
-REPORT_DIR = (
-    PROJECT_ROOT
-    / "reports"
-    / "modeling"
+REPORT_DIR = Path(
+    os.getenv(
+        "GS_TGN_REPORT_DIR",
+        str(PROJECT_ROOT / "reports" / "modeling"),
+    )
 )
 
-PREDICTION_DIR = (
-    PROJECT_ROOT
-    / "data"
-    / "processed"
-    / "modeling"
+PREDICTION_DIR = Path(
+    os.getenv(
+        "GS_TGN_PREDICTION_DIR",
+        str(PROJECT_ROOT / "data" / "processed" / "modeling"),
+    )
 )
 
-
-CHECKPOINT_PATH = (
-    MODEL_DIR
-    / "tgn_risk_v1.pt"
+CHECKPOINT_PATH = Path(
+    os.getenv(
+        "GS_TGN_CHECKPOINT_PATH",
+        str(MODEL_DIR / "tgn_risk_v1.pt"),
+    )
 )
 
 
@@ -81,6 +85,29 @@ MAX_VAL_EVENTS = env_int(
 MAX_TEST_EVENTS = env_int(
     "GS_TGN_MAX_TEST_EVENTS",
     0,
+)
+
+
+def env_bool(name, default=False):
+    value = os.getenv(
+        name,
+        "1" if default else "0",
+    ).strip().lower()
+
+    return value in {
+        "1",
+        "true",
+        "yes",
+        "on",
+    }
+
+
+# Phase 10 model-selection runs must not touch the locked test split.
+# Set GS_TGN_EVAL_TEST=1 only once, after the final temporal candidate
+# has been selected using validation data.
+EVAL_TEST = env_bool(
+    "GS_TGN_EVAL_TEST",
+    False,
 )
 
 
@@ -441,6 +468,9 @@ def main():
         "max_test_events":
             MAX_TEST_EVENTS,
 
+        "eval_test":
+            EVAL_TEST,
+
         "pos_weight":
             pos_weight,
     }
@@ -630,27 +660,34 @@ def main():
     )
 
     # Validation has now entered memory.
-    # Test is the true future continuation.
+    # The locked test split remains untouched during Phase 10 candidate
+    # selection. Enable it only once for the final selected model.
 
-    print(
-        "Scoring untouched test..."
-    )
+    y_test = None
+    test_scores = None
+    final_test_metrics = None
 
-    y_test, test_scores = (
-        evaluate_split(
-            bundle,
-            system,
-            device,
-            "test",
+    if EVAL_TEST:
+
+        print(
+            "Scoring untouched test..."
         )
-    )
 
-    final_test_metrics = (
-        evaluate_scores(
-            y_test,
-            test_scores,
+        y_test, test_scores = (
+            evaluate_split(
+                bundle,
+                system,
+                device,
+                "test",
+            )
         )
-    )
+
+        final_test_metrics = (
+            evaluate_scores(
+                y_test,
+                test_scores,
+            )
+        )
 
     print(
         "\n--- FINAL VALIDATION ---"
@@ -670,23 +707,31 @@ def main():
         ],
     )
 
-    print(
-        "\n--- FINAL TEST ---"
-    )
+    if EVAL_TEST:
 
-    print(
-        "AP:",
-        final_test_metrics[
-            "average_precision"
-        ],
-    )
+        print(
+            "\n--- FINAL TEST ---"
+        )
 
-    print(
-        "Recall@1%:",
-        final_test_metrics[
-            "recall_at_top_1pct"
-        ],
-    )
+        print(
+            "AP:",
+            final_test_metrics[
+                "average_precision"
+            ],
+        )
+
+        print(
+            "Recall@1%:",
+            final_test_metrics[
+                "recall_at_top_1pct"
+            ],
+        )
+
+    else:
+
+        print(
+            "\nLOCKED_TEST_EVALUATION=SKIPPED"
+        )
 
     # ======================================================
     # Save predictions
@@ -711,24 +756,26 @@ def main():
         compression="zstd",
     )
 
-    pl.DataFrame(
-        {
-            "transaction_id":
-                bundle.ids[
-                    "test"
-                ],
+    if EVAL_TEST:
 
-            "is_laundering":
-                y_test,
+        pl.DataFrame(
+            {
+                "transaction_id":
+                    bundle.ids[
+                        "test"
+                    ],
 
-            "tgn_risk_score":
-                test_scores,
-        }
-    ).write_parquet(
-        PREDICTION_DIR
-        / "tgn_test_predictions.parquet",
-        compression="zstd",
-    )
+                "is_laundering":
+                    y_test,
+
+                "tgn_risk_score":
+                    test_scores,
+            }
+        ).write_parquet(
+            PREDICTION_DIR
+            / "tgn_test_predictions.parquet",
+            compression="zstd",
+        )
 
     report = {
         "model":
@@ -750,6 +797,9 @@ def main():
 
         "final_validation":
             final_val_metrics,
+
+        "test_evaluated":
+            EVAL_TEST,
 
         "final_test":
             final_test_metrics,
@@ -779,6 +829,15 @@ def main():
     print(
         REPORT_DIR
         / "tgn_metrics.json"
+    )
+
+    print(
+        "TEST_USED_FOR_SELECTION=FALSE"
+    )
+
+    print(
+        "LOCKED_TEST_EVALUATED="
+        + ("TRUE" if EVAL_TEST else "FALSE")
     )
 
 

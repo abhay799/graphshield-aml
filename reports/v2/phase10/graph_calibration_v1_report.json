@@ -1,0 +1,17 @@
+{
+  "status": "PASS",
+  "phase": 10,
+  "block": "A1",
+  "champion": "lightgbm_graph",
+  "model_artifact": "lightgbm_graph_v1.joblib",
+  "calibration_artifact": "probability_calibrator_graph_v1.joblib",
+  "calibration_version": "platt_graph_v1",
+  "method": "platt_logit",
+  "fit_split": "validation",
+  "validation_rows": 761749,
+  "feature_count": 70,
+  "test_used_for_fit": false,
+  "labels_used_only_for_validation_calibration": true,
+  "raw_validation_brier": 0.017509194707211947,
+  "calibrated_validation_brier": 0.000979897817526597
+}

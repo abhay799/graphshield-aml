@@ -1,0 +1,22 @@
+{
+  "status": "PASS",
+  "phase": 10,
+  "block": "B4-stateful-live-scoring",
+  "model_name": "lightgbm_graph",
+  "model_version": "lightgbm_graph_v1",
+  "calibration_version": "platt_graph_v1",
+  "scoring_version": "stateful_online_scoring_v1",
+  "feature_source": "redis_strict_pit_state_v1",
+  "first_timestamp_rows_seeded": 10977,
+  "second_timestamp_rows_scored": 25,
+  "output_topic": "graphshield.scored-transactions.smoke.v1",
+  "output_messages_produced": 25,
+  "raw_score_max_abs_diff_vs_certified_gold": 0.0,
+  "calibrated_score_max_abs_diff_vs_certified_gold": 0.0,
+  "score_tolerance": 1e-12,
+  "label_exposure": false,
+  "zero_fill_missing_features": false,
+  "current_timestamp_state_visible": false,
+  "decision_support_only": true,
+  "delivery_semantics": "Kafka output idempotent producer; this smoke does not claim end-to-end exactly-once"
+}

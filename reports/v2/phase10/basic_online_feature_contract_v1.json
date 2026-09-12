@@ -1,0 +1,55 @@
+{
+  "status": "PASS",
+  "phase": 10,
+  "block": "B2-contract",
+  "sample_rows": 100000,
+  "resolved": {
+    "hour_of_day": "dt_hour",
+    "day_of_week": "iso_monday_1",
+    "is_weekend": "iso_ge_6",
+    "cross_bank": "bank_not_equal",
+    "cross_currency": "currency_not_equal",
+    "log_amount_paid": "polars_log1p",
+    "log_amount_received": "polars_log1p",
+    "same_currency_amount_ratio": "received_div_paid_when_same_currency_and_paid_gt_0"
+  },
+  "diagnostics": {
+    "hour_of_day": {
+      "dt_hour": 0
+    },
+    "day_of_week": {
+      "iso_monday_1": 0,
+      "monday_0": 100000
+    },
+    "is_weekend": {
+      "friday_rows": 1408962,
+      "friday_zero": 1408962,
+      "friday_one": 0,
+      "resolved_candidate": "iso_ge_6"
+    },
+    "cross_bank": {
+      "bank_not_equal": 0,
+      "bank_equal": 100000
+    },
+    "cross_currency": {
+      "currency_not_equal": 0,
+      "currency_equal": 100000
+    },
+    "log_amount_paid": {
+      "polars_log1p": 0,
+      "ln_1p": 2323,
+      "ln_raw": 100000,
+      "log10_1p": 100000
+    },
+    "log_amount_received": {
+      "polars_log1p": 0,
+      "ln_1p": 2322,
+      "ln_raw": 100000,
+      "log10_1p": 100000
+    }
+  },
+  "same_currency_amount_ratio_mismatches": 0,
+  "certified_gold": "model_features_v2_graph_split.parquet",
+  "zero_fill_missing_features": false,
+  "label_used": false
+}

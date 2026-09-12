@@ -1,0 +1,28 @@
+{
+  "status": "PASS",
+  "phase": 10,
+  "block": "D-freeze-fusion-calibration",
+  "validation_rows": 761749,
+  "validation_positives": 760,
+  "frozen_graph_weight": 0.99,
+  "frozen_tgn_weight": 0.010000000000000009,
+  "fusion_type": "fixed_ecdf_rank_fusion",
+  "fusion_weights_tuned_again": false,
+  "calibration_method": "platt_logistic_regression",
+  "chronological_calibration_diagnostic": {
+    "fit_rows": 380874,
+    "fit_positives": 350,
+    "eval_rows": 380875,
+    "eval_positives": 410,
+    "eval_average_precision": 0.0017179326125064975,
+    "eval_brier_score": 0.0010748509078204393,
+    "eval_ece_10_bins": 0.00020040578477899154
+  },
+  "final_calibrator_fit_rows": 761749,
+  "final_calibrator_fit_positives": 760,
+  "test_rows_selected": false,
+  "test_used_for_selection": false,
+  "test_used_for_calibration_fit": false,
+  "calibrator_artifact": "C:\\Users\\DELL\\graphshield-aml\\models\\v2\\phase10_fusion_calibrator_v1.joblib",
+  "validation_scores": "C:\\Users\\DELL\\graphshield-aml\\data\\processed\\modeling\\v2\\phase10\\fusion_validation_scores_v1.parquet"
+}

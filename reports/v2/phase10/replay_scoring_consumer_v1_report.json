@@ -1,0 +1,19 @@
+{
+  "status": "PASS",
+  "phase": 10,
+  "block": "A2-A3",
+  "input_topic": "graphshield.transactions.smoke.v1",
+  "output_topic": "graphshield.scored-transactions.smoke.v1",
+  "events_received": 10,
+  "events_scored": 10,
+  "model": "lightgbm_graph_v1",
+  "calibration_version": "platt_graph_v1",
+  "feature_source": "certified_pit_graph_feature_store",
+  "labels_used_for_scoring": false,
+  "decision_support_only": true,
+  "producer_idempotence": true,
+  "kafka_auto_commit": false,
+  "offset_commit_after_scored_publish": true,
+  "elapsed_seconds": 1.093,
+  "generated_at": "2026-09-12T12:00:25.753106+00:00"
+}

@@ -1,0 +1,61 @@
+{
+  "status": "PASS",
+  "phase": 10,
+  "title": "Real-Time Streaming + Temporal Fusion",
+  "blocks": {
+    "A_replay_scoring_graph_calibration": "PASS",
+    "B_online_feature_parity_live_scoring": "PASS",
+    "C_stronger_tgn": "PASS",
+    "D_fusion_calibration_locked_test": "PASS"
+  },
+  "frozen_fusion": {
+    "graph_weight": 0.99,
+    "tgn_weight": 0.010000000000000009,
+    "confirmed_on_validation_holdout": true
+  },
+  "locked_test": {
+    "rows": 761639,
+    "positives": 1561,
+    "graph_average_precision": 0.0545211397049114,
+    "graph_recall_at_top_1pct": 0.18770019218449713,
+    "tgn_average_precision": 0.0033442149258326092,
+    "tgn_recall_at_top_1pct": 0.007687379884689302,
+    "fusion_average_precision": 0.08125550928255773,
+    "fusion_recall_at_top_1pct": 0.5150544522741832,
+    "fusion_calibrated_brier": 0.0020459876801037225,
+    "fusion_calibrated_ece_10_bins": 0.001029679959786896,
+    "fusion_ap_delta_vs_graph": 0.026734369577646327,
+    "fusion_recall_at_1pct_delta_vs_graph": 0.3273542600896861
+  },
+  "final_phase10_candidate": "graph_tgn_fusion",
+  "governance": {
+    "decision_support_only": true,
+    "human_review_required": true,
+    "autonomous_blocking": false,
+    "autonomous_case_closure": false,
+    "autonomous_regulatory_filing": false,
+    "test_used_for_selection": false,
+    "test_used_for_calibration_fit": false,
+    "model_or_weight_tuning_after_test": false
+  },
+  "required_reports": {
+    "graph_calibration": "C:\\Users\\DELL\\graphshield-aml\\reports\\v2\\phase10\\graph_calibration_v1_report.json",
+    "replay_scoring": "C:\\Users\\DELL\\graphshield-aml\\reports\\v2\\phase10\\replay_scoring_consumer_v1_report.json",
+    "live_feature_contract": "C:\\Users\\DELL\\graphshield-aml\\reports\\v2\\phase10\\live_feature_contract_v1.json",
+    "basic_feature_contract": "C:\\Users\\DELL\\graphshield-aml\\reports\\v2\\phase10\\basic_online_feature_contract_v1.json",
+    "online_feature_parity": "C:\\Users\\DELL\\graphshield-aml\\reports\\v2\\phase10\\online_feature_parity_evolving_v1_report.json",
+    "stateful_live_scoring": "C:\\Users\\DELL\\graphshield-aml\\reports\\v2\\phase10\\stateful_live_scoring_v1_report.json",
+    "validation_fusion": "C:\\Users\\DELL\\graphshield-aml\\reports\\v2\\phase10\\validation_fusion_v1_report.json",
+    "fusion_holdout": "C:\\Users\\DELL\\graphshield-aml\\reports\\v2\\phase10\\validation_fusion_holdout_v1_report.json",
+    "fusion_calibration": "C:\\Users\\DELL\\graphshield-aml\\reports\\v2\\phase10\\fusion_calibration_v1_report.json",
+    "locked_test": "C:\\Users\\DELL\\graphshield-aml\\reports\\v2\\phase10\\locked_test_evaluation_v1.json"
+  },
+  "required_artifacts": {
+    "graph_model": "C:\\Users\\DELL\\graphshield-aml\\models\\lightgbm_graph_v1.joblib",
+    "graph_calibrator": "C:\\Users\\DELL\\graphshield-aml\\models\\probability_calibrator_graph_v1.joblib",
+    "tgn_checkpoint": "C:\\Users\\DELL\\graphshield-aml\\models\\v2\\tgn_phase10c\\tgn_risk.pt",
+    "fusion_ecdf": "C:\\Users\\DELL\\graphshield-aml\\models\\v2\\phase10_fusion_ecdf_v1.npz",
+    "fusion_calibrator": "C:\\Users\\DELL\\graphshield-aml\\models\\v2\\phase10_fusion_calibrator_v1.joblib",
+    "locked_test_predictions": "C:\\Users\\DELL\\graphshield-aml\\data\\processed\\modeling\\v2\\phase10\\locked_test_predictions_v1.parquet"
+  }
+}

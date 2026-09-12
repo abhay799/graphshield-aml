@@ -1,0 +1,169 @@
+{
+  "status": "PASS",
+  "phase": 10,
+  "block": "D-validation-fusion",
+  "selection_split": "validation_only",
+  "locked_test_read": false,
+  "rows": 100000,
+  "positives": 121,
+  "fusion_type": "rank_normalized_convex",
+  "predeclared_graph_weights": [
+    1.0,
+    0.99,
+    0.95,
+    0.9,
+    0.8,
+    0.7,
+    0.5
+  ],
+  "graph_only": {
+    "rows": 100000,
+    "positives": 121,
+    "prevalence": 0.00121,
+    "average_precision": 0.0409944283026046,
+    "roc_auc": 0.7024787596297306,
+    "k": 1000,
+    "precision_at_top_1pct": 0.073,
+    "recall_at_top_1pct": 0.6033057851239669,
+    "lift_at_top_1pct": 60.33057851239669
+  },
+  "tgn_only": {
+    "rows": 100000,
+    "positives": 121,
+    "prevalence": 0.00121,
+    "average_precision": 0.0033054859937529605,
+    "roc_auc": 0.69058775994987,
+    "k": 1000,
+    "precision_at_top_1pct": 0.004,
+    "recall_at_top_1pct": 0.03305785123966942,
+    "lift_at_top_1pct": 3.3057851239669422
+  },
+  "candidates": [
+    {
+      "graph_weight": 1.0,
+      "tgn_weight": 0.0,
+      "metrics": {
+        "rows": 100000,
+        "positives": 121,
+        "prevalence": 0.00121,
+        "average_precision": 0.0409944283026046,
+        "roc_auc": 0.7024787596297306,
+        "k": 1000,
+        "precision_at_top_1pct": 0.073,
+        "recall_at_top_1pct": 0.6033057851239669,
+        "lift_at_top_1pct": 60.33057851239669
+      }
+    },
+    {
+      "graph_weight": 0.99,
+      "tgn_weight": 0.010000000000000009,
+      "metrics": {
+        "rows": 100000,
+        "positives": 121,
+        "prevalence": 0.00121,
+        "average_precision": 0.04978110793972948,
+        "roc_auc": 0.7054526886623725,
+        "k": 1000,
+        "precision_at_top_1pct": 0.059,
+        "recall_at_top_1pct": 0.48760330578512395,
+        "lift_at_top_1pct": 48.760330578512395
+      }
+    },
+    {
+      "graph_weight": 0.95,
+      "tgn_weight": 0.050000000000000044,
+      "metrics": {
+        "rows": 100000,
+        "positives": 121,
+        "prevalence": 0.00121,
+        "average_precision": 0.04074429088599661,
+        "roc_auc": 0.7028760171708593,
+        "k": 1000,
+        "precision_at_top_1pct": 0.048,
+        "recall_at_top_1pct": 0.39669421487603307,
+        "lift_at_top_1pct": 39.66942148760331
+      }
+    },
+    {
+      "graph_weight": 0.9,
+      "tgn_weight": 0.09999999999999998,
+      "metrics": {
+        "rows": 100000,
+        "positives": 121,
+        "prevalence": 0.00121,
+        "average_precision": 0.0379633264606046,
+        "roc_auc": 0.7078078110877799,
+        "k": 1000,
+        "precision_at_top_1pct": 0.04,
+        "recall_at_top_1pct": 0.3305785123966942,
+        "lift_at_top_1pct": 33.057851239669425
+      }
+    },
+    {
+      "graph_weight": 0.8,
+      "tgn_weight": 0.19999999999999996,
+      "metrics": {
+        "rows": 100000,
+        "positives": 121,
+        "prevalence": 0.00121,
+        "average_precision": 0.03464469702133231,
+        "roc_auc": 0.7149625426931878,
+        "k": 1000,
+        "precision_at_top_1pct": 0.039,
+        "recall_at_top_1pct": 0.32231404958677684,
+        "lift_at_top_1pct": 32.231404958677686
+      }
+    },
+    {
+      "graph_weight": 0.7,
+      "tgn_weight": 0.30000000000000004,
+      "metrics": {
+        "rows": 100000,
+        "positives": 121,
+        "prevalence": 0.00121,
+        "average_precision": 0.03225646980026055,
+        "roc_auc": 0.7178140508693205,
+        "k": 1000,
+        "precision_at_top_1pct": 0.038,
+        "recall_at_top_1pct": 0.3140495867768595,
+        "lift_at_top_1pct": 31.40495867768595
+      }
+    },
+    {
+      "graph_weight": 0.5,
+      "tgn_weight": 0.5,
+      "metrics": {
+        "rows": 100000,
+        "positives": 121,
+        "prevalence": 0.00121,
+        "average_precision": 0.023224047484426656,
+        "roc_auc": 0.7447294697658546,
+        "k": 1000,
+        "precision_at_top_1pct": 0.037,
+        "recall_at_top_1pct": 0.30578512396694213,
+        "lift_at_top_1pct": 30.578512396694215
+      }
+    }
+  ],
+  "selected": {
+    "graph_weight": 0.99,
+    "tgn_weight": 0.010000000000000009,
+    "metrics": {
+      "rows": 100000,
+      "positives": 121,
+      "prevalence": 0.00121,
+      "average_precision": 0.04978110793972948,
+      "roc_auc": 0.7054526886623725,
+      "k": 1000,
+      "precision_at_top_1pct": 0.059,
+      "recall_at_top_1pct": 0.48760330578512395,
+      "lift_at_top_1pct": 48.760330578512395
+    }
+  },
+  "selected_vs_graph_ap_delta": 0.00878667963712488,
+  "selected_vs_graph_recall_at_1pct_delta": -0.11570247933884298,
+  "promote_tgn_into_fusion_candidate": true,
+  "selection_metric": "average_precision",
+  "test_used_for_selection": false,
+  "output": "C:\\Users\\DELL\\graphshield-aml\\data\\processed\\modeling\\v2\\phase10\\validation_fusion_v1.parquet"
+}
