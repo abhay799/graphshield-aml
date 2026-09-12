@@ -51,5 +51,5 @@ finally {
         Remove-Item $Checkpoint -ErrorAction SilentlyContinue
     }
 
-    docker exec graphshield-redpanda rpk topic delete $SmokeTopic 2>$null | Out-Null
+    # docker exec graphshield-redpanda rpk topic delete $SmokeTopic 2>$null | Out-Null
 }

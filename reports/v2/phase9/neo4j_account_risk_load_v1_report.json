@@ -1,0 +1,23 @@
+{
+  "status": "PASS",
+  "artifact": "account_risk_v1",
+  "source": "data\\processed\\graph\\account_risk_v1.parquet",
+  "neo4j_uri": "bolt://127.0.0.1:7687",
+  "neo4j_user": "neo4j",
+  "password_logged": false,
+  "batch_size": 5000,
+  "expected": {
+    "total_accounts": 515088,
+    "scored_accounts": 39833,
+    "high_risk_accounts": 337
+  },
+  "observed": {
+    "total_accounts": 515088,
+    "scored_accounts": 39833,
+    "high_risk_accounts": 337,
+    "distinct_account_ids": 515088
+  },
+  "elapsed_seconds": 166.149,
+  "idempotent": true,
+  "label_properties_loaded": false
+}

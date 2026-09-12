@@ -14,7 +14,21 @@ from pydantic import (
     Field,
 )
 
-from api.analyst_routes import router as analyst_router
+from api.analyst_routes import (
+    router as analyst_router,
+)
+
+from api.graph_routes import (
+    router as graph_router,
+)
+
+from api.intelligence_routes import (
+    router as intelligence_router,
+)
+
+from api.online_graph_routes import (
+    router as online_graph_router,
+)
 
 from services.graphshield_service import (
     GraphShieldService,
@@ -26,12 +40,34 @@ app = FastAPI(
     version="0.1.0",
     description=(
         "Read-only analyst API for GraphShield AML. "
-        "Certified Phase 1-6 artifacts are treated "
-        "as immutable inputs."
+        "Certified artifacts are treated as immutable inputs."
     ),
 )
 
-app.include_router(analyst_router)
+
+# ============================================================
+# ROUTER REGISTRATION
+# ============================================================
+
+# PHASE 7 ANALYST ROUTER
+app.include_router(
+    analyst_router
+)
+
+# PHASE 7 GRAPH ROUTER
+app.include_router(
+    graph_router
+)
+
+# PHASE 7 CASE INTELLIGENCE ROUTER
+app.include_router(
+    intelligence_router
+)
+
+# PHASE 9 ONLINE GRAPH ROUTER
+app.include_router(
+    online_graph_router
+)
 
 
 @lru_cache(maxsize=1)
@@ -124,7 +160,7 @@ def governance() -> dict[str, Any]:
         "mode":
             "decision_support_only",
 
-        "phase_1_6_artifacts":
+        "certified_artifacts":
             "read_only",
 
         "autonomous_account_blocking":
@@ -410,40 +446,27 @@ def policy_search(
         ) from error
 
 
-# PHASE 7 ANALYST ROUTER REGISTRATION
-from api.analyst_routes import (
-    router as analyst_router,
-)
-
-app.include_router(
-    analyst_router
-)
-
-
-# PHASE 7 GRAPH ROUTER REGISTRATION
-from api.graph_routes import (
-    router as graph_router,
-)
-
-app.include_router(
-    graph_router
-)
-
-
-# PHASE 7 CASE INTELLIGENCE ROUTER REGISTRATION
-from api.intelligence_routes import (
-    router as intelligence_router,
-)
-
-app.include_router(
-    intelligence_router
-)
-
-
+# ============================================================
 # PHASE 8 OBSERVABILITY
-from api.observability import install_observability
-install_observability(app)
+# ============================================================
 
+from api.observability import (
+    install_observability,
+)
+
+install_observability(
+    app
+)
+
+
+# ============================================================
 # PHASE 8 SECURITY HARDENING
-from api.security import install_security
-install_security(app)
+# ============================================================
+
+from api.security import (
+    install_security,
+)
+
+install_security(
+    app
+)

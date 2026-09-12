@@ -1,0 +1,24 @@
+{
+  "status": "PASS",
+  "phase": 9,
+  "step": "5B",
+  "version": "account_motif_intelligence_v1",
+  "input": "data\\processed\\graph\\account_motif_intelligence_v1.parquet",
+  "expected": {
+    "total_accounts": 515088,
+    "rapid_accounts": 32730,
+    "cycle_accounts": 134927,
+    "any_motif_accounts": 139891
+  },
+  "observed": {
+    "total_accounts": 515088,
+    "rapid_accounts": 32730,
+    "cycle_accounts": 134927,
+    "any_motif_accounts": 139891
+  },
+  "batch_size": 1000,
+  "labels_used": false,
+  "composite_probability_created": false,
+  "idempotent": true,
+  "elapsed_seconds": 182.771
+}

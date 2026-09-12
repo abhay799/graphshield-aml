@@ -1,0 +1,17 @@
+{
+  "status": "PASS",
+  "phase": 9,
+  "step": "6A",
+  "version": "online_graph_v1",
+  "topic": "graphshield.transactions.smoke.v1",
+  "consumer_group": "graphshield-online-graph-idempotency-v1",
+  "events_received": 10,
+  "events_newly_applied": 0,
+  "duplicate_events_safely_ignored": 10,
+  "labels_used": false,
+  "kafka_auto_commit": false,
+  "neo4j_before_kafka_offset_commit": true,
+  "idempotency_marker": "TRANSFER.online_processed_version",
+  "elapsed_seconds": 0.425,
+  "generated_at": "2026-09-12T11:11:25.952206+00:00"
+}

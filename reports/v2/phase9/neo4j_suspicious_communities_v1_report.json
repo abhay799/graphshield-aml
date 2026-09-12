@@ -1,0 +1,16 @@
+{
+  "status": "PASS",
+  "phase": 9,
+  "step": "3B",
+  "version": "suspicious_communities_v1",
+  "community_nodes": 1074,
+  "membership_relationships": 38122,
+  "distinct_member_accounts": 38122,
+  "communities_with_members": 1074,
+  "high_risk_communities": 134,
+  "labels_used": false,
+  "idempotent": true,
+  "elapsed_seconds": 24.005,
+  "membership_source": "data\\processed\\graph\\suspicious_community_membership_v1.parquet",
+  "summary_source": "data\\processed\\graph\\suspicious_communities_v1.parquet"
+}

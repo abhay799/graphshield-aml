@@ -1,0 +1,24 @@
+{
+  "status": "PASS",
+  "prediction_rows": 37380,
+  "prediction_unique_ids": 37380,
+  "joined_rows": 37380,
+  "joined_unique_ids": 37380,
+  "account_nodes": 515088,
+  "scored_accounts": 39833,
+  "high_risk_accounts": 337,
+  "high_risk_threshold_raw": 0.7112226558751765,
+  "labels_used_for_risk_aggregation": false,
+  "output": "data\\processed\\graph\\account_risk_v1.parquet",
+  "provenance": {
+    "phase": "9",
+    "artifact": "account_risk_v1",
+    "prediction_source": "data\\processed\\modeling\\champion_test_predictions.parquet",
+    "edge_source": "data\\processed\\graph\\transaction_edges.parquet",
+    "node_source": "data\\processed\\graph\\account_nodes.parquet",
+    "labels_used_for_risk_aggregation": false,
+    "high_risk_threshold_rule": "99th percentile of champion raw transaction risk within the available scored champion test subset",
+    "entity_risk_seed_definition": "maximum champion transaction risk touching the account",
+    "scope_note": "v1 account risk is based only on transactions present in champion_test_predictions.parquet; it is not a full-history account probability."
+  }
+}

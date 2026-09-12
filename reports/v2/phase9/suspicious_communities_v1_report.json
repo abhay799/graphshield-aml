@@ -1,0 +1,23 @@
+{
+  "status": "PASS",
+  "phase": 9,
+  "step": "3A",
+  "algorithm": "Louvain",
+  "networkx_version": "3.6.1",
+  "seed": 42,
+  "resolution": 1.0,
+  "labels_used": false,
+  "seed_definition": "account_risk_v1.high_risk_txn_count > 0",
+  "expansion": "exact 1-hop seed neighborhood, then induced subgraph",
+  "community_weight": "aggregated transaction_count",
+  "priority_rule": "lexicographic sort by high_risk_seed_count, max_entity_risk_seed_raw, member_count, internal_transaction_count",
+  "high_risk_seed_accounts": 337,
+  "one_hop_transactions": 433318,
+  "candidate_accounts": 38122,
+  "induced_transactions": 548334,
+  "weighted_pairs": 74379,
+  "communities": 1074,
+  "communities_with_high_risk_seed": 134,
+  "membership_output": "data\\processed\\graph\\suspicious_community_membership_v1.parquet",
+  "summary_output": "data\\processed\\graph\\suspicious_communities_v1.parquet"
+}

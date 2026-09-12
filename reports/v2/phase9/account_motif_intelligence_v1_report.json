@@ -1,0 +1,29 @@
+{
+  "status": "PASS",
+  "phase": 9,
+  "step": "5A",
+  "version": "account_motif_intelligence_v1",
+  "labels_used": false,
+  "snapshot_cutoff_utc": "2022-09-04T15:51:00+00:00",
+  "snapshot_transactions": 2218789,
+  "account_nodes": 515088,
+  "rapid_pass_through_accounts": 32730,
+  "two_node_cycle_accounts": 134927,
+  "accounts_with_any_motif_signal": 139891,
+  "high_risk_seed_accounts_with_motif": 131,
+  "suspicious_community_accounts_with_motif": 14278,
+  "propagated_nonseed_accounts_with_motif": 44753,
+  "motif_signals": [
+    "rapid_pass_through_candidate",
+    "closes_two_node_cycle",
+    "sender_fanout_ratio_1h",
+    "sender_fanout_ratio_24h",
+    "receiver_fanin_ratio_1h",
+    "receiver_fanin_ratio_24h"
+  ],
+  "risk_context_joined": true,
+  "community_context_joined": true,
+  "propagation_context_joined": true,
+  "composite_probability_created": false,
+  "output": "data\\processed\\graph\\account_motif_intelligence_v1.parquet"
+}
