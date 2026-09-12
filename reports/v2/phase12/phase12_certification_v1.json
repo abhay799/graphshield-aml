@@ -1,0 +1,94 @@
+{
+  "status": "PASS",
+  "phase": 12,
+  "name": "Agentic Investigation",
+  "checks": {
+    "phase11_certification_pass": true,
+    "required_files_present": true,
+    "tool_plan_bounded": true,
+    "phase11_explanation_tool_present": true,
+    "policy_tool_selected": true,
+    "graph_tool_selected": true,
+    "history_tool_selected": true,
+    "prohibited_tools_absent": true,
+    "strict_grounding_positive_control": true,
+    "strict_grounding_negative_control": true,
+    "api_routes_registered": true,
+    "audit_hash_chain_valid": true
+  },
+  "required_files": {
+    "src\\investigation\\phase12_contracts.py": true,
+    "src\\investigation\\phase12_tools.py": true,
+    "src\\investigation\\phase12_contradiction.py": true,
+    "src\\investigation\\phase12_grounding.py": true,
+    "src\\investigation\\phase12_audit.py": true,
+    "src\\investigation\\phase12_agent.py": true,
+    "src\\api\\phase12_routes.py": true
+  },
+  "allowed_tools": [
+    "case_overview",
+    "history_evidence",
+    "path_evidence",
+    "phase11_explanation",
+    "policy_search",
+    "search_evidence"
+  ],
+  "prohibited_tools": [
+    "block_account",
+    "close_account",
+    "close_case",
+    "file_sar",
+    "file_str",
+    "powershell",
+    "python",
+    "shell",
+    "submit_regulatory_report"
+  ],
+  "certification_plan": {
+    "case_id": "CERTIFICATION_CASE",
+    "question": "Review transaction history, graph network paths, risk explanation, FATF policy and regulatory requirements.",
+    "planned_tools": [
+      "case_overview",
+      "search_evidence",
+      "phase11_explanation",
+      "policy_search",
+      "path_evidence",
+      "history_evidence"
+    ],
+    "max_tool_calls": 6,
+    "include_policy": true,
+    "rationale": [
+      "Retrieve deterministic case overview.",
+      "Perform question-grounded case evidence search.",
+      "Include the certified Phase 11 explanation.",
+      "Policy language detected.",
+      "Graph/network language detected.",
+      "Historical/temporal language detected."
+    ]
+  },
+  "audit_chain": {
+    "valid": true,
+    "record_count": 1,
+    "first_invalid_index": null
+  },
+  "registered_phase12_paths": [
+    "/phase12/investigations",
+    "/phase12/tools"
+  ],
+  "governance": {
+    "mode": "decision_support_only",
+    "human_review_required": true,
+    "read_only_tools_only": true,
+    "fail_closed_on_grounding_failure": true,
+    "autonomous_account_blocking": false,
+    "autonomous_case_closure": false,
+    "autonomous_regulatory_filing": false
+  },
+  "scientific_boundaries": {
+    "llm_can_call_tools_directly": false,
+    "planner": "deterministic_bounded",
+    "claim_level_grounding": "strict",
+    "phase11_explanations_consumed_as_evidence": true,
+    "phase10_models_modified": false
+  }
+}

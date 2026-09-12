@@ -474,3 +474,7 @@ install_security(
 # GraphShield Phase 11 explainability routes
 from api.explainability_routes import router as phase11_explainability_router
 app.include_router(phase11_explainability_router)
+
+# GraphShield Phase 12 investigation routes
+from api.phase12_routes import router as phase12_investigation_router
+app.include_router(phase12_investigation_router)
