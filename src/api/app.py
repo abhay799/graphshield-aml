@@ -482,3 +482,9 @@ app.include_router(phase12_investigation_router)
 # Phase 13 governance API
 from api.phase13_routes import router as phase13_governance_router
 app.include_router(phase13_governance_router)
+
+# Phase 14 enterprise platform wiring
+from api.phase14_routes import router as phase14_enterprise_router
+from enterprise.phase14_runtime import install_enterprise_security
+app.include_router(phase14_enterprise_router)
+install_enterprise_security(app)

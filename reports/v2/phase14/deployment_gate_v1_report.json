@@ -1,0 +1,29 @@
+{
+  "schema_version": "phase14_deployment_gate_v1",
+  "status": "PASS",
+  "deployment_allowed": true,
+  "checks": {
+    "phase13_certification_pass": true,
+    "runtime_readiness_pass": true,
+    "artifact_integrity_pass": true
+  },
+  "runtime": {
+    "environment": "local",
+    "release": "phase14-dev",
+    "commit_sha": "unknown",
+    "region": "local",
+    "instance_id": "local-instance",
+    "strict_readiness": true
+  },
+  "integrity": {
+    "verified": true,
+    "mismatch_count": 0
+  },
+  "governance": {
+    "gate_is_pre_deployment_only": true,
+    "automatic_deployment": false,
+    "automatic_model_promotion": false,
+    "automatic_artifact_replacement": false,
+    "human_release_approval_required": true
+  }
+}

@@ -1,0 +1,10 @@
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: graphshield-api
+  namespace: graphshield
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app: graphshield-api

@@ -1,0 +1,38 @@
+{
+  "schema_version": "phase14_artifact_manifest_v1",
+  "status": "PASS",
+  "artifact_count": 4,
+  "missing_artifacts": [],
+  "artifacts": [
+    {
+      "path": "models/lightgbm_graph_v1.joblib",
+      "exists": true,
+      "size_bytes": 20454,
+      "sha256": "55f6dabc77b96f5176cabb2354b0432f2060f8a01d99a8880ea54d464f98de35"
+    },
+    {
+      "path": "models/probability_calibrator_graph_v1.joblib",
+      "exists": true,
+      "size_bytes": 2976,
+      "sha256": "7bc7655c0c51b3921ff6fee4ebd494b8320c9468a5e88ae99b5301cdf9fd32b4"
+    },
+    {
+      "path": "models/v2/phase10_fusion_calibrator_v1.joblib",
+      "exists": true,
+      "size_bytes": 1601445,
+      "sha256": "bbe9eab7f43f2ac09d726e69c6199541e484c8bfb276404f15332c27ea18d205"
+    },
+    {
+      "path": "reports/v2/phase13/phase13_final_certification_v1_report.json",
+      "exists": true,
+      "size_bytes": 953,
+      "sha256": "9ed886f71ae1eaa7b2c5edda90cdfd546925ad4d3b0be8136c59d6dea77c4632"
+    }
+  ],
+  "governance": {
+    "certified_artifacts_read_only": true,
+    "manifest_generation_modifies_artifacts": false,
+    "automatic_model_replacement": false,
+    "automatic_model_promotion": false
+  }
+}

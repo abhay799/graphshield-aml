@@ -1,0 +1,17 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: graphshield-api-default-deny-ingress
+  namespace: graphshield
+spec:
+  podSelector:
+    matchLabels:
+      app: graphshield-api
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - namespaceSelector: {}
+      ports:
+        - protocol: TCP
+          port: 8000

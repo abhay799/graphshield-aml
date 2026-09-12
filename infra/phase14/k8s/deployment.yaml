@@ -1,0 +1,119 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: graphshield-api
+  namespace: graphshield
+spec:
+  replicas: 2
+  revisionHistoryLimit: 5
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+  selector:
+    matchLabels:
+      app: graphshield-api
+  template:
+    metadata:
+      labels:
+        app: graphshield-api
+    spec:
+      serviceAccountName: graphshield-api
+      automountServiceAccountToken: false
+      terminationGracePeriodSeconds: 30
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: kubernetes.io/hostname
+          whenUnsatisfiable: ScheduleAnyway
+          labelSelector:
+            matchLabels:
+              app: graphshield-api
+      containers:
+        - name: api
+          image: graphshield-aml:phase14
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8000
+              name: http
+          envFrom:
+            - configMapRef:
+                name: graphshield-runtime
+          env:
+            - name: GS_COMMIT_SHA
+              value: "set-by-deployment"
+            - name: GS_INSTANCE_ID
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 15
+            timeoutSeconds: 5
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /live
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 20
+            timeoutSeconds: 5
+            failureThreshold: 3
+          startupProbe:
+            httpGet:
+              path: /live
+              port: http
+            periodSeconds: 5
+            failureThreshold: 24
+          lifecycle:
+            preStop:
+              exec:
+                command:
+                  - /bin/sh
+                  - -c
+                  - "sleep 5"
+          resources:
+            requests:
+              cpu: "500m"
+              memory: "1Gi"
+            limits:
+              cpu: "2"
+              memory: "4Gi"
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            capabilities:
+              drop:
+                - ALL
+          volumeMounts:
+            - name: artifacts
+              mountPath: /app/models
+              subPath: models
+              readOnly: true
+            - name: artifacts
+              mountPath: /app/reports
+              subPath: reports
+              readOnly: true
+            - name: artifacts
+              mountPath: /app/data/processed
+              subPath: data-processed
+              readOnly: true
+            - name: artifacts
+              mountPath: /app/data/policy
+              subPath: data-policy
+              readOnly: true
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: artifacts
+          persistentVolumeClaim:
+            claimName: graphshield-artifacts
+        - name: tmp
+          emptyDir: {}

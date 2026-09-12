@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: graphshield-runtime
+  namespace: graphshield
+data:
+  GS_ENVIRONMENT: "production"
+  GS_RELEASE: "phase14"
+  GS_REGION: "unset"
+  GS_STRICT_READINESS: "true"
+  GS_ENABLE_HSTS: "true"
+  GS_ALLOWED_HOSTS: "graphshield-api,localhost,127.0.0.1"
+  HF_HUB_OFFLINE: "1"
+  TRANSFORMERS_OFFLINE: "1"
+  PYTHONPATH: "/app/src"
