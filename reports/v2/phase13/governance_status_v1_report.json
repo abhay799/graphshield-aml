@@ -1,0 +1,23 @@
+{
+  "schema_version": "phase13_governance_status_v1",
+  "drift": {
+    "overall_severity": "critical",
+    "critical_feature_count": 6,
+    "warning_feature_count": 9,
+    "human_review_required": true
+  },
+  "feedback": {
+    "feedback_events": 0,
+    "adjudication_events": 0,
+    "approved_for_modeling": 0
+  },
+  "model_governance": {
+    "certified_model": "graphshield-v2-phase10-certified",
+    "automatic_retraining_enabled": false,
+    "automatic_promotion_enabled": false,
+    "human_approval_required_for_retraining": true,
+    "human_approval_required_for_promotion": true,
+    "phase10_model_modified": false
+  },
+  "status": "REVIEW_REQUIRED"
+}

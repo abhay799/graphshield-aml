@@ -1,0 +1,360 @@
+{
+  "schema_version": "phase13_drift_investigation_v1",
+  "feature_drift_severity": "critical",
+  "score_drift_severity": "stable",
+  "feature_score_relationship": {
+    "feature_drift_and_score_drift_may_differ": true,
+    "current_interpretation": "Input/feature distributions changed while the frozen model score distribution may remain comparatively stable.",
+    "model_failure_inferred_from_feature_drift": false
+  },
+  "ranked_features": [
+    {
+      "feature": "pair_relationship_age_seconds",
+      "severity": "critical",
+      "feature_type": "numeric",
+      "metric_name": "psi",
+      "metric_value": 8.20386892624004,
+      "monitoring_domain": "temporal_progression",
+      "missing_rate_reference": 0.0,
+      "missing_rate_monitor": 0.0,
+      "missing_rate_delta": 0.0,
+      "unseen_category_rate": null,
+      "investigation_hypotheses": [
+        "Chronological progression between validation and the post-lock monitoring window may shift this feature naturally.",
+        "These are monitoring hypotheses only; causality is not asserted."
+      ],
+      "recommended_review_checks": [
+        "Verify source-data/schema consistency for this feature.",
+        "Compare validation and monitoring-window descriptive statistics.",
+        "Check whether the shift is expected from chronological progression.",
+        "Inspect timestamp coverage and age/time-derived feature semantics."
+      ]
+    },
+    {
+      "feature": "receiver_unique_senders_7d",
+      "severity": "critical",
+      "feature_type": "numeric",
+      "metric_name": "psi",
+      "metric_value": 1.738606675646178,
+      "monitoring_domain": "graph_or_network_behavior",
+      "missing_rate_reference": 0.0,
+      "missing_rate_monitor": 0.0,
+      "missing_rate_delta": 0.0,
+      "unseen_category_rate": null,
+      "investigation_hypotheses": [
+        "Network connectivity or counterparty-mix changes may alter graph-derived behavior without implying model failure.",
+        "These are monitoring hypotheses only; causality is not asserted."
+      ],
+      "recommended_review_checks": [
+        "Verify source-data/schema consistency for this feature.",
+        "Compare validation and monitoring-window descriptive statistics.",
+        "Check whether the shift is expected from chronological progression.",
+        "Inspect network-degree, counterparty-mix, and graph-structure changes."
+      ]
+    },
+    {
+      "feature": "hour_of_day",
+      "severity": "critical",
+      "feature_type": "numeric",
+      "metric_name": "psi",
+      "metric_value": 1.6516149859490477,
+      "monitoring_domain": "temporal_progression",
+      "missing_rate_reference": 0.0,
+      "missing_rate_monitor": 0.0,
+      "missing_rate_delta": 0.0,
+      "unseen_category_rate": null,
+      "investigation_hypotheses": [
+        "Chronological progression between validation and the post-lock monitoring window may shift this feature naturally.",
+        "These are monitoring hypotheses only; causality is not asserted."
+      ],
+      "recommended_review_checks": [
+        "Verify source-data/schema consistency for this feature.",
+        "Compare validation and monitoring-window descriptive statistics.",
+        "Check whether the shift is expected from chronological progression.",
+        "Inspect timestamp coverage and age/time-derived feature semantics."
+      ]
+    },
+    {
+      "feature": "pair_prior_tx_count",
+      "severity": "critical",
+      "feature_type": "numeric",
+      "metric_name": "psi",
+      "metric_value": 1.1437929705378294,
+      "monitoring_domain": "relationship_history",
+      "missing_rate_reference": 0.0,
+      "missing_rate_monitor": 0.0,
+      "missing_rate_delta": 0.0,
+      "unseen_category_rate": null,
+      "investigation_hypotheses": [
+        "Accumulating sender/receiver or pair history may change relationship-level distributions over time.",
+        "These are monitoring hypotheses only; causality is not asserted."
+      ],
+      "recommended_review_checks": [
+        "Verify source-data/schema consistency for this feature.",
+        "Compare validation and monitoring-window descriptive statistics.",
+        "Check whether the shift is expected from chronological progression.",
+        "Inspect pair/counterparty history accumulation and cohort mix."
+      ]
+    },
+    {
+      "feature": "receiver_prior_tx_count",
+      "severity": "critical",
+      "feature_type": "numeric",
+      "metric_name": "psi",
+      "metric_value": 0.6344236031966257,
+      "monitoring_domain": "transaction_history_or_velocity",
+      "missing_rate_reference": 0.0,
+      "missing_rate_monitor": 0.0,
+      "missing_rate_delta": 0.0,
+      "unseen_category_rate": null,
+      "investigation_hypotheses": [
+        "Transaction-volume, velocity, or rolling-history changes may reflect genuine population or activity-pattern shift.",
+        "These are monitoring hypotheses only; causality is not asserted."
+      ],
+      "recommended_review_checks": [
+        "Verify source-data/schema consistency for this feature.",
+        "Compare validation and monitoring-window descriptive statistics.",
+        "Check whether the shift is expected from chronological progression.",
+        "Inspect transaction-volume and rolling-window population changes."
+      ]
+    },
+    {
+      "feature": "sender_unique_receivers_7d",
+      "severity": "critical",
+      "feature_type": "numeric",
+      "metric_name": "psi",
+      "metric_value": 0.588514931330696,
+      "monitoring_domain": "graph_or_network_behavior",
+      "missing_rate_reference": 0.0,
+      "missing_rate_monitor": 0.0,
+      "missing_rate_delta": 0.0,
+      "unseen_category_rate": null,
+      "investigation_hypotheses": [
+        "Network connectivity or counterparty-mix changes may alter graph-derived behavior without implying model failure.",
+        "These are monitoring hypotheses only; causality is not asserted."
+      ],
+      "recommended_review_checks": [
+        "Verify source-data/schema consistency for this feature.",
+        "Compare validation and monitoring-window descriptive statistics.",
+        "Check whether the shift is expected from chronological progression.",
+        "Inspect network-degree, counterparty-mix, and graph-structure changes."
+      ]
+    },
+    {
+      "feature": "sender_fanout_ratio_24h",
+      "severity": "warning",
+      "feature_type": "numeric",
+      "metric_name": "psi",
+      "metric_value": 0.1847383646535918,
+      "monitoring_domain": "graph_or_network_behavior",
+      "missing_rate_reference": 0.0,
+      "missing_rate_monitor": 0.0,
+      "missing_rate_delta": 0.0,
+      "unseen_category_rate": null,
+      "investigation_hypotheses": [
+        "Network connectivity or counterparty-mix changes may alter graph-derived behavior without implying model failure.",
+        "These are monitoring hypotheses only; causality is not asserted."
+      ],
+      "recommended_review_checks": [
+        "Verify source-data/schema consistency for this feature.",
+        "Compare validation and monitoring-window descriptive statistics.",
+        "Check whether the shift is expected from chronological progression.",
+        "Inspect network-degree, counterparty-mix, and graph-structure changes."
+      ]
+    },
+    {
+      "feature": "sender_prior_tx_count",
+      "severity": "warning",
+      "feature_type": "numeric",
+      "metric_name": "psi",
+      "metric_value": 0.18205733513459046,
+      "monitoring_domain": "transaction_history_or_velocity",
+      "missing_rate_reference": 0.0,
+      "missing_rate_monitor": 0.0,
+      "missing_rate_delta": 0.0,
+      "unseen_category_rate": null,
+      "investigation_hypotheses": [
+        "Transaction-volume, velocity, or rolling-history changes may reflect genuine population or activity-pattern shift.",
+        "These are monitoring hypotheses only; causality is not asserted."
+      ],
+      "recommended_review_checks": [
+        "Verify source-data/schema consistency for this feature.",
+        "Compare validation and monitoring-window descriptive statistics.",
+        "Check whether the shift is expected from chronological progression.",
+        "Inspect transaction-volume and rolling-window population changes."
+      ]
+    },
+    {
+      "feature": "receiver_tx_count_7d",
+      "severity": "warning",
+      "feature_type": "numeric",
+      "metric_name": "psi",
+      "metric_value": 0.16972462050117879,
+      "monitoring_domain": "transaction_history_or_velocity",
+      "missing_rate_reference": 0.0,
+      "missing_rate_monitor": 0.0,
+      "missing_rate_delta": 0.0,
+      "unseen_category_rate": null,
+      "investigation_hypotheses": [
+        "Transaction-volume, velocity, or rolling-history changes may reflect genuine population or activity-pattern shift.",
+        "These are monitoring hypotheses only; causality is not asserted."
+      ],
+      "recommended_review_checks": [
+        "Verify source-data/schema consistency for this feature.",
+        "Compare validation and monitoring-window descriptive statistics.",
+        "Check whether the shift is expected from chronological progression.",
+        "Inspect transaction-volume and rolling-window population changes."
+      ]
+    },
+    {
+      "feature": "seconds_since_last_inbound_1h",
+      "severity": "warning",
+      "feature_type": "numeric",
+      "metric_name": "psi",
+      "metric_value": 0.13783911548962222,
+      "monitoring_domain": "temporal_progression",
+      "missing_rate_reference": 0.9875,
+      "missing_rate_monitor": 0.98016,
+      "missing_rate_delta": -0.007340000000000013,
+      "unseen_category_rate": null,
+      "investigation_hypotheses": [
+        "Chronological progression between validation and the post-lock monitoring window may shift this feature naturally.",
+        "These are monitoring hypotheses only; causality is not asserted."
+      ],
+      "recommended_review_checks": [
+        "Verify source-data/schema consistency for this feature.",
+        "Compare validation and monitoring-window descriptive statistics.",
+        "Check whether the shift is expected from chronological progression.",
+        "Inspect timestamp coverage and age/time-derived feature semantics."
+      ]
+    },
+    {
+      "feature": "sender_prior_unique_senders",
+      "severity": "warning",
+      "feature_type": "numeric",
+      "metric_name": "psi",
+      "metric_value": 0.12397130155864057,
+      "monitoring_domain": "graph_or_network_behavior",
+      "missing_rate_reference": 0.0,
+      "missing_rate_monitor": 0.0,
+      "missing_rate_delta": 0.0,
+      "unseen_category_rate": null,
+      "investigation_hypotheses": [
+        "Network connectivity or counterparty-mix changes may alter graph-derived behavior without implying model failure.",
+        "These are monitoring hypotheses only; causality is not asserted."
+      ],
+      "recommended_review_checks": [
+        "Verify source-data/schema consistency for this feature.",
+        "Compare validation and monitoring-window descriptive statistics.",
+        "Check whether the shift is expected from chronological progression.",
+        "Inspect network-degree, counterparty-mix, and graph-structure changes."
+      ]
+    },
+    {
+      "feature": "pair_share_of_receiver_history",
+      "severity": "warning",
+      "feature_type": "numeric",
+      "metric_name": "psi",
+      "metric_value": 0.1230108850123013,
+      "monitoring_domain": "relationship_history",
+      "missing_rate_reference": 0.0,
+      "missing_rate_monitor": 0.0,
+      "missing_rate_delta": 0.0,
+      "unseen_category_rate": null,
+      "investigation_hypotheses": [
+        "Accumulating sender/receiver or pair history may change relationship-level distributions over time.",
+        "These are monitoring hypotheses only; causality is not asserted."
+      ],
+      "recommended_review_checks": [
+        "Verify source-data/schema consistency for this feature.",
+        "Compare validation and monitoring-window descriptive statistics.",
+        "Check whether the shift is expected from chronological progression.",
+        "Inspect pair/counterparty history accumulation and cohort mix."
+      ]
+    },
+    {
+      "feature": "pair_seconds_since_previous",
+      "severity": "warning",
+      "feature_type": "numeric",
+      "metric_name": "psi",
+      "metric_value": 0.11880928064805517,
+      "monitoring_domain": "temporal_progression",
+      "missing_rate_reference": 0.0268,
+      "missing_rate_monitor": 0.03216,
+      "missing_rate_delta": 0.00536,
+      "unseen_category_rate": null,
+      "investigation_hypotheses": [
+        "Chronological progression between validation and the post-lock monitoring window may shift this feature naturally.",
+        "These are monitoring hypotheses only; causality is not asserted."
+      ],
+      "recommended_review_checks": [
+        "Verify source-data/schema consistency for this feature.",
+        "Compare validation and monitoring-window descriptive statistics.",
+        "Check whether the shift is expected from chronological progression.",
+        "Inspect timestamp coverage and age/time-derived feature semantics."
+      ]
+    },
+    {
+      "feature": "sender_bridge_degree",
+      "severity": "warning",
+      "feature_type": "numeric",
+      "metric_name": "psi",
+      "metric_value": 0.1144468486749629,
+      "monitoring_domain": "graph_or_network_behavior",
+      "missing_rate_reference": 0.0,
+      "missing_rate_monitor": 0.0,
+      "missing_rate_delta": 0.0,
+      "unseen_category_rate": null,
+      "investigation_hypotheses": [
+        "Network connectivity or counterparty-mix changes may alter graph-derived behavior without implying model failure.",
+        "These are monitoring hypotheses only; causality is not asserted."
+      ],
+      "recommended_review_checks": [
+        "Verify source-data/schema consistency for this feature.",
+        "Compare validation and monitoring-window descriptive statistics.",
+        "Check whether the shift is expected from chronological progression.",
+        "Inspect network-degree, counterparty-mix, and graph-structure changes."
+      ]
+    },
+    {
+      "feature": "bank_pair_prior_tx_count",
+      "severity": "warning",
+      "feature_type": "numeric",
+      "metric_name": "psi",
+      "metric_value": 0.10890675092292124,
+      "monitoring_domain": "relationship_history",
+      "missing_rate_reference": 0.0,
+      "missing_rate_monitor": 0.0,
+      "missing_rate_delta": 0.0,
+      "unseen_category_rate": null,
+      "investigation_hypotheses": [
+        "Accumulating sender/receiver or pair history may change relationship-level distributions over time.",
+        "These are monitoring hypotheses only; causality is not asserted."
+      ],
+      "recommended_review_checks": [
+        "Verify source-data/schema consistency for this feature.",
+        "Compare validation and monitoring-window descriptive statistics.",
+        "Check whether the shift is expected from chronological progression.",
+        "Inspect pair/counterparty history accumulation and cohort mix."
+      ]
+    }
+  ],
+  "monitoring_domain_counts": {
+    "graph_or_network_behavior": 5,
+    "temporal_progression": 4,
+    "relationship_history": 3,
+    "transaction_history_or_velocity": 3
+  },
+  "governance": {
+    "human_review_required": true,
+    "automatic_retraining_triggered": false,
+    "automatic_recalibration_triggered": false,
+    "automatic_model_promotion": false,
+    "automatic_threshold_change": false,
+    "certified_phase10_model_modified": false,
+    "test_used_for_model_selection": false,
+    "investigation_is_diagnostic_only": true,
+    "hypotheses_are_not_causal_claims": true
+  },
+  "recommended_next_action": "human_drift_investigation"
+}

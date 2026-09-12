@@ -1,0 +1,28 @@
+{
+  "schema_version": "phase13_governance_gate_v1",
+  "status": "PASS",
+  "feature_drift_report": "C:\\Users\\DELL\\graphshield-aml\\reports\\v2\\phase13\\feature_drift_v1_report.json",
+  "score_drift_report": "C:\\Users\\DELL\\graphshield-aml\\reports\\v2\\phase13\\score_drift_v1_report.json",
+  "gate": {
+    "feature_drift_severity": "critical",
+    "score_drift_severity": "stable",
+    "eligible_feedback_count": 0,
+    "minimum_feedback_for_retraining_review": 100,
+    "enough_adjudicated_feedback_for_review": false,
+    "drift_review_required": true,
+    "retraining_review_may_be_prepared": false,
+    "recommended_action": "investigate_critical_drift",
+    "automatic_retraining_allowed": false,
+    "automatic_model_promotion_allowed": false,
+    "automatic_threshold_change_allowed": false,
+    "human_approval_required": true
+  },
+  "governance": {
+    "feedback_is_not_automatically_a_label": true,
+    "adjudicated_feedback_only_for_modeling": true,
+    "automatic_retraining": false,
+    "automatic_model_promotion": false,
+    "human_review_required": true,
+    "certified_phase10_model": "read_only"
+  }
+}

@@ -1,0 +1,199 @@
+{
+  "schema_version": "phase13_drift_alerts_v1",
+  "overall_severity": "critical",
+  "critical_feature_count": 6,
+  "warning_feature_count": 9,
+  "critical_features": [
+    {
+      "feature": "hour_of_day",
+      "feature_type": "numeric",
+      "metric_name": "psi",
+      "metric_value": 1.6516149859490477,
+      "missing_rate_reference": 0.0,
+      "missing_rate_monitor": 0.0,
+      "missing_rate_delta": 0.0,
+      "unseen_category_rate": null,
+      "severity": "critical",
+      "context": "temporal_or_age_feature"
+    },
+    {
+      "feature": "receiver_prior_tx_count",
+      "feature_type": "numeric",
+      "metric_name": "psi",
+      "metric_value": 0.6344236031966257,
+      "missing_rate_reference": 0.0,
+      "missing_rate_monitor": 0.0,
+      "missing_rate_delta": 0.0,
+      "unseen_category_rate": null,
+      "severity": "critical",
+      "context": "general_model_feature"
+    },
+    {
+      "feature": "sender_unique_receivers_7d",
+      "feature_type": "numeric",
+      "metric_name": "psi",
+      "metric_value": 0.588514931330696,
+      "missing_rate_reference": 0.0,
+      "missing_rate_monitor": 0.0,
+      "missing_rate_delta": 0.0,
+      "unseen_category_rate": null,
+      "severity": "critical",
+      "context": "general_model_feature"
+    },
+    {
+      "feature": "receiver_unique_senders_7d",
+      "feature_type": "numeric",
+      "metric_name": "psi",
+      "metric_value": 1.738606675646178,
+      "missing_rate_reference": 0.0,
+      "missing_rate_monitor": 0.0,
+      "missing_rate_delta": 0.0,
+      "unseen_category_rate": null,
+      "severity": "critical",
+      "context": "general_model_feature"
+    },
+    {
+      "feature": "pair_prior_tx_count",
+      "feature_type": "numeric",
+      "metric_name": "psi",
+      "metric_value": 1.1437929705378294,
+      "missing_rate_reference": 0.0,
+      "missing_rate_monitor": 0.0,
+      "missing_rate_delta": 0.0,
+      "unseen_category_rate": null,
+      "severity": "critical",
+      "context": "general_model_feature"
+    },
+    {
+      "feature": "pair_relationship_age_seconds",
+      "feature_type": "numeric",
+      "metric_name": "psi",
+      "metric_value": 8.20386892624004,
+      "missing_rate_reference": 0.0,
+      "missing_rate_monitor": 0.0,
+      "missing_rate_delta": 0.0,
+      "unseen_category_rate": null,
+      "severity": "critical",
+      "context": "temporal_or_age_feature"
+    }
+  ],
+  "warning_features": [
+    {
+      "feature": "sender_prior_tx_count",
+      "feature_type": "numeric",
+      "metric_name": "psi",
+      "metric_value": 0.18205733513459046,
+      "missing_rate_reference": 0.0,
+      "missing_rate_monitor": 0.0,
+      "missing_rate_delta": 0.0,
+      "unseen_category_rate": null,
+      "severity": "warning",
+      "context": "general_model_feature"
+    },
+    {
+      "feature": "receiver_tx_count_7d",
+      "feature_type": "numeric",
+      "metric_name": "psi",
+      "metric_value": 0.16972462050117879,
+      "missing_rate_reference": 0.0,
+      "missing_rate_monitor": 0.0,
+      "missing_rate_delta": 0.0,
+      "unseen_category_rate": null,
+      "severity": "warning",
+      "context": "general_model_feature"
+    },
+    {
+      "feature": "sender_fanout_ratio_24h",
+      "feature_type": "numeric",
+      "metric_name": "psi",
+      "metric_value": 0.1847383646535918,
+      "missing_rate_reference": 0.0,
+      "missing_rate_monitor": 0.0,
+      "missing_rate_delta": 0.0,
+      "unseen_category_rate": null,
+      "severity": "warning",
+      "context": "general_model_feature"
+    },
+    {
+      "feature": "seconds_since_last_inbound_1h",
+      "feature_type": "numeric",
+      "metric_name": "psi",
+      "metric_value": 0.13783911548962222,
+      "missing_rate_reference": 0.9875,
+      "missing_rate_monitor": 0.98016,
+      "missing_rate_delta": -0.007340000000000013,
+      "unseen_category_rate": null,
+      "severity": "warning",
+      "context": "temporal_or_age_feature"
+    },
+    {
+      "feature": "pair_seconds_since_previous",
+      "feature_type": "numeric",
+      "metric_name": "psi",
+      "metric_value": 0.11880928064805517,
+      "missing_rate_reference": 0.0268,
+      "missing_rate_monitor": 0.03216,
+      "missing_rate_delta": 0.00536,
+      "unseen_category_rate": null,
+      "severity": "warning",
+      "context": "temporal_or_age_feature"
+    },
+    {
+      "feature": "pair_share_of_receiver_history",
+      "feature_type": "numeric",
+      "metric_name": "psi",
+      "metric_value": 0.1230108850123013,
+      "missing_rate_reference": 0.0,
+      "missing_rate_monitor": 0.0,
+      "missing_rate_delta": 0.0,
+      "unseen_category_rate": null,
+      "severity": "warning",
+      "context": "general_model_feature"
+    },
+    {
+      "feature": "bank_pair_prior_tx_count",
+      "feature_type": "numeric",
+      "metric_name": "psi",
+      "metric_value": 0.10890675092292124,
+      "missing_rate_reference": 0.0,
+      "missing_rate_monitor": 0.0,
+      "missing_rate_delta": 0.0,
+      "unseen_category_rate": null,
+      "severity": "warning",
+      "context": "general_model_feature"
+    },
+    {
+      "feature": "sender_prior_unique_senders",
+      "feature_type": "numeric",
+      "metric_name": "psi",
+      "metric_value": 0.12397130155864057,
+      "missing_rate_reference": 0.0,
+      "missing_rate_monitor": 0.0,
+      "missing_rate_delta": 0.0,
+      "unseen_category_rate": null,
+      "severity": "warning",
+      "context": "general_model_feature"
+    },
+    {
+      "feature": "sender_bridge_degree",
+      "feature_type": "numeric",
+      "metric_name": "psi",
+      "metric_value": 0.1144468486749629,
+      "missing_rate_reference": 0.0,
+      "missing_rate_monitor": 0.0,
+      "missing_rate_delta": 0.0,
+      "unseen_category_rate": null,
+      "severity": "warning",
+      "context": "general_model_feature"
+    }
+  ],
+  "governance_action": "human_review_required",
+  "automatic_retraining_triggered": false,
+  "automatic_model_promotion": false,
+  "certified_models_modified": false,
+  "interpretation": {
+    "drift_is_not_model_failure": true,
+    "temporal_progression_can_create_real_distribution_shift": true,
+    "critical_drift_requires_review_not_automatic_retraining": true
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "schema_version": "phase13_score_drift_v1",
+  "reference_split": "validation",
+  "monitor_split": "test",
+  "reference_rows": 50000,
+  "monitor_rows": 50000,
+  "metrics": {
+    "graph_score_raw_psi": {
+      "value": 0.012264807162658679,
+      "severity": "stable"
+    },
+    "graph_score_calibrated_psi": {
+      "value": 0.012264807162658679,
+      "severity": "stable"
+    }
+  },
+  "overall_severity": "stable",
+  "governance": {
+    "automatic_retraining_triggered": false,
+    "automatic_recalibration_triggered": false,
+    "automatic_model_promotion": false,
+    "human_review_required": true,
+    "certified_phase10_model": "read_only",
+    "test_used_for_model_selection": false,
+    "test_used_for_post_lock_monitoring_simulation": true
+  }
+}

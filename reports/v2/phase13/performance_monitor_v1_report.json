@@ -1,0 +1,26 @@
+{
+  "schema_version": "phase13_performance_monitor_v1",
+  "status": "INSUFFICIENT_VALID_LABELS",
+  "input_record_count": 0,
+  "valid_labeled_record_count": 0,
+  "invalid_or_unapproved_record_count": 0,
+  "minimum_valid_labels": 30,
+  "metrics": null,
+  "label_contract": {
+    "analyst_feedback_is_not_ground_truth": true,
+    "accepted_label_sources": [
+      "adjudicated_outcome",
+      "authoritative_outcome",
+      "confirmed_case_outcome"
+    ],
+    "only_adjudicated_or_authoritative_outcomes_are_eligible": true
+  },
+  "governance": {
+    "automatic_retraining_triggered": false,
+    "automatic_recalibration_triggered": false,
+    "automatic_model_promotion": false,
+    "automatic_threshold_change": false,
+    "human_review_required": true,
+    "certified_phase10_model_modified": false
+  }
+}

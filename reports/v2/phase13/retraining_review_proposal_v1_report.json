@@ -1,0 +1,30 @@
+{
+  "schema_version": "phase13_retraining_review_proposal_v1",
+  "proposal_status": "NOT_READY",
+  "eligible_feedback_count": 0,
+  "minimum_feedback_required": 100,
+  "enough_adjudicated_feedback": false,
+  "drift_review_required": true,
+  "validated_performance_monitoring_available": false,
+  "retraining_review_may_be_prepared": false,
+  "human_approval": {
+    "required": true,
+    "received": false
+  },
+  "proposal_only": true,
+  "execution": {
+    "training_started": false,
+    "recalibration_started": false,
+    "model_promotion_started": false,
+    "threshold_change_started": false
+  },
+  "governance": {
+    "automatic_retraining_allowed": false,
+    "automatic_recalibration_allowed": false,
+    "automatic_model_promotion_allowed": false,
+    "automatic_threshold_change_allowed": false,
+    "certified_phase10_model_read_only": true,
+    "test_used_for_model_selection": false
+  },
+  "recommended_action": "collect_and_adjudicate_more_feedback"
+}

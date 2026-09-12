@@ -1,0 +1,30 @@
+{
+  "schema_version": "phase13_final_certification_v1",
+  "status": "PASS",
+  "summary": {
+    "feature_drift_severity": "critical",
+    "score_drift_severity": "stable",
+    "eligible_feedback_count": 0,
+    "minimum_feedback_required": 100,
+    "retraining_review_may_be_prepared": false,
+    "performance_status": "INSUFFICIENT_VALID_LABELS",
+    "governance_status": "REVIEW_REQUIRED",
+    "governance_gate_status": "PASS"
+  },
+  "verified_api_routes": [
+    "/phase13/drift",
+    "/phase13/governance-gate",
+    "/phase13/performance",
+    "/phase13/retraining-proposal",
+    "/phase13/status"
+  ],
+  "scientific_boundary": {
+    "certified_phase10_model_read_only": true,
+    "test_not_used_for_model_selection": true,
+    "no_automatic_retraining": true,
+    "no_automatic_recalibration": true,
+    "no_automatic_promotion": true,
+    "no_automatic_threshold_change": true,
+    "human_approval_required": true
+  }
+}

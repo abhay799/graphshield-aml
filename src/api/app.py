@@ -478,3 +478,7 @@ app.include_router(phase11_explainability_router)
 # GraphShield Phase 12 investigation routes
 from api.phase12_routes import router as phase12_investigation_router
 app.include_router(phase12_investigation_router)
+
+# Phase 13 governance API
+from api.phase13_routes import router as phase13_governance_router
+app.include_router(phase13_governance_router)
