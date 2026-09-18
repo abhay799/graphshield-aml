@@ -4,6 +4,30 @@ GraphShield AML is a graph-native, human-controlled anti-money-laundering invest
 
 > Decision support only. GraphShield does not block accounts, close cases, file SAR/STRs, submit regulatory reports, or replace legal, compliance, or investigator judgement.
 
+## Reviewer quick facts
+
+### WHAT IS GRAPHSHIELD?
+GraphShield AML is a graph-native, human-controlled investigation-support prototype for AML alert triage. It assembles transaction, graph, policy, and case evidence around a suspicious activity review flow, but leaves decisions and any external action to the investigator.
+
+### WHAT IS ACTUALLY IMPLEMENTED?
+The repo contains implemented data normalization, feature engineering, model pipelines, graph investigations, evidence bundles, policy retrieval, API/UI services, and governance guardrails. The main review path is: source data -> canonical features -> risk-ranked cases -> investigation evidence -> policy context -> human review.
+
+### WHAT IS SYNTHETIC / HISTORICAL?
+This project uses synthetic IBM AML-style data, local processed artifacts, historical certification reports, and demo outputs. Those artifacts are useful evidence for workflow design and repository validation, but they are not fresh live-bank evidence.
+
+### WHAT IS NOT CLAIMED?
+GraphShield does not claim autonomous compliance enforcement, regulatory filing, customer blocking, legal conclusions, or a production banking deployment. It also does not claim live cloud readiness or external-system security certification.
+
+### WHERE SHOULD A REVIEWER START?
+- [Project Architecture](docs/architecture/PROJECT_ARCHITECTURE.md)
+- [Phase Index](docs/architecture/PHASE_INDEX.md)
+- [Safety Invariants](docs/architecture/SAFETY_INVARIANTS.md)
+- [Validation](docs/VALIDATION.md)
+- [Limitations](docs/LIMITATIONS.md)
+- [Running](docs/RUNNING.md)
+- [Demo Scenarios](docs/demo/DEMO_SCENARIOS.md)
+- [Benchmarks & Evidence](docs/evidence/BENCHMARKS_AND_EVIDENCE.md)
+
 ## The problem
 
 Transaction-monitoring teams must triage many alerts with limited time and incomplete context. A transaction alone does not show recent velocity, counterparty history, network structure, or the surrounding evidence needed to investigate it. GraphShield connects these views into an evidence-oriented review workflow while keeping the investigator responsible for every decision.

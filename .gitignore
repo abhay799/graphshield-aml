@@ -67,3 +67,10 @@ models/**
 
 # Runtime reports/log state
 reports/phase7_runtime/
+
+# Generated review / packaging artifacts
+/dist/
+/docs/screenshots/*.html
+/docs/screenshots/**/*.css
+/docs/screenshots/**/*.js
+/runpodctl.exe
