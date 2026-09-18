@@ -1,233 +1,98 @@
 # GraphShield AML
 
-**Graph-native AML alert prioritization and investigation support with explainable ML, temporal graph intelligence, evidence-grounded RAG, and human-controlled review.**
+GraphShield AML is a graph-native, human-controlled anti-money-laundering investigation-support prototype. It prioritizes transaction alerts and assembles point-in-time graph, model, case, and policy evidence for a human investigator. It is a portfolio/research system built with synthetic or public material; it is not an autonomous compliance system.
 
-> Portfolio / academic research prototype built with public or synthetic data.  
-> GraphShield is **decision support**, not an autonomous compliance engine.
+> Decision support only. GraphShield does not block accounts, close cases, file SAR/STRs, submit regulatory reports, or replace legal, compliance, or investigator judgement.
 
-## Why GraphShield
+## The problem
 
-Traditional transaction-monitoring systems can generate more alerts than investigators can review with equal depth. A single transaction row also misses important context: account history, recent velocity, counterparties, repeated relationships, network structure, and evolving graph behavior.
+Transaction-monitoring teams must triage many alerts with limited time and incomplete context. A transaction alone does not show recent velocity, counterparty history, network structure, or the surrounding evidence needed to investigate it. GraphShield connects these views into an evidence-oriented review workflow while keeping the investigator responsible for every decision.
 
-GraphShield converts that alert stream into a **risk-ranked, explainable, evidence-linked investigation workflow**:
+## What is implemented
 
-**Transactions → Point-in-time features → Rules + ML → Graph/TGN intelligence → Calibration & ranking → Case evidence → Explainability → Policy-grounded investigation → Human review**
+- Canonical transaction normalization, chronological splits, and point-in-time history, velocity, counterparty, pair, concentration, and graph features.
+- Rule alerts plus logistic-regression, LightGBM, CatBoost, and temporal graph-network research pipelines.
+- Transaction-to-account graph tables, point-in-time graph evidence, circular-flow candidates, community detection, risk propagation, and motif signals.
+- Risk-ranked case queues, materialized case bundles, subgraphs, paths, evidence documents, and a separate analyst-review state store.
+- Model explanation through TreeSHAP for the frozen graph LightGBM component, deterministic reason codes, graph evidence, and temporal context.
+- Policy retrieval over locally indexed FATF, FinCEN, FIU-IND, and RBI documents, with citations and grounding checks.
+- A bounded Phase 12 investigation agent with six allowlisted read-only tools and fail-closed grounding behavior.
+- Governance controls for append-only feedback, adjudication, drift/performance observation, and human-gated retraining proposals.
+- FastAPI services, Streamlit interfaces, Docker/Kubernetes readiness contracts, artifact-integrity checks, and release/recovery contracts.
 
-## Product workflow
+See [the project architecture](docs/architecture/PROJECT_ARCHITECTURE.md) for the implemented data flow and [limitations](docs/LIMITATIONS.md) for the important boundaries.
 
-1. **Command Center** — inspect live system state and high-priority cases.
-2. **Case Queue** — review a ranked analyst queue.
-3. **Investigation** — inspect the selected case and supporting evidence.
-4. **Graph Explorer** — visualize the materialized point-in-time transaction network.
-5. **Explainability** — separate model attribution, deterministic reason codes, graph evidence, and temporal context.
-6. **AI Investigator** — run a bounded, read-only investigation agent.
-7. **Policy RAG** — retrieve grounded policy context with citations.
-8. **Governance** — monitor drift and governance gates without automatic retraining.
-9. **Deployment & Reliability** — inspect readiness, integrity, and release evidence.
-
-## Architecture
+## Architecture at a glance
 
 ```mermaid
 flowchart LR
-    A[Public / Synthetic Transactions] --> B[Bronze / Silver Normalization]
-    B --> C[Point-in-Time Gold Features]
-
-    C --> D1[History / Velocity]
-    C --> D2[Counterparty / Pair]
-    C --> D3[Concentration]
-    C --> D4[Static Graph Features]
-
-    D1 --> E[Rules + ML Risk Models]
-    D2 --> E
-    D3 --> E
-    D4 --> E
-
-    C --> F[Temporal Graph Network]
-    E --> G[Calibrated Fusion + Risk Ranking]
-    F --> G
-
-    G --> H[Analyst Case Queue]
-    H --> I[Case Evidence + Graph Subgraph]
-    I --> J[Phase 11 Explainability]
-    I --> K[Policy / Evidence Retrieval]
-
-    J --> L[Bounded Phase 12 Investigator]
-    K --> L
-
-    L --> M[Human Analyst Review]
-    M --> N[Audit / Feedback / Governance]
-
-    N --> O[Drift Monitoring]
-    O --> P[Human-Gated Retraining Proposal]
-
-    H --> Q[FastAPI]
-    J --> Q
-    L --> Q
-    N --> Q
-
-    Q --> R[Streamlit Analyst UI v2]
-
-    S[Phase 14 Deployment Controls] --> Q
-    T[Phase 15 Reliability + Integrity Gates] --> Q
+    A[Synthetic/public transaction data] --> B[Canonical silver data]
+    B --> C[Point-in-time features and graph tables]
+    C --> D[Rules and ML/TGN scoring]
+    D --> E[Risk-ranked case queue]
+    E --> F[Case bundles, paths, and subgraphs]
+    F --> G[Explanation and policy retrieval]
+    G --> H[Bounded investigation assistance]
+    H --> I[Human investigator review]
+    I --> J[Auditable feedback and governance]
 ```
 
-## Core capabilities
+The workflow is deliberately evidence-first: risk ranking informs what to review; it does not determine an enforcement or reporting outcome.
 
-### Leak-aware temporal data engineering
-GraphShield builds historical, velocity, counterparty, pair, concentration, and graph features using information available **before the focal event**. Chronological train/validation/test splits are used to reduce temporal leakage.
+## Graph and temporal intelligence
 
-### ML + graph intelligence
-The project compares transparent and boosted tabular approaches and adds relational context through graph features and a Temporal Graph Network. The final certified Phase 10 stack is frozen for later phases rather than silently retrained.
+The core graph representation connects transaction events to sender and receiver accounts. It derives point-in-time degree, pair-history, concentration, bank, and motif features before the focal event. Phase 9 adds account-risk aggregation, three-hop propagation, Louvain community analysis, and rapid pass-through/two-node-cycle signals. Neo4j loaders are included as an optional integration; local graph artifacts and NetworkX-based analysis are the demonstrated code path.
 
-### Explainable AML
-Phase 11 provides:
-- TreeSHAP for the frozen LightGBM graph model
-- deterministic AML reason codes
-- graph evidence
-- temporal/TGN context
-- fusion-component explanation
-- deterministic analyst summaries
-- no runtime exposure of ground-truth labels
+Temporal Graph Network code uses PyTorch Geometric to construct time-ordered event data and train/evaluate a TGN component. The later Phase 10 artifact set records a frozen graph/TGN fusion candidate. Model lineage is versioned across phases; consult [Validation](docs/VALIDATION.md) before comparing older champion reports with the later fusion artifacts.
 
-### Bounded agentic investigation
-Phase 12 uses only allowlisted, read-only investigation tools:
-- `case_overview`
-- `search_evidence`
-- `path_evidence`
-- `history_evidence`
-- `policy_search`
-- `phase11_explanation`
+## Investigation, explanation, and policy evidence
 
-The agent collects supporting and countervailing evidence, drafts a grounded response, validates citations, and fails closed when grounding is insufficient.
+1. Rank candidate transactions into an analyst case queue.
+2. Retrieve the case overview, point-in-time subgraph, paths, history, and evidence documents.
+3. Present separate explanation channels: graph-LightGBM TreeSHAP, deterministic reason codes, graph evidence, and temporal context. TGN context is not presented as SHAP attribution.
+4. Retrieve policy context from the local corpus with document/chunk citations.
+5. Let the bounded investigation agent collect only allowlisted, read-only evidence and withhold unsupported answers.
+6. Leave final assessment and disposition to the human investigator.
 
-### Governance-first MLOps
-Phase 13 monitors feature/score drift and analyst feedback while enforcing:
-- no automatic retraining
-- no automatic recalibration
-- no automatic promotion
-- no automatic threshold changes
-- human approval for any model-change proposal
+## Phase status
 
-### Enterprise runtime and reliability
-Phases 14–15 add:
-- Docker / Kubernetes deployment contracts
-- readiness and liveness endpoints
-- artifact-integrity checks
-- hardened non-root runtime assumptions
-- release-readiness gates
-- recovery / rollback verification
-- reliability certification
+Repository history and stored certification artifacts support implementation through Phase 15. Phases 1–8 cover data, features, ML, graph intelligence, temporal work, investigation/RAG, service integration, and productization. Phases 8.5–15 extend platform foundations, online graph intelligence, real-time fusion, explainability, bounded investigation, governance, enterprise readiness, and reliability.
 
-These checks establish **readiness contracts**, not production-SLO attainment.
+These are historical artifacts, not a claim that this checkout has freshly rerun every certification. There is no formal Phase 0 definition or certification in the repository; the initial project commit is documented only as bootstrap/history. The detailed, evidence-oriented record is in [Phase Index](docs/architecture/PHASE_INDEX.md).
 
-## Technology stack
+## Validation and safety
 
-| Layer | Technologies |
-|---|---|
-| Data | Python, Polars, Pandas, Parquet, PyArrow |
-| ML | scikit-learn, LightGBM, CatBoost, joblib |
-| Graph / Temporal | graph analytics, PyTorch, Temporal Graph Network |
-| Retrieval / AI | RAG, policy retrieval, grounded LLM workflow |
-| API | FastAPI, Pydantic |
-| UI | Streamlit |
-| Governance | drift monitoring, append-only feedback/audit controls |
-| Deployment | Docker, Kubernetes |
-| Reliability | readiness, liveness, artifact integrity, release gates |
-| Quality | pytest, validation scripts, versioned certification artifacts |
+- The repository contains 34 test files with 83 test functions, primarily covering service contracts and Phases 11–15.
+- Earlier phases retain validation scripts, reports, hashes, and certification artifacts.
+- Current CI is lightweight and does not execute the full test suite; the active branch is also outside its configured `master`/`main` triggers.
+- Stored Phase 15 smoke evidence is explicitly in-process and does not establish cloud networking, production traffic, or achieved SLOs.
 
-## Certified project status
+Read [Validation](docs/VALIDATION.md), [Safety Invariants](docs/architecture/SAFETY_INVARIANTS.md), and [Limitations](docs/LIMITATIONS.md) before relying on the system or its reported artifacts.
 
-GraphShield is complete through **Phase 15**.
+## Local demonstration
 
-- Phase 10 — Real-Time Streaming + Temporal Fusion: **certified**
-- Phase 11 — Explainable AML: **certified**
-- Phase 12 — Agentic Investigation: **certified**
-- Phase 13 — Feedback / Drift / MLOps Governance: **certified**
-- Phase 14 — Enterprise Platform / Cloud: **certified**
-- Phase 15 — Reliability / Final Release: **certified**
-
-Final repository tags include:
-
-```text
-graphshield-v2-phase13-certified
-graphshield-v2-phase14-certified
-graphshield-v2-phase15-certified
-graphshield-v2-final
-```
-
-## UI preview
-
-Add the final screenshots here after running UI v2 Batch 7:
-
-```text
-docs/screenshots/01-command-center.png
-docs/screenshots/02-case-queue.png
-docs/screenshots/03-investigation.png
-docs/screenshots/04-graph-explorer.png
-docs/screenshots/05-explainability.png
-docs/screenshots/06-ai-investigator.png
-docs/screenshots/07-policy-rag.png
-docs/screenshots/08-governance.png
-docs/screenshots/09-deployment.png
-```
-
-Recommended README layout after screenshots are captured:
-
-```markdown
-![GraphShield Command Center](docs/screenshots/01-command-center.png)
-![GraphShield Graph Explorer](docs/screenshots/04-graph-explorer.png)
-![GraphShield AI Investigator](docs/screenshots/06-ai-investigator.png)
-```
-
-## Local demo
-
-### Terminal 1 — FastAPI
+The repository includes FastAPI and Streamlit entry points. A local environment with the required ignored data/model artifacts is required.
 
 ```powershell
+# API
 .\.venv\Scripts\python.exe -m uvicorn api.app:app --app-dir src --host 127.0.0.1 --port 8000
-```
 
-### Terminal 2 — Analyst UI v2
-
-```powershell
+# Analyst UI
 $env:GRAPHSHIELD_API_URL="http://127.0.0.1:8000"
 .\.venv\Scripts\python.exe -m streamlit run src\frontend\app.py --server.port 8502
 ```
 
-Open:
+This is a local demonstration path, not a production deployment guide. Runtime artifacts under `data/` and `models/` are intentionally Git-ignored; see [Limitations](docs/LIMITATIONS.md#artifact-and-environment-reproducibility).
 
-```text
-http://localhost:8502
-```
+## Documentation map
 
-## Suggested evaluator demo
+- [Project Architecture](docs/architecture/PROJECT_ARCHITECTURE.md) — implemented components and data flow.
+- [Phase Index](docs/architecture/PHASE_INDEX.md) — roadmap recovery with evidence status.
+- [Safety Invariants](docs/architecture/SAFETY_INVARIANTS.md) — non-autonomy and evidence boundaries.
+- [Validation](docs/VALIDATION.md) — what is tested, certified historically, and not freshly verified.
+- [Limitations](docs/LIMITATIONS.md) — operational, data, model, and reproducibility limitations.
+- [Demo script](docs/DEMO_SCRIPT.md) — a bounded portfolio demonstration.
 
-**Case Queue → Investigation → Graph Explorer → Explainability → AI Investigator → Policy RAG → Governance**
+## Scope
 
-The intended takeaway is not simply that GraphShield produces a risk score. It organizes **risk → evidence → explanation → grounded review → human decision**.
-
-## Safety and scope
-
-GraphShield deliberately does **not**:
-- autonomously block accounts
-- autonomously close cases
-- file SAR/STR reports
-- submit regulatory reports
-- treat analyst feedback as automatic ground truth
-- automatically retrain or promote certified models
-- claim production SLO attainment from local/in-process tests
-
-The system uses public or synthetic data and keeps human review mandatory.
-
-## Project identity
-
-**Abhay Kumar**  
-B.E./B.Tech — Artificial Intelligence & Machine Learning  
-Sri Krishna Institute of Technology, Bengaluru  
-Visvesvaraya Technological University
-
----
-
-### Portfolio summary
-
-GraphShield AML demonstrates end-to-end engineering across **data pipelines, ML, temporal graph intelligence, explainability, RAG, agentic investigation, FastAPI, Streamlit, governance, Docker/Kubernetes, and reliability engineering** in one human-controlled financial-crime investigation workflow.
+GraphShield is intended to demonstrate engineering patterns for AML investigation support, not to claim real-bank deployment, regulatory certification, guaranteed detection performance, or legal conclusions.

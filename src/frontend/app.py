@@ -11,6 +11,19 @@ import polars as pl
 import requests
 import streamlit as st
 
+from provider import (
+    api_get,
+    api_post,
+    case_catalog,
+    fetch_case_graph,
+    fetch_explainability,
+    fetch_governance_status,
+    fetch_policy_context,
+    provenance_label,
+    real_case_ids,
+    source_descriptor,
+)
+
 API_BASE = os.getenv("GRAPHSHIELD_API_URL", "http://127.0.0.1:8000").rstrip("/")
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
@@ -28,192 +41,8 @@ def load_css() -> None:
     with open(css_path, "r", encoding="utf-8") as f:
         st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
-def api_get(path: str, timeout: float = 2.0):
-    try:
-        r = requests.get(f"{API_BASE}{path}", timeout=timeout)
-        if r.ok:
-            try:
-                return True, r.json()
-            except Exception:
-                return True, {"text": r.text}
-        return False, {"status_code": r.status_code, "detail": r.text[:500]}
-    except Exception as exc:
-        return False, {"error": str(exc)}
-
-
-
-def api_post(path: str, payload: dict, timeout: float = 45.0):
-    try:
-        r = requests.post(
-            f"{API_BASE}{path}",
-            json=payload,
-            timeout=timeout,
-        )
-        try:
-            body = r.json()
-        except Exception:
-            body = {"text": r.text}
-        return r.ok, body, r.status_code
-    except Exception as exc:
-        return False, {"error": str(exc)}, None
-
-@st.cache_data(ttl=10, show_spinner=False)
-def load_real_case_queue():
-    if not CASE_QUEUE_PATH.exists():
-        return [], "missing"
-
-    try:
-        df = pl.read_parquet(CASE_QUEUE_PATH)
-    except Exception as exc:
-        return [], f"error: {type(exc).__name__}: {exc}"
-
-    if df.height == 0:
-        return [], "empty"
-
-    names = set(df.columns)
-    case_col = next(
-        (c for c in ("case_id", "investigation_id", "alert_id") if c in names),
-        None,
-    )
-    tx_col = next(
-        (c for c in ("transaction_id", "focal_transaction_id") if c in names),
-        None,
-    )
-    risk_col = next(
-        (c for c in ("risk_score", "calibrated_score", "score", "priority_score") if c in names),
-        None,
-    )
-    rank_col = next(
-        (c for c in ("risk_rank", "rank", "priority_rank") if c in names),
-        None,
-    )
-    entity_col = next(
-        (c for c in ("account_id", "entity_id", "sender_id", "sender_account") if c in names),
-        None,
-    )
-
-    if case_col is None:
-        return [], "unsupported_schema"
-
-    if rank_col:
-        try:
-            df = df.sort(rank_col)
-        except Exception:
-            pass
-
-    rows = []
-    for row in df.head(250).iter_rows(named=True):
-        case_id = str(row.get(case_col, "") or "").strip()
-        if not case_id:
-            continue
-
-        raw_score = row.get(risk_col) if risk_col else None
-        try:
-            score = float(raw_score)
-            if score <= 1.0:
-                score = score * 100.0
-            score = round(score, 1)
-        except Exception:
-            score = None
-
-        rows.append(
-            {
-                "case_id": case_id,
-                "transaction_id": str(row.get(tx_col, "") or "") if tx_col else "",
-                "risk_score": score,
-                "risk_rank": row.get(rank_col) if rank_col else None,
-                "entity": str(row.get(entity_col, "") or "") if entity_col else "",
-                "raw": {k: row.get(k) for k in df.columns[:40]},
-            }
-        )
-
-    return rows, "live"
-
-
-@st.cache_data(ttl=10, show_spinner=False)
-def load_api_cases(limit: int = 250):
-    ok, payload = api_get(f"/cases?limit={limit}", timeout=6.0)
-    if not ok or not isinstance(payload, dict):
-        return [], "api_unavailable"
-
-    records = payload.get("cases")
-    if not isinstance(records, list):
-        return [], "api_schema_unexpected"
-
-    rows = []
-    for item in records:
-        if not isinstance(item, dict):
-            continue
-
-        case_id = str(
-            item.get("case_id")
-            or item.get("investigation_id")
-            or item.get("alert_id")
-            or ""
-        ).strip()
-        if not case_id:
-            continue
-
-        txid = str(
-            item.get("transaction_id")
-            or item.get("focal_transaction_id")
-            or ""
-        ).strip()
-
-        entity = str(
-            item.get("account_id")
-            or item.get("entity_id")
-            or item.get("from_account_key")
-            or item.get("sender_account")
-            or item.get("sender")
-            or ""
-        ).strip()
-
-        raw_score = (
-            item.get("risk_score")
-            if item.get("risk_score") is not None
-            else item.get("calibrated_score")
-            if item.get("calibrated_score") is not None
-            else item.get("priority_score")
-            if item.get("priority_score") is not None
-            else item.get("score")
-        )
-        try:
-            score = float(raw_score)
-            if score <= 1.0:
-                score *= 100.0
-            score = round(score, 2)
-        except Exception:
-            score = None
-
-        rows.append(
-            {
-                "case_id": case_id,
-                "transaction_id": txid,
-                "risk_score": score,
-                "risk_rank": item.get("risk_rank") or item.get("rank") or item.get("priority_rank"),
-                "entity": entity,
-                "raw": item,
-            }
-        )
-
-    return rows, "live_api"
-
-
-def case_catalog():
-    api_rows, api_status = load_api_cases()
-    if api_rows:
-        return api_rows, "LIVE API /cases"
-
-    real_rows, local_status = load_real_case_queue()
-    if real_rows:
-        return real_rows, "LOCAL READ-ONLY CASE QUEUE"
-
-    return [], "CASE SOURCE UNAVAILABLE"
-
-def real_case_ids():
-    rows, mode = case_catalog()
-    return [r["case_id"] for r in rows], mode
+# The frontend now routes most read-only data access through src/frontend/provider.py.
+# This keeps the existing UI behavior intact while narrowing the scattered data-loading pattern.
 
 
 @st.cache_data(ttl=15, show_spinner=False)
@@ -471,6 +300,23 @@ def badge(text: str, tone: str = "blue") -> str:
     return f'<span class="badge badge-{tone}">{text}</span>'
 
 
+def render_provenance_banner(title: str, source_label: str, state_label: str = "MEASURED", detail: str | None = None) -> None:
+    source_text = provenance_label(source_label) if source_label else "NOT MEASURED"
+    st.markdown(
+        f"""
+        <div class="live-endpoint-card endpoint-green" style="margin-bottom: 1rem;">
+          <div class="live-endpoint-top">
+            <span>{escape(str(title))}</span>
+            <strong>{escape(str(state_label))}</strong>
+          </div>
+          <div class="live-endpoint-path">{escape(source_text)}</div>
+          <div class="live-endpoint-summary">{escape(str(detail or 'Read-only GraphShield data path; analyst review remains required.'))}</div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+
 def sidebar() -> str:
     with st.sidebar:
         st.markdown(
@@ -486,24 +332,36 @@ def sidebar() -> str:
             unsafe_allow_html=True,
         )
 
-        rows, source_mode = case_catalog()
+        rows, source_mode, source_meta = case_catalog()
 
         st.markdown('<div class="side-section">ANALYST WORKSPACE</div>', unsafe_allow_html=True)
 
         pages = [
+            "AML Mission Control",
             "Command Center",
             "Case Queue",
-            "Investigation",
+            "Transaction Intelligence",
+            "Entity / Counterparty Intelligence",
             "Graph Explorer",
-            "AI Investigator",
-            "Explainability",
+            "Suspicious Network Detection",
+            "Risk / Alert Intelligence",
+            "Case Investigation",
+            "Investigation",
+            "Path / Evidence Explorer",
+            "Policy / Regulatory Evidence",
             "Policy RAG",
+            "Model / Detection Intelligence",
+            "Explainability",
+            "Investigator Decision Support",
+            "AI Investigator",
+            "Provenance / Audit",
             "Governance",
+            "System / Research Status",
             "Deployment",
         ]
 
         if "nav" not in st.session_state:
-            st.session_state.nav = "Command Center"
+            st.session_state.nav = "AML Mission Control"
 
         pending_nav = st.session_state.pop("_pending_nav", None)
         if pending_nav:
@@ -552,7 +410,7 @@ def goto(page: str, case_id: str | None = None) -> None:
 
 def topbar(api_ok: bool) -> None:
     now = datetime.now().strftime("%d %b %Y • %I:%M %p")
-    rows, source_mode = case_catalog()
+    rows, source_mode, _ = case_catalog()
 
     left, right = st.columns([2.2, 1])
 
@@ -619,7 +477,8 @@ def topbar(api_ok: bool) -> None:
         )
 
 def command_center(api_ok: bool) -> None:
-    rows, source_mode = case_catalog()
+    rows, source_mode, _ = case_catalog()
+    render_provenance_banner("AML Mission Control", source_mode, "READ-ONLY", "Decision support workspace. Analyst review remains mandatory.")
     scores = [r["risk_score"] for r in rows if isinstance(r.get("risk_score"), (int, float))]
     high = sum(1 for s in scores if s >= 75)
     critical = sum(1 for s in scores if s >= 90)
@@ -781,7 +640,8 @@ def command_center(api_ok: bool) -> None:
     )
 
 def case_queue() -> None:
-    rows, source_mode = case_catalog()
+    rows, source_mode, _ = case_catalog()
+    render_provenance_banner("Risk / Alert Intelligence", source_mode, "READ-ONLY", "Queue view sourced from the current GraphShield case data path.")
     live_mode = bool(rows)
 
     st.markdown(f"""
@@ -902,7 +762,7 @@ def case_queue() -> None:
 
 
 def get_selected_case():
-    rows, source_mode = case_catalog()
+    rows, source_mode, _ = case_catalog()
     selected = st.session_state.get("selected_case_id")
 
     if not selected and rows:
@@ -982,7 +842,8 @@ def get_selected_case():
 def investigation() -> None:
     c = get_selected_case()
     case_id = c["case_id"]
-    rows, source_mode = case_catalog()
+    rows, source_mode, _ = case_catalog()
+    render_provenance_banner("Case Investigation", source_mode, "READ-ONLY", "Evidence and graph review remain analyst-controlled.")
 
     if not case_id:
         st.error(
@@ -1185,7 +1046,8 @@ def investigation() -> None:
 
 def graph_explorer() -> None:
     c = get_selected_case()
-    case_ids, case_mode = real_case_ids()
+    case_ids, case_mode, _ = real_case_ids()
+    render_provenance_banner("Graph Explorer", case_mode, "READ-ONLY", "The graph is a point-in-time evidence view and not a proof of illicit activity.")
     if not case_ids:
         st.error("No live case source is available for Graph Explorer.")
         return
@@ -1331,7 +1193,8 @@ def graph_explorer() -> None:
 
 def ai_investigator() -> None:
     c = get_selected_case()
-    case_ids, case_mode = real_case_ids()
+    case_ids, case_mode, _ = real_case_ids()
+    render_provenance_banner("Investigator Decision Support", case_mode, "READ-ONLY", "Only bounded, reviewable investigation outputs are shown.")
     if not case_ids:
         st.error("No live case source is available for AI Investigator.")
         return
@@ -1496,7 +1359,8 @@ def ai_investigator() -> None:
 
 def explainability_page() -> None:
     c = get_selected_case()
-    case_ids, case_mode = real_case_ids()
+    case_ids, case_mode, _ = real_case_ids()
+    render_provenance_banner("Model / Detection Intelligence", case_mode, "READ-ONLY", "Model explanation context is recorded separately from case facts.")
     if not case_ids:
         st.error("No live case source is available for Explainability.")
         return
@@ -1614,7 +1478,8 @@ def explainability_page() -> None:
 
 def policy_rag_page() -> None:
     c = get_selected_case()
-    case_ids, case_mode = real_case_ids()
+    case_ids, case_mode, _ = real_case_ids()
+    render_provenance_banner("Policy / Regulatory Evidence", case_mode, "READ-ONLY", "Policy references support analyst review and do not replace regulatory judgment.")
     if not case_ids:
         st.error("No live case source is available for Policy RAG.")
         return
@@ -1780,6 +1645,7 @@ def backend_discovery_page(name: str, icon: str, title: str, subtitle: str, keyw
         )
 
 def governance_page() -> None:
+    render_provenance_banner("Provenance / Audit", "BACKEND_API", "LIVE", "Audit and governance state is read-only and not an autonomous action trigger.")
     st.markdown(
         """
         <div class="hero compact-hero">
@@ -1853,6 +1719,7 @@ def governance_page() -> None:
                 st.error(payload)
 
 def deployment_page() -> None:
+    render_provenance_banner("System / Research Status", "BACKEND_API", "READ-ONLY", "Deployment and readiness checks are informational only.")
     st.markdown(
         """
         <div class="hero compact-hero">
@@ -1939,29 +1806,134 @@ def deployment_page() -> None:
                 st.error(payload)
 
 
+def transaction_intelligence_view() -> None:
+    rows, source_mode, _ = case_catalog()
+    render_provenance_banner("Transaction Intelligence", source_mode, "READ-ONLY", "Transaction-level context is derived from the current case queue or backend read-only contract.")
+    if not rows:
+        st.warning("No case data is available for transaction intelligence.")
+        return
+    table = []
+    for row in rows[:25]:
+        table.append(
+            {
+                "Case": row.get("case_id", "—"),
+                "Transaction": row.get("transaction_id", "—"),
+                "Entity": row.get("entity", "—"),
+                "Risk": row.get("risk_score", "—"),
+                "Source": source_mode,
+            }
+        )
+    st.dataframe(pd.DataFrame(table), use_container_width=True, hide_index=True)
+
+
+def entity_intelligence_view() -> None:
+    rows, source_mode, _ = case_catalog()
+    render_provenance_banner("Entity / Counterparty Intelligence", source_mode, "READ-ONLY", "Entity context is limited to connected queue metadata and graph evidence available in the repository.")
+    if not rows:
+        st.warning("No entity metadata is currently available from the case source.")
+        return
+    df = pd.DataFrame(rows)
+    st.dataframe(df[["case_id", "entity", "transaction_id", "risk_score"]].head(25), use_container_width=True, hide_index=True)
+
+
+def suspicious_network_view() -> None:
+    render_provenance_banner("Suspicious Network Detection", "BACKEND_API", "READ-ONLY", "Graph context is evidence-only; it is not a legal determination or confirmed suspicious network finding.")
+    st.info("This view reuses the existing point-in-time graph explorer and flagging context from the repository. It does not introduce new detection logic.")
+    graph_explorer()
+
+
+def path_evidence_view() -> None:
+    render_provenance_banner("Path / Evidence Explorer", "BACKEND_API", "READ-ONLY", "Evidence is separated into factual graph evidence, interpretation, policy context, and generated explanation.")
+    st.caption("FACTUAL TRANSACTION / GRAPH EVIDENCE")
+    graph_explorer()
+    st.caption("MODEL OR GRAPH INTERPRETATION")
+    explainability_page()
+    st.caption("POLICY REFERENCE MATERIAL")
+    policy_rag_page()
+
+
+def model_detection_view() -> None:
+    render_provenance_banner("Model / Detection Intelligence", "BACKEND_API", "READ-ONLY", "This page reflects the known model lineage history rather than claiming a single production model stack.")
+    st.markdown(
+        """
+        <div class="safety-card">
+          <div>✓ Known lineage includes older CatBoost and graph LightGBM artifacts.</div>
+          <div>✓ Temporal/TGN components are tracked separately from model explanation outputs.</div>
+          <div>✓ Fusion and calibration states remain visible rather than hidden.</div>
+          <div>✓ Analyst review remains required for any model-based conclusion.</div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+    explainability_page()
+
+
+def provenance_audit_view() -> None:
+    render_provenance_banner("Provenance / Audit", "BACKEND_API", "READ-ONLY", "Audit metadata, governance status, and case provenance are shown separately from analyst feedback.")
+    governance_page()
+
+
 load_css()
 api_ok,_=api_get("/live")
 page=sidebar()
 topbar(api_ok)
 
-if page=="Command Center":
+page_aliases = {
+    "AML Mission Control": "command_center",
+    "Command Center": "command_center",
+    "Case Queue": "case_queue",
+    "Transaction Intelligence": "transaction_intelligence_view",
+    "Entity / Counterparty Intelligence": "entity_intelligence_view",
+    "Graph Explorer": "graph_explorer",
+    "Suspicious Network Detection": "suspicious_network_view",
+    "Risk / Alert Intelligence": "case_queue",
+    "Case Investigation": "investigation",
+    "Investigation": "investigation",
+    "Path / Evidence Explorer": "path_evidence_view",
+    "Policy / Regulatory Evidence": "policy_rag_page",
+    "Policy RAG": "policy_rag_page",
+    "Model / Detection Intelligence": "model_detection_view",
+    "Explainability": "explainability_page",
+    "Investigator Decision Support": "ai_investigator",
+    "AI Investigator": "ai_investigator",
+    "Provenance / Audit": "provenance_audit_view",
+    "Governance": "governance_page",
+    "System / Research Status": "deployment_page",
+    "Deployment": "deployment_page",
+}
+
+page_name = page_aliases.get(page, "command_center")
+
+if page_name == "command_center":
     command_center(api_ok)
-elif page=="Case Queue":
+elif page_name == "case_queue":
     case_queue()
-elif page=="Investigation":
+elif page_name == "investigation":
     investigation()
-elif page=="Graph Explorer":
+elif page_name == "graph_explorer":
     graph_explorer()
-elif page=="AI Investigator":
+elif page_name == "ai_investigator":
     ai_investigator()
-elif page=="Explainability":
+elif page_name == "explainability_page":
     explainability_page()
-elif page=="Policy RAG":
+elif page_name == "policy_rag_page":
     policy_rag_page()
-elif page=="Governance":
+elif page_name == "governance_page":
     governance_page()
-elif page=="Deployment":
+elif page_name == "deployment_page":
     deployment_page()
+elif page_name == "transaction_intelligence_view":
+    transaction_intelligence_view()
+elif page_name == "entity_intelligence_view":
+    entity_intelligence_view()
+elif page_name == "suspicious_network_view":
+    suspicious_network_view()
+elif page_name == "path_evidence_view":
+    path_evidence_view()
+elif page_name == "model_detection_view":
+    model_detection_view()
+elif page_name == "provenance_audit_view":
+    provenance_audit_view()
 else:
     st.error("Unknown UI page.")
 
