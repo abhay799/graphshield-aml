@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GraphShield AML | Financial Crime Intelligence</title>
+    <meta
+      name="description"
+      content="GraphShield AML is a graph-native AML investigation support prototype for evidence-backed, human-controlled triage and case analysis."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="container nav">
+        <div class="brand-wrap">
+          <div class="brand-mark">GS</div>
+          <div>
+            <div class="brand-name">GraphShield AML</div>
+            <div class="brand-sub">Financial Crime Intelligence</div>
+          </div>
+        </div>
+
+        <nav class="main-nav" aria-label="Main navigation">
+          <a href="#problem">Problem</a>
+          <a href="#architecture">Architecture</a>
+          <a href="#graph-intelligence">Graph Intelligence</a>
+          <a href="#evidence">Evidence</a>
+          <a href="#status">Status</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="container hero-grid">
+          <div class="hero-copy">
+            <p class="eyebrow">Human-controlled · Evidence-backed · Research/portfolio system</p>
+            <h1>Graph-native AML &amp; Financial Crime Investigation Intelligence</h1>
+            <p class="lede">
+              GraphShield AML turns transaction alerts into network-aware investigation context:
+              evidence, graph structure, explanation, and policy retrieval for a human reviewer.
+            </p>
+
+            <div class="cta-row">
+              <a class="button primary" href="#architecture">Explore Architecture</a>
+              <a class="button secondary" href="#evidence">View Evidence</a>
+              <a class="button ghost" href="../../README.md">View Repository</a>
+              <a class="button ghost" href="#command-center">Launch Control Center</a>
+            </div>
+
+            <ul class="hero-facts" aria-label="Project facts">
+              <li>Human-controlled</li>
+              <li>Evidence-first</li>
+              <li>Synthetic/public demo data</li>
+              <li>Research portfolio scope</li>
+            </ul>
+          </div>
+
+          <div class="hero-visual" aria-label="GraphShield architecture summary">
+            <div class="network-panel">
+              <div class="node node-a">Tx</div>
+              <div class="node node-b">Graph</div>
+              <div class="node node-c">Case</div>
+              <div class="node node-d">Policy</div>
+              <div class="node node-e">Human</div>
+              <div class="node node-f">Audit</div>
+
+              <span class="link l1"></span>
+              <span class="link l2"></span>
+              <span class="link l3"></span>
+              <span class="link l4"></span>
+              <span class="link l5"></span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="stats-band">
+        <div class="container stats-grid">
+          <div class="stat-card">
+            <strong>5.08M</strong>
+            <span>Raw transaction rows in the documented synthetic benchmark</span>
+          </div>
+          <div class="stat-card">
+            <strong>5,177</strong>
+            <span>Laundering rows in the project’s data-quality evidence</span>
+          </div>
+          <div class="stat-card">
+            <strong>34</strong>
+            <span>Documented test files in repository validation evidence</span>
+          </div>
+          <div class="stat-card">
+            <strong>83</strong>
+            <span>Test functions recorded in the repo validation summary</span>
+          </div>
+        </div>
+      </section>
+
+      <section id="problem" class="section">
+        <div class="container">
+          <div class="section-header">
+            <p class="eyebrow dark">Problem</p>
+            <h2>One transaction is not enough.</h2>
+          </div>
+
+          <div class="two-col">
+            <div>
+              <p>
+                Single-alert AML review misses the context needed to assess true risk:
+                counterparty history, network structure, recent behavior, and policy context.
+              </p>
+              <p>
+                GraphShield addresses that gap by turning alerts into point-in-time evidence bundles a human reviewer can assess with traceability.
+              </p>
+            </div>
+
+            <div class="problem-grid">
+              <div class="mini-card">
+                <span class="kicker">Context</span>
+                <h3>Transaction context</h3>
+              </div>
+              <div class="mini-card">
+                <span class="kicker">Behavior</span>
+                <h3>Temporal behavior</h3>
+              </div>
+              <div class="mini-card">
+                <span class="kicker">Structure</span>
+                <h3>Network and graph</h3>
+              </div>
+              <div class="mini-card">
+                <span class="kicker">Review</span>
+                <h3>Human investigation</h3>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="architecture" class="section alt">
+        <div class="container">
+          <div class="section-header">
+            <p class="eyebrow dark">Architecture</p>
+            <h2>Repository-backed investigation flow</h2>
+          </div>
+
+          <div class="flow-diagram" aria-label="System architecture flow">
+            <div class="flow-node">Transactions</div>
+            <div class="flow-node">Canonical data</div>
+            <div class="flow-node">Point-in-time features</div>
+            <div class="flow-node">Rules + ML</div>
+            <div class="flow-node">Graph / TGN intelligence</div>
+            <div class="flow-node">Fusion / ranking</div>
+            <div class="flow-node">Cases</div>
+            <div class="flow-node">Subgraphs / paths / evidence</div>
+            <div class="flow-node">Explainability</div>
+            <div class="flow-node">Policy retrieval</div>
+            <div class="flow-node">Bounded agent assistance</div>
+            <div class="flow-node">Human decision</div>
+            <div class="flow-node">Audit / governance</div>
+          </div>
+        </div>
+      </section>
+
+      <section id="graph-intelligence" class="section">
+        <div class="container">
+          <div class="section-header">
+            <p class="eyebrow dark">Graph Intelligence</p>
+            <h2>Account-to-account risk context, not just a score</h2>
+          </div>
+
+          <div class="card-grid four-up">
+            <article class="info-card">
+              <span class="tag">Entity graph</span>
+              <h3>Account and counterparty network</h3>
+              <p>Transaction edges, sender/receiver relationships, and account-level context around the focal event.</p>
+            </article>
+            <article class="info-card">
+              <span class="tag">Propagation</span>
+              <h3>Risk propagation</h3>
+              <p>Exposure, account-risk aggregation, and pass-through patterns that help a reviewer understand network influence.</p>
+            </article>
+            <article class="info-card">
+              <span class="tag">Community</span>
+              <h3>Communities and motifs</h3>
+              <p>Local graph clusters, suspicious motifs, and cyclical relationships used as context clues for review.</p>
+            </article>
+            <article class="info-card">
+              <span class="tag">Case subgraphs</span>
+              <h3>Path extraction</h3>
+              <p>Case-specific subgraphs and suspicious paths for evidence-based investigation and analyst reasoning.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section alt">
+        <div class="container">
+          <div class="section-header">
+            <p class="eyebrow dark">Investigation workflow</p>
+            <h2>From risk signal to human review</h2>
+          </div>
+
+          <div class="journey">
+            <div class="journey-step"><span>1</span><strong>Risk Signal</strong></div>
+            <div class="journey-step"><span>2</span><strong>Case</strong></div>
+            <div class="journey-step"><span>3</span><strong>Network</strong></div>
+            <div class="journey-step"><span>4</span><strong>Path</strong></div>
+            <div class="journey-step"><span>5</span><strong>Evidence</strong></div>
+            <div class="journey-step"><span>6</span><strong>Explanation</strong></div>
+            <div class="journey-step"><span>7</span><strong>Policy context</strong></div>
+            <div class="journey-step"><span>8</span><strong>Investigator review</strong></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <div class="section-header">
+            <p class="eyebrow dark">Engineering capabilities</p>
+            <h2>Implemented system building blocks</h2>
+          </div>
+
+          <div class="card-grid six-up">
+            <div class="mini-feature">Data engineering</div>
+            <div class="mini-feature">ML</div>
+            <div class="mini-feature">Graph intelligence</div>
+            <div class="mini-feature">Temporal/TGN</div>
+            <div class="mini-feature">Explainability</div>
+            <div class="mini-feature">RAG / policy retrieval</div>
+            <div class="mini-feature">Bounded investigation agent</div>
+            <div class="mini-feature">FastAPI</div>
+            <div class="mini-feature">Streamlit command center</div>
+            <div class="mini-feature">Governance</div>
+            <div class="mini-feature">Docker / Kubernetes readiness</div>
+            <div class="mini-feature">Reliability / integrity</div>
+          </div>
+        </div>
+      </section>
+
+      <section id="evidence" class="section alt">
+        <div class="container">
+          <div class="section-header">
+            <p class="eyebrow dark">Evidence</p>
+            <h2>Honest provenance and what the repo actually supports</h2>
+          </div>
+
+          <div class="evidence-grid">
+            <div class="evidence-card measured"><span>MEASURED</span><p>Recorded in repository artifacts and validation outputs.</p></div>
+            <div class="evidence-card cert"><span>HISTORICAL CERTIFICATION</span><p>Past phase-gate artifacts and repo reports, not live deployment proof.</p></div>
+            <div class="evidence-card synthetic"><span>SYNTHETIC</span><p>IBM AML LI-Small is synthetic and not real customer/bank data.</p></div>
+            <div class="evidence-card demo"><span>STATIC DEMO</span><p>Deterministic scenario outputs and analyst review examples.</p></div>
+            <div class="evidence-card target"><span>READINESS TARGET</span><p>Human approval and release gates are documented as targets, not SLO attainment.</p></div>
+            <div class="evidence-card notmeasured"><span>NOT MEASURED</span><p>Values or conditions absent from repo evidence remain unproven.</p></div>
+            <div class="evidence-card notlive"><span>NOT PROVEN LIVE</span><p>No evidence of production operation or live external hosting in this repo state.</p></div>
+          </div>
+
+          <div class="evidence-note">
+            <strong>High-confidence evidence in the repository:</strong>
+            the synthetic benchmark includes documented counts, temporal handling, and historical model reports, but it does not justify live-bank deployment or regulatory claims.
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <div class="section-header">
+            <p class="eyebrow dark">Deterministic demo</p>
+            <h2>Research scenarios with human review guardrails</h2>
+          </div>
+
+          <div class="demo-grid">
+            <article class="demo-card">
+              <span class="tag">GS-AML-001</span>
+              <h3>Queue triage</h3>
+              <p>Risk-ranked case prioritization and analyst review flow.</p>
+            </article>
+            <article class="demo-card">
+              <span class="tag">GS-AML-002</span>
+              <h3>Graph / path review</h3>
+              <p>Reverse-prior path and suspicious network context.</p>
+            </article>
+            <article class="demo-card">
+              <span class="tag">GS-AML-003</span>
+              <h3>Community context</h3>
+              <p>Motif and suspicious community signals for context only.</p>
+            </article>
+            <article class="demo-card">
+              <span class="tag">GS-AML-004</span>
+              <h3>Human review gate</h3>
+              <p>Evidence-backed review with no autonomous case action.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="command-center" class="section alt">
+        <div class="container">
+          <div class="section-header">
+            <p class="eyebrow dark">Command Center preview</p>
+            <h2>Analyst workspace, architecture-first</h2>
+          </div>
+
+          <div class="command-grid">
+            <div class="ui-card">
+              <span class="ui-label">Mission control</span>
+              <h3>AML Mission Control</h3>
+              <p>Queue ranking, risk context, and case triage.</p>
+            </div>
+            <div class="ui-card">
+              <span class="ui-label">Investigation</span>
+              <h3>Graph Explorer</h3>
+              <p>Entity-to-entity structure and suspicious subgraphs.</p>
+            </div>
+            <div class="ui-card">
+              <span class="ui-label">Case review</span>
+              <h3>Case Investigation</h3>
+              <p>Evidence bundles, paths, and analyst notes.</p>
+            </div>
+            <div class="ui-card">
+              <span class="ui-label">Evidence</span>
+              <h3>Policy Evidence</h3>
+              <p>Citations, retrieval context, and grounding checks.</p>
+            </div>
+            <div class="ui-card">
+              <span class="ui-label">Modeling</span>
+              <h3>Model Intelligence</h3>
+              <p>Historical scores, explanations, and context review.</p>
+            </div>
+            <div class="ui-card">
+              <span class="ui-label">Decision</span>
+              <h3>Investigator Decision Support</h3>
+              <p>Evidence assembly without autonomous enforcement.</p>
+            </div>
+            <div class="ui-card">
+              <span class="ui-label">Provenance</span>
+              <h3>Provenance &amp; Audit</h3>
+              <p>Source-of-truth labels and evidence boundaries.</p>
+            </div>
+            <div class="ui-card placeholder">
+              <span class="ui-label">Local preview</span>
+              <h3>Control Center</h3>
+              <p>Local launch placeholder for a later GitHub Pages deployment.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="status" class="section status-section">
+        <div class="container">
+          <div class="section-header">
+            <p class="eyebrow dark">Current status</p>
+            <h2>What is real, and what is not claimed</h2>
+          </div>
+
+          <div class="status-grid">
+            <div class="status-card success">
+              <h3>Implemented</h3>
+              <p>Canonical data workflows, graph intelligence, explanation layers, policy retrieval, API/UI interfaces, and governance boundaries.</p>
+            </div>
+            <div class="status-card warn">
+              <h3>Historical</h3>
+              <p>Certification artifacts and benchmark reports document prior repository state.</p>
+            </div>
+            <div class="status-card neutral">
+              <h3>Not claimed</h3>
+              <p>Live deployment, regulatory filing, autonomous enforcement, or real-bank production suitability.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-row">
+        <div>
+          <strong>GraphShield AML</strong>
+          <p>Graph-native AML investigation support for a human reviewer.</p>
+        </div>
+        <div class="footer-links">
+          <a href="../../README.md">Repository</a>
+          <a href="../../docs/architecture/PROJECT_ARCHITECTURE.md">Architecture</a>
+          <a href="../../docs/VALIDATION.md">Validation</a>
+          <a href="../../docs/LIMITATIONS.md">Limitations</a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
