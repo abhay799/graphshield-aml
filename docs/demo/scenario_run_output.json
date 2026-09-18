@@ -1,0 +1,142 @@
+{
+  "repo_root": ".",
+  "provenance": "LOCAL READ-ONLY ARTIFACT",
+  "scenarios": [
+    {
+      "id": "GS-AML-001",
+      "title": "Queue triage and analyst prioritization",
+      "status": "PASS",
+      "source": "data\\processed\\cases\\case_queue.parquet",
+      "expected": {
+        "risk_rank": 1,
+        "case_status": "OPEN",
+        "review_capacity": 0.01,
+        "case_id": "CASE_IBM_LI_SMALL_4310302"
+      },
+      "checkpoints": {
+        "queue_rows": 7617,
+        "top_case_ids": [
+          "CASE_IBM_LI_SMALL_4310302",
+          "CASE_IBM_LI_SMALL_4310637",
+          "CASE_IBM_LI_SMALL_4313856",
+          "CASE_IBM_LI_SMALL_4316801",
+          "CASE_IBM_LI_SMALL_4326023"
+        ],
+        "first_case_id": "CASE_IBM_LI_SMALL_4310302",
+        "first_rank": 1,
+        "first_status": "OPEN",
+        "first_review_capacity": 0.01,
+        "first_transaction_id": "IBM_LI_SMALL_4310302"
+      },
+      "provenance": "LOCAL READ-ONLY ARTIFACT"
+    },
+    {
+      "id": "GS-AML-002",
+      "title": "Graph evidence and reverse-prior path review",
+      "status": "PASS",
+      "source": "data\\processed\\cases\\case_paths.jsonl",
+      "expected": {
+        "case_id": "CASE_IBM_LI_SMALL_4417139",
+        "reverse_prior_path_is_not_null": true,
+        "closes_multi_hop_cycle": true
+      },
+      "checkpoints": {
+        "case_id": "CASE_IBM_LI_SMALL_4417139",
+        "transaction_id": "IBM_LI_SMALL_4417139",
+        "reverse_prior_path": [
+          "ENT_510328",
+          "ENT_7559"
+        ],
+        "closes_multi_hop_cycle": true,
+        "supporting_edges_strictly_prior": true,
+        "max_search_depth": 3
+      },
+      "provenance": "LOCAL READ-ONLY ARTIFACT"
+    },
+    {
+      "id": "GS-AML-003",
+      "title": "Suspicious community and motif context",
+      "status": "PASS",
+      "source": "data\\processed\\graph",
+      "expected": {
+        "suspicious_communities_rows": ">0",
+        "motif_rows": ">0",
+        "context_only": true
+      },
+      "checkpoints": {
+        "suspicious_communities_rows": 1074,
+        "motif_rows": 515088,
+        "suspicious_communities_columns": [
+          "community_priority_rank",
+          "community_id",
+          "member_count",
+          "high_risk_seed_count",
+          "scored_account_count",
+          "max_entity_risk_seed_raw",
+          "max_entity_risk_seed_calibrated",
+          "mean_entity_risk_seed_raw",
+          "risk_exposure_sum_calibrated",
+          "internal_transaction_count",
+          "internal_amount_paid"
+        ],
+        "motif_columns": [
+          "account_key",
+          "bank_id",
+          "scored_txn_count",
+          "high_risk_txn_count",
+          "entity_risk_seed_raw",
+          "entity_risk_seed_calibrated",
+          "sender_snapshot_tx_count",
+          "rapid_pass_through_tx_count",
+          "max_sender_fanout_ratio_1h",
+          "max_sender_fanout_ratio_24h",
+          "mean_sender_fanout_ratio_1h",
+          "mean_sender_fanout_ratio_24h",
+          "receiver_snapshot_tx_count",
+          "max_receiver_fanin_ratio_1h",
+          "max_receiver_fanin_ratio_24h",
+          "mean_receiver_fanin_ratio_1h",
+          "mean_receiver_fanin_ratio_24h",
+          "two_node_cycle_close_tx_count",
+          "shortest_hop_from_seed",
+          "max_3hop_exposure_raw",
+          "cumulative_3hop_exposure_raw",
+          "propagation_version",
+          "community_id",
+          "is_high_risk_seed",
+          "has_rapid_pass_through_signal",
+          "has_two_node_cycle_signal",
+          "has_any_motif_signal",
+          "is_high_risk_seed_account",
+          "is_in_suspicious_community",
+          "motif_snapshot_ts",
+          "motif_version",
+          "label_used_for_motif_intelligence"
+        ]
+      },
+      "provenance": "LOCAL READ-ONLY ARTIFACT"
+    },
+    {
+      "id": "GS-AML-004",
+      "title": "Human review gate from the case bundle",
+      "status": "PASS",
+      "source": "data\\processed\\cases\\bundles\\CASE_IBM_LI_SMALL_4310302.json",
+      "expected": {
+        "decision": "analyst_review_required",
+        "autonomous_account_block": false,
+        "autonomous_case_closure": false,
+        "ground_truth_exposed": false
+      },
+      "checkpoints": {
+        "case_id": "CASE_IBM_LI_SMALL_4310302",
+        "status": "OPEN",
+        "decision": "analyst_review_required",
+        "autonomous_account_block": false,
+        "autonomous_case_closure": false,
+        "ground_truth_exposed": false,
+        "score": 0.9999999999997846
+      },
+      "provenance": "LOCAL READ-ONLY ARTIFACT"
+    }
+  ]
+}
