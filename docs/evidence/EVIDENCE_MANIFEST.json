@@ -1,0 +1,193 @@
+{
+  "schema_version": "graphshield_evidence_v1",
+  "project": "GraphShield AML",
+  "purpose": "Separate measured repository evidence from non-live, historical, and demo-only claims.",
+  "provenance_classes": [
+    "MEASURED",
+    "HISTORICAL CERTIFICATION",
+    "SYNTHETIC",
+    "SIMULATED",
+    "STATIC DEMO",
+    "READINESS TARGET",
+    "NOT MEASURED",
+    "NOT PROVEN LIVE"
+  ],
+  "evidence": [
+    {
+      "category": "DATA",
+      "name": "Phase 1 data quality report",
+      "file": "reports/phase1_data_quality_report.md",
+      "classification": ["MEASURED", "SYNTHETIC"],
+      "summary": "IBM AML LI-Small synthetic dataset with row preservation, timestamp validity, and critical null checks PASS. Raw rows 5,078,345; laundering rows 5,177; laundering rate 0.101943%."
+    },
+    {
+      "category": "DATA",
+      "name": "Case queue artifact",
+      "file": "data/processed/cases/case_queue.parquet",
+      "classification": ["MEASURED", "LOCAL READ-ONLY ARTIFACT"],
+      "summary": "Repository-backed case queue. Scenario output records 7,617 rows and deterministic top-ranked case IDs."
+    },
+    {
+      "category": "DATA",
+      "name": "Case paths and bundles",
+      "file": "data/processed/cases/case_paths.jsonl",
+      "classification": ["MEASURED", "LOCAL READ-ONLY ARTIFACT"],
+      "summary": "Graph/traversal evidence and case bundle anchors for suspicious path and review workflows."
+    },
+    {
+      "category": "MODEL",
+      "name": "Logistic Regression metrics",
+      "file": "reports/modeling/logistic_metrics.json",
+      "classification": ["MEASURED", "SYNTHETIC"],
+      "summary": {
+        "selected_model": "logistic_unweighted",
+        "validation_roc_auc": 0.6409290315144608,
+        "validation_average_precision": 0.012282205194266997,
+        "validation_recall_at_top_1pct": 0.2578947368421053,
+        "test_roc_auc": 0.6351398046526056,
+        "test_average_precision": 0.014094178927337352
+      }
+    },
+    {
+      "category": "MODEL",
+      "name": "LightGBM validation metrics",
+      "file": "reports/modeling/lightgbm_validation.json",
+      "classification": ["MEASURED", "SYNTHETIC"],
+      "summary": {
+        "model": "lightgbm",
+        "validation_roc_auc": 0.10446269245471493,
+        "validation_average_precision": 0.0011209543568731835,
+        "validation_recall_at_top_1pct": 0.031578947368421054,
+        "validation_recall_at_top_5pct": 0.04736842105263158
+      }
+    },
+    {
+      "category": "MODEL",
+      "name": "CatBoost validation metrics",
+      "file": "reports/modeling/catboost_validation.json",
+      "classification": ["MEASURED", "SYNTHETIC"],
+      "summary": {
+        "model": "catboost",
+        "validation_roc_auc": 0.9798591917194184,
+        "validation_average_precision": 0.18417278761674397,
+        "validation_recall_at_top_1pct": 0.7263157894736842,
+        "validation_recall_at_top_5pct": 0.8631578947368421
+      }
+    },
+    {
+      "category": "MODEL",
+      "name": "Champion test metrics",
+      "file": "reports/modeling/champion_test_metrics.json",
+      "classification": ["MEASURED", "SYNTHETIC", "HISTORICAL CERTIFICATION"],
+      "summary": {
+        "champion": "catboost",
+        "test_roc_auc": 0.8998073757090546,
+        "test_average_precision": 0.004321723235894369,
+        "test_recall_at_top_5pct": 0.21212121212121213
+      }
+    },
+    {
+      "category": "MODEL",
+      "name": "Graph ablation metrics",
+      "file": "reports/modeling/graph_ablation_metrics.json",
+      "classification": ["MEASURED", "SYNTHETIC"],
+      "summary": {
+        "graph_validation_average_precision": 0.0228225805914592,
+        "graph_validation_recall_at_top_5pct": 0.5342105263157895,
+        "graph_test_average_precision": 0.05375112142569439,
+        "graph_test_recall_at_top_5pct": 0.600896860986547
+      }
+    },
+    {
+      "category": "MODEL",
+      "name": "TGN metrics",
+      "file": "reports/modeling/tgn_metrics.json",
+      "classification": ["MEASURED", "SYNTHETIC"],
+      "summary": {
+        "model": "TGN",
+        "validation_average_precision": 0.0009407477022529927,
+        "validation_recall_at_top_1pct": 0.006578947368421052,
+        "final_test_average_precision": 0.0016109586602384986,
+        "final_test_recall_at_top_1pct": 0.005765534913516977
+      }
+    },
+    {
+      "category": "MODEL",
+      "name": "Phase 5 temporal graph report",
+      "file": "reports/phase5_temporal_graph_report.md",
+      "classification": ["MEASURED", "HISTORICAL CERTIFICATION", "SYNTHETIC"],
+      "summary": {
+        "graph_plus_tgn_hybrid_validation_average_precision": 0.029219,
+        "graph_plus_tgn_hybrid_validation_recall_at_top_1pct": 0.6667,
+        "graph_plus_tgn_hybrid_validation_recall_at_top_5pct": 0.6667,
+        "interpretation": "The report explicitly says model quality may not beat the handcrafted graph model and that the result is still valid."
+      }
+    },
+    {
+      "category": "GRAPH",
+      "name": "Graph intelligence artifacts",
+      "file": "data/processed/graph/",
+      "classification": ["MEASURED", "IMPLEMENTED"],
+      "summary": "Graph construction, account risk propagation, suspicious communities, motif intelligence, and related graph evidence are present as processed artifacts. No single leaderboard exists for all graph evidence outputs."
+    },
+    {
+      "category": "INVESTIGATION",
+      "name": "Deterministic Step 4 scenarios",
+      "file": "docs/demo/scenario_run_output.json",
+      "classification": ["STATIC DEMO", "FRESHLY EXECUTED DURING STEP 5"],
+      "summary": "Scenario IDs GS-AML-001 through GS-AML-004 all PASS against repository-backed case queue, path, graph, and bundle evidence."
+    },
+    {
+      "category": "TEST",
+      "name": "Validation and limitation docs",
+      "file": "docs/VALIDATION.md",
+      "classification": ["MEASURED", "HISTORICAL CERTIFICATION"],
+      "summary": "Document states 34 tests and 83 test functions, highlights that historical certifications are not fresh current verification, and distinguishes validation from deployment claims."
+    },
+    {
+      "category": "CERTIFICATION",
+      "name": "Phase 15 final release gate",
+      "file": "reports/v2/phase15/final_release_gate_v1_report.json",
+      "classification": ["HISTORICAL CERTIFICATION", "READINESS TARGET"],
+      "summary": {
+        "status": "PASS",
+        "final_release_ready_for_human_approval": true,
+        "human_release_approval_required": true,
+        "automatic_production_release": false,
+        "production_slo_attainment_claimed": false,
+        "external_cloud_smoke_claimed": false
+      }
+    },
+    {
+      "category": "CERTIFICATION",
+      "name": "Phase 15 final certification report",
+      "file": "reports/v2/phase15/phase15_final_certification_v1_report.json",
+      "classification": ["HISTORICAL CERTIFICATION", "READINESS TARGET"],
+      "summary": {
+        "status": "PASS",
+        "phase15": {
+          "slo_readiness": "PASS",
+          "failure_modes": "PASS",
+          "recovery_readiness": "PASS",
+          "production_smoke": "PASS",
+          "final_release_gate": "PASS"
+        },
+        "final_boundary": {
+          "human_review_required": true,
+          "automatic_account_blocking": false,
+          "automatic_case_closure": false,
+          "automatic_regulatory_submission": false,
+          "production_slo_attainment_claimed": false,
+          "external_cloud_smoke_claimed": false
+        }
+      }
+    },
+    {
+      "category": "LIMITATION",
+      "name": "Project limitations and legal boundary",
+      "file": "docs/LIMITATIONS.md",
+      "classification": ["NOT PROVEN LIVE", "NOT MEASURED"],
+      "summary": "The repo explicitly forbids presenting the system as a deployed bank system, legal advice, or a regulatory-certified product."
+    }
+  ]
+}
