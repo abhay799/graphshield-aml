@@ -4,6 +4,7 @@ import os
 
 from fastapi import FastAPI, Request
 from starlette.middleware.trustedhost import TrustedHostMiddleware
+from starlette.middleware.cors import CORSMiddleware
 
 
 DEFAULT_ALLOWED_HOSTS = '127.0.0.1,localhost,api,testserver'
@@ -17,6 +18,18 @@ def install_security(app: FastAPI) -> None:
         TrustedHostMiddleware,
         allowed_hosts=allowed_hosts,
     )
+
+    # CORS middleware
+    allowed_origins_raw = os.getenv('GS_ALLOWED_ORIGINS', '')
+    allowed_origins = [origin.strip() for origin in allowed_origins_raw.split(',') if origin.strip()]
+    if allowed_origins:
+        app.add_middleware(
+            CORSMiddleware,
+            allow_origins=allowed_origins,
+            allow_methods=["GET", "POST", "OPTIONS"],
+            allow_headers=["Content-Type", "Accept"],
+            allow_credentials=False,
+        )
 
     @app.middleware('http')
     async def security_headers(request: Request, call_next):

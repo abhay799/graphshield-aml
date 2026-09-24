@@ -352,6 +352,41 @@
         </div>
       </section>
 
+      <section id="live-status" class="section">
+        <div class="container">
+          <div class="section-header">
+            <p class="eyebrow dark">Live Status</p>
+            <h2>System Health and Case Queue</h2>
+          </div>
+
+          <div class="status-grid">
+            <div class="status-card" id="live-status-card">
+              <h3>Live</h3>
+              <p id="live-status-text">Checking...</p>
+            </div>
+            <div class="status-card" id="health-status-card">
+              <h3>Health</h3>
+              <p id="health-status-text">Checking...</p>
+            </div>
+            <div class="status-card" id="ready-status-card">
+              <h3>Ready</h3>
+              <p id="ready-status-text">Checking...</p>
+            </div>
+          </div>
+
+          <div class="section-header">
+            <p class="eyebrow dark">Case Queue</p>
+            <h2>Recent Cases</h2>
+          </div>
+
+          <div id="case-queue" class="card-grid four-up">
+          </div>
+
+          <div id="case-details" class="section">
+          </div>
+        </div>
+      </section>
+
       <section id="status" class="section status-section">
         <div class="container">
           <div class="section-header">
@@ -391,5 +426,57 @@
         </div>
       </div>
     </footer>
+    <script>
+      const API_BASE = 'https://graphshield-api-production.up.railway.app';
+      async function fetchJSON(url) {
+        try {
+          const resp = await fetch(url, { headers: { Accept: 'application/json' } });
+          if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+          return await resp.json();
+        } catch (e) {
+          console.error(e);
+          return null;
+        }
+      }
+      async function updateLiveStatus() {
+        const live = await fetchJSON(`${API_BASE}/live`);
+        const health = await fetchJSON(`${API_BASE}/health`);
+        const ready = await fetchJSON(`${API_BASE}/ready`);
+        document.getElementById('live-status-text').textContent = live ? 'OK' : 'FAIL';
+        document.getElementById('health-status-text').textContent = health ? 'OK' : 'FAIL';
+        document.getElementById('ready-status-text').textContent = ready ? 'OK' : 'FAIL';
+        if (live && health && ready) {
+          loadCaseQueue();
+        }
+      }
+      async function loadCaseQueue() {
+        const data = await fetchJSON(`${API_BASE}/cases?limit=10`);
+        if (!data || !data.cases) return;
+        const container = document.getElementById('case-queue');
+        container.innerHTML = '';
+        data.cases.forEach(c => {
+          const card = document.createElement('div');
+          card.className = 'mini-card';
+          card.innerHTML = `
+            <strong>${c.case_id}</strong>
+            <p>${c.source_model}</p>
+          `;
+          card.onclick = () => showCaseDetails(c.case_id);
+          container.appendChild(card);
+        });
+      }
+      async function showCaseDetails(caseId) {
+        const data = await fetchJSON(`${API_BASE}/cases/${caseId}`);
+        if (!data) return;
+        const detailsDiv = document.getElementById('case-details');
+        detailsDiv.innerHTML = `
+          <h3>Case Details: ${data.case_id}</h3>
+          <p><strong>Model:</strong> ${data.source_model}</p>
+          <p><strong>Risk Score:</strong> ${data.risk_score ?? 'N/A'}</p>
+          <p><strong>Labels:</strong> ${data.labels?.join(', ') ?? 'None'}</p>
+        `;
+      }
+      updateLiveStatus();
+    </script>
   </body>
 </html>
