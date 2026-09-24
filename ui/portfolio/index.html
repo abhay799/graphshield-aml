@@ -381,8 +381,47 @@
 
           <div id="case-queue" class="card-grid four-up">
           </div>
+        </div>
+      </section>
 
-          <div id="case-details" class="section">
+      <section id="case-workspace" class="section">
+        <div class="container">
+          <div class="section-header">
+            <p class="eyebrow dark">Case Workspace</p>
+            <h2>Selected Case Analysis</h2>
+          </div>
+          <div id="selected-case-basic" class="section">
+            <!-- Basic case details will go here -->
+          </div>
+          <div id="case-overview" class="section">
+            <!-- Case Overview -->
+          </div>
+          <div id="evidence-search" class="section">
+          <h3>Evidence Search</h3>
+          <form id="evidence-search-form">
+            <input type="text" id="evidence-search-query" placeholder="Enter search query" required>
+            <input type="number" id="evidence-search-topk" placeholder="Top K (default 5)" min="1" max="50" value="5">
+            <button type="submit">Search</button>
+          </form>
+          <div id="evidence-search-results"></div>
+        </div>
+          <div id="graph-path" class="section">
+            <!-- Graph/Path Investigation -->
+          </div>
+          <div id="explainability" class="section">
+            <!-- Explainability -->
+          </div>
+        </div>
+      </section>
+
+      <section id="policy-search" class="section alt">
+        <div class="container">
+          <div class="section-header">
+            <p class="eyebrow dark">Policy Search</p>
+            <h2>Search Global Policy Documents</h2>
+          </div>
+          <div id="policy-search-form">
+            <!-- Form and results -->
           </div>
         </div>
       </section>
@@ -466,16 +505,81 @@
         });
       }
       async function showCaseDetails(caseId) {
-        const data = await fetchJSON(`${API_BASE}/cases/${caseId}`);
-        if (!data) return;
-        const detailsDiv = document.getElementById('case-details');
-        detailsDiv.innerHTML = `
-          <h3>Case Details: ${data.case_id}</h3>
-          <p><strong>Model:</strong> ${data.source_model}</p>
-          <p><strong>Risk Score:</strong> ${data.risk_score ?? 'N/A'}</p>
-          <p><strong>Labels:</strong> ${data.labels?.join(', ') ?? 'None'}</p>
+        // Basic case info
+        const basic = await fetchJSON(`${API_BASE}/cases/${caseId}`);
+        if (!basic) return;
+        document.getElementById('selected-case-basic').innerHTML = `
+          <h3>Case: ${basic.case_id}</h3>
+          <p><strong>Model:</strong> ${basic.source_model}</p>
+          <p><strong>Risk Score:</strong> ${basic.risk_score ?? 'N/A'}</p>
+          <p><strong>Labels:</strong> ${basic.labels?.join(', ') ?? 'None'}</p>
         `;
+        // Overview
+        const overview = await fetchJSON(`${API_BASE}/cases/${caseId}/overview`);
+        document.getElementById('case-overview').innerHTML = overview ? `
+          <h3>Case Overview</h3>
+          <pre>${JSON.stringify(overview.overview, null, 2)}</pre>
+        ` : '<p>No overview data</p>';
+        // Graph / Paths
+        const paths = await fetchJSON(`${API_BASE}/cases/${caseId}/paths`);
+        document.getElementById('graph-path').innerHTML = paths ? `
+          <h3>Graph / Path Evidence</h3>
+          <pre>${JSON.stringify(paths.paths, null, 2)}</pre>
+        ` : '<p>No path data</p>';
+        // Explainability
+        const expl = await fetchJSON(`${API_BASE}/explainability/cases/${caseId}`);
+        document.getElementById('explainability').innerHTML = expl ? `
+          <h3>Explainability</h3>
+          <pre>${JSON.stringify(expl, null, 2)}</pre>
+        ` : '<p>No explainability data</p>';
+        // Setup evidence search form for this case
+        const form = document.getElementById('evidence-search-form');
+        form.onsubmit = async (e) => {
+          e.preventDefault();
+          const query = document.getElementById('evidence-search-query').value;
+          const topk = document.getElementById('evidence-search-topk').value;
+          const results = await fetchJSON(`${API_BASE}/cases/${caseId}/evidence/search`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({query, top_k: parseInt(topk)})
+          });
+          document.getElementById('evidence-search-results').innerHTML = results ? `
+            <h4>Results for "${query}"</h4>
+            <pre>${JSON.stringify(results.results, null, 2)}</pre>
+          ` : '<p>No results</p>';
+        };
       }
+      // Policy search (global)
+      document.addEventListener('DOMContentLoaded', () => {
+        const policyForm = document.getElementById('policy-search-form');
+        if (policyForm) {
+          policyForm.innerHTML = `
+            <h3>Policy Search</h3>
+            <form id="policy-search-form-inner">
+              <input type="text" id="policy-query" placeholder="Enter policy query" required>
+              <input type="number" id="policy-topk" placeholder="Top K (default 5)" min="1" max="50" value="5">
+              <input type="text" id="policy-jurisdiction" placeholder="Jurisdiction (optional)">
+              <button type="submit">Search</button>
+            </form>
+            <div id="policy-search-results"></div>
+          `;
+          document.getElementById('policy-search-form-inner').onsubmit = async (e) => {
+            e.preventDefault();
+            const query = document.getElementById('policy-query').value;
+            const topk = document.getElementById('policy-topk').value;
+            const jurisdiction = document.getElementById('policy-jurisdiction').value;
+            const results = await fetchJSON(`${API_BASE}/policy/search`, {
+              method: 'POST',
+              headers: {'Content-Type': 'application/json'},
+              body: JSON.stringify({query, top_k: parseInt(topk), jurisdiction: jurisdiction || undefined})
+            });
+            document.getElementById('policy-search-results').innerHTML = results ? `
+              <h4>Results for "${query}"</h4>
+              <pre>${JSON.stringify(results.results, null, 2)}</pre>
+            ` : '<p>No results</p>';
+          };
+        }
+      });
       updateLiveStatus();
     </script>
   </body>
