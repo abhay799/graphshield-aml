@@ -477,6 +477,69 @@
           return null;
         }
       }
+      function createLoading() { return '<p class="loading">Loading…</p>'; }
+      function createError(msg) { return `<p class="error">Error: ${msg}</p>`; }
+      function createEmpty() { return '<p class="empty">No data available.</p>'; }
+      function formatKeyValue(obj) {
+        if (!obj || typeof obj !== 'object') return '<p>Invalid data</p>';
+        const entries = Object.entries(obj);
+        if (entries.length === 0) return '<p>Empty</p>';
+        return entries.map(([k, v]) => {
+          const key = String(k).replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase());
+          if (v && typeof v === 'object' && !(v instanceof Array)) {
+            return `<div><strong>${key}:</strong> ${formatKeyValue(v)}</div>`;
+          } else if (v instanceof Array) {
+            if (v.length === 0) return `<div><strong>${key}:</strong> []</div>`;
+            return `<div><strong>${key}:</strong> [${v.map(item => (typeof item === 'object' ? formatKeyValue(item) : item)).join(', ')}]</div>`;
+          } else {
+            return `<div><strong>${key}:</strong> ${v}</div>`;
+          }
+        }).join('');
+      }
+      function renderCaseOverview(data) {
+        if (!data) return createEmpty();
+        // Expect overview to be an object with sections
+        if (typeof data === 'string') return `<pre>${data}</pre>`;
+        return formatKeyValue(data);
+      }
+      function renderPaths(data) {
+        if (!data) return createEmpty();
+        if (!Array.isArray(data)) return `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+        if (data.length === 0) return createEmpty();
+        return data.map((path, idx) => {
+          // Assume path is an object with nodes/edges or just a string
+          if (typeof path === 'string') return `<div class="path-item"><strong>Path ${idx+1}:</strong> ${path}</div>`;
+          if (path && typeof path === 'object') {
+            // Try to show a readable representation
+            const desc = path.description || path.summary || JSON.stringify(path);
+            return `<div class="path-item"><strong>Path ${idx+1}:</strong> ${desc}</div>`;
+          }
+          return `<div class="path-item"><strong>Path ${idx+1}:</strong> ${JSON.stringify(path)}</div>`;
+        }).join('');
+      }
+      function renderExplainability(data) {
+        if (!data) return createEmpty();
+        if (typeof data === 'string') return `<pre>${data}</pre>`;
+        // Expect factors, features, etc.
+        return formatKeyValue(data);
+      }
+      function renderEvidenceResults(data) {
+        if (!data) return createEmpty();
+        if (!Array.isArray(data)) return `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+        if (data.length === 0) return createEmpty();
+        return data.map((item, idx) => {
+          if (typeof item === 'string') return `<div class="result-item"><strong>${idx+1}.</strong> ${item}</div>`;
+          if (item && typeof item === 'object') {
+            const title = item.title || item.summary || `Result ${idx+1}`;
+            const snippet = item.snippet || item.description || '';
+            return `<div class="result-item"><strong>${title}</strong>${snippet ? `<p>${snippet}</p>` : ''}</div>`;
+          }
+          return `<div class="result-item"><strong>${idx+1}.</strong> ${JSON.stringify(item)}</div>`;
+        }).join('');
+      }
+      function renderPolicyResults(data) {
+        return renderEvidenceResults(data); // reuse same renderer
+      }
       async function updateLiveStatus() {
         const live = await fetchJSON(`${API_BASE}/live`);
         const health = await fetchJSON(`${API_BASE}/health`);
@@ -505,48 +568,64 @@
         });
       }
       async function showCaseDetails(caseId) {
+        // Show loading states
+        document.getElementById('selected-case-basic').innerHTML = createLoading();
+        document.getElementById('case-overview').innerHTML = createLoading();
+        document.getElementById('graph-path').innerHTML = createLoading();
+        document.getElementById('explainability').innerHTML = createLoading();
+        document.getElementById('evidence-search-results').innerHTML = createLoading();
+        // Reset form
+        document.getElementById('evidence-search-query').value = '';
+        document.getElementById('evidence-search-topk').value = '5';
+        // Fetch data
+        const [basic, overview, paths, expl] = await Promise.all([
+          fetchJSON(`${API_BASE}/cases/${caseId}`),
+          fetchJSON(`${API_BASE}/cases/${caseId}/overview`),
+          fetchJSON(`${API_BASE}/cases/${caseId}/paths`),
+          fetchJSON(`${API_BASE}/explainability/cases/${caseId}`)
+        ]);
         // Basic case info
-        const basic = await fetchJSON(`${API_BASE}/cases/${caseId}`);
-        if (!basic) return;
-        document.getElementById('selected-case-basic').innerHTML = `
-          <h3>Case: ${basic.case_id}</h3>
-          <p><strong>Model:</strong> ${basic.source_model}</p>
-          <p><strong>Risk Score:</strong> ${basic.risk_score ?? 'N/A'}</p>
-          <p><strong>Labels:</strong> ${basic.labels?.join(', ') ?? 'None'}</p>
-        `;
+        if (basic) {
+          const riskScore = basic.risk_score ?? 'N/A';
+          const riskClass = riskScore !== 'N/A' && parseFloat(riskScore) > 0.7 ? 'risk-high' : riskScore !== 'N/A' && parseFloat(riskScore) > 0.4 ? 'risk-medium' : 'risk-low';
+          document.getElementById('selected-case-basic').innerHTML = `
+            <div class="case-summary">
+              <h3>Case: ${basic.case_id}</h3>
+              <p><strong>Model:</strong> ${basic.source_model}</p>
+              <p><strong>Risk Score:</strong> <span class="${riskClass}">${riskScore}</span></p>
+              <p><strong>Labels:</strong> ${basic.labels?.join(', ') ?? 'None'}</p>
+            </div>
+          `;
+        } else {
+          document.getElementById('selected-case-basic').innerHTML = createError('Failed to load case');
+        }
         // Overview
-        const overview = await fetchJSON(`${API_BASE}/cases/${caseId}/overview`);
-        document.getElementById('case-overview').innerHTML = overview ? `
-          <h3>Case Overview</h3>
-          <pre>${JSON.stringify(overview.overview, null, 2)}</pre>
-        ` : '<p>No overview data</p>';
+        document.getElementById('case-overview').innerHTML = overview ? `<h3>Case Overview</h3>${renderCaseOverview(overview.overview)}` : '<p>No overview data</p>';
         // Graph / Paths
-        const paths = await fetchJSON(`${API_BASE}/cases/${caseId}/paths`);
-        document.getElementById('graph-path').innerHTML = paths ? `
-          <h3>Graph / Path Evidence</h3>
-          <pre>${JSON.stringify(paths.paths, null, 2)}</pre>
-        ` : '<p>No path data</p>';
+        document.getElementById('graph-path').innerHTML = paths ? `<h3>Graph / Path Evidence</h3>${renderPaths(paths.paths)}` : '<p>No path data</p>';
         // Explainability
-        const expl = await fetchJSON(`${API_BASE}/explainability/cases/${caseId}`);
-        document.getElementById('explainability').innerHTML = expl ? `
-          <h3>Explainability</h3>
-          <pre>${JSON.stringify(expl, null, 2)}</pre>
-        ` : '<p>No explainability data</p>';
+        document.getElementById('explainability').innerHTML = expl ? `<h3>Explainability</h3>${renderExplainability(expl)}` : '<p>No explainability data</p>';
         // Setup evidence search form for this case
         const form = document.getElementById('evidence-search-form');
         form.onsubmit = async (e) => {
           e.preventDefault();
-          const query = document.getElementById('evidence-search-query').value;
+          const query = document.getElementById('evidence-search-query').value.trim();
           const topk = document.getElementById('evidence-search-topk').value;
-          const results = await fetchJSON(`${API_BASE}/cases/${caseId}/evidence/search`, {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({query, top_k: parseInt(topk)})
-          });
-          document.getElementById('evidence-search-results').innerHTML = results ? `
-            <h4>Results for "${query}"</h4>
-            <pre>${JSON.stringify(results.results, null, 2)}</pre>
-          ` : '<p>No results</p>';
+          if (!query) {
+            document.getElementById('evidence-search-results').innerHTML = createError('Please enter a search query');
+            return;
+          }
+          document.getElementById('evidence-search-results').innerHTML = createLoading();
+          try {
+            const results = await fetchJSON(`${API_BASE}/cases/${caseId}/evidence/search`, {
+              method: 'POST',
+              headers: {'Content-Type': 'application/json'},
+              body: JSON.stringify({query, top_k: parseInt(topk)})
+            });
+            document.getElementById('evidence-search-results').innerHTML = results ? `<h4>Results for "${query}"</h4>${renderEvidenceResults(results.results)}` : '<p>No results</p>';
+          } catch (err) {
+            document.getElementById('evidence-search-results').innerHTML = createError('Search failed');
+          }
         };
       }
       // Policy search (global)
@@ -565,18 +644,24 @@
           `;
           document.getElementById('policy-search-form-inner').onsubmit = async (e) => {
             e.preventDefault();
-            const query = document.getElementById('policy-query').value;
+            const query = document.getElementById('policy-query').value.trim();
             const topk = document.getElementById('policy-topk').value;
             const jurisdiction = document.getElementById('policy-jurisdiction').value;
-            const results = await fetchJSON(`${API_BASE}/policy/search`, {
-              method: 'POST',
-              headers: {'Content-Type': 'application/json'},
-              body: JSON.stringify({query, top_k: parseInt(topk), jurisdiction: jurisdiction || undefined})
-            });
-            document.getElementById('policy-search-results').innerHTML = results ? `
-              <h4>Results for "${query}"</h4>
-              <pre>${JSON.stringify(results.results, null, 2)}</pre>
-            ` : '<p>No results</p>';
+            if (!query) {
+              document.getElementById('policy-search-results').innerHTML = createError('Please enter a search query');
+              return;
+            }
+            document.getElementById('policy-search-results').innerHTML = createLoading();
+            try {
+              const results = await fetchJSON(`${API_BASE}/policy/search`, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({query, top_k: parseInt(topk), jurisdiction: jurisdiction || undefined})
+              });
+              document.getElementById('policy-search-results').innerHTML = results ? `<h4>Results for "${query}"</h4>${renderPolicyResults(results.results)}` : '<p>No results</p>';
+            } catch (err) {
+              document.getElementById('policy-search-results').innerHTML = createError('Search failed');
+            }
           };
         }
       });
@@ -584,3 +669,4 @@
     </script>
   </body>
 </html>
+
