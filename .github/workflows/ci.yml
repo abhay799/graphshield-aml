@@ -50,3 +50,4 @@ jobs:
 
       - name: CI summary
         run: echo 'GraphShield AML CI validation passed'
+
