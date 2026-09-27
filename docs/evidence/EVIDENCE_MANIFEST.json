@@ -2,6 +2,11 @@
   "schema_version": "graphshield_evidence_v1",
   "project": "GraphShield AML",
   "purpose": "Separate measured repository evidence from non-live, historical, and demo-only claims.",
+  "status_classes": [
+    "IMPLEMENTED",
+    "CONFIGURED ONLY",
+    "DOCUMENTED / REFERENCE ONLY"
+  ],
   "provenance_classes": [
     "MEASURED",
     "HISTORICAL CERTIFICATION",
@@ -9,6 +14,8 @@
     "SIMULATED",
     "STATIC DEMO",
     "READINESS TARGET",
+    "LOCAL READ-ONLY ARTIFACT",
+    "FRESH VERIFICATION",
     "NOT MEASURED",
     "NOT PROVEN LIVE"
   ],
@@ -127,15 +134,17 @@
       "category": "GRAPH",
       "name": "Graph intelligence artifacts",
       "file": "data/processed/graph/",
-      "classification": ["MEASURED", "IMPLEMENTED"],
+      "status": "IMPLEMENTED",
+      "classification": ["MEASURED", "LOCAL READ-ONLY ARTIFACT"],
       "summary": "Graph construction, account risk propagation, suspicious communities, motif intelligence, and related graph evidence are present as processed artifacts. No single leaderboard exists for all graph evidence outputs."
     },
     {
       "category": "INVESTIGATION",
-      "name": "Deterministic Step 4 scenarios",
+      "name": "Deterministic demo scenarios",
       "file": "docs/demo/scenario_run_output.json",
-      "classification": ["STATIC DEMO", "FRESHLY EXECUTED DURING STEP 5"],
-      "summary": "Scenario IDs GS-AML-001 through GS-AML-004 all PASS against repository-backed case queue, path, graph, and bundle evidence."
+      "status": "IMPLEMENTED",
+      "classification": ["STATIC DEMO", "LOCAL READ-ONLY ARTIFACT", "FRESH VERIFICATION"],
+      "summary": "Scenario IDs GS-AML-001 through GS-AML-004 are fail-closed deterministic checks against local read-only case queue, path, graph, and bundle evidence."
     },
     {
       "category": "TEST",

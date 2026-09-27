@@ -26,12 +26,12 @@ This package is intentionally limited to the repository's existing GraphShield A
 ### GS-AML-002 — Graph evidence and reverse-prior path review
 
 - Case anchor: `CASE_IBM_LI_SMALL_4417139`
-- Trigger: `case_paths.jsonl` row with a non-null `reverse_prior_path`
+- Trigger: the fixed `CASE_IBM_LI_SMALL_4417139` row in `case_paths.jsonl`
 - Data source: `data/processed/cases/case_paths.jsonl`
 - Expected checkpoint:
   - `reverse_prior_path` is not `null`
   - `closes_multi_hop_cycle == true`
-  - `supporting_edges_strictly_prior == true` for the same case in the path catalog, when present
+  - `supporting_edges_strictly_prior == true`
 
 ### GS-AML-003 — Suspicious community / motif context
 
@@ -84,7 +84,7 @@ The runner writes a reproducible output artifact to:
 
 1. Confirm the repo artifacts are present under `data/processed/...`
 2. Run the scenario runner again with the same command
-3. If you want a clean reset, delete the generated `docs/demo/scenario_run_output.json` and rerun
+3. The runner overwrites only `docs/demo/scenario_run_output.json` with the deterministic result
 4. Do not edit the underlying processed artifacts in place for demo work; keep the scenario data deterministic and repository-backed
 
 ## Expected result shape
@@ -94,7 +94,10 @@ The runner prints a concise summary and saves structured JSON with these section
 - `provenance`
 - `repo_root`
 - `scenario_count`
+- `all_passed`
 - `scenarios[]`
 - per-scenario `status`, `checkpoints`, and `expected`
+
+Every documented checkpoint is validated. A failed checkpoint is recorded in `failed_checks`, and the command exits non-zero when any requested scenario fails.
 
 This keeps the demo deterministic, auditable, and consistent with the repository's local-read-only provenance model.
