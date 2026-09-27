@@ -64,12 +64,10 @@ class GraphShieldService:
             EvidenceRetriever()
         )
 
-        self._policy_retriever = (
-            PolicyRetriever(
-                enable_reranker=
-                    enable_policy_reranker
-            )
+        self._enable_policy_reranker = (
+            enable_policy_reranker
         )
+        self._policy_retriever = None
 
         self._investigation_tools = (
             InvestigationTools()
@@ -368,6 +366,11 @@ class GraphShieldService:
         if top_k < 1:
             raise ValueError(
                 "top_k must be at least 1"
+            )
+
+        if self._policy_retriever is None:
+            self._policy_retriever = PolicyRetriever(
+                enable_reranker=self._enable_policy_reranker
             )
 
         result = (

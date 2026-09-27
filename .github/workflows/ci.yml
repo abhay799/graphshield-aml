@@ -46,6 +46,9 @@ jobs:
       - name: Validate Docker Compose
         run: docker compose config
 
+      - name: Prepare CI test artifacts
+        run: python scripts/ci/prepare_ci_test_artifacts.py
+
       - name: Run tests
         run: python -m pytest -q
 
