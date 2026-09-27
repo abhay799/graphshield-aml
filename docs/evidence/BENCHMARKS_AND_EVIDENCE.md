@@ -4,7 +4,13 @@ This document is an honest evidence package for what the repository proves and w
 
 ## Evidence taxonomy
 
-The repository contains multiple provenance classes, and they must remain separate:
+Use one primary status class before applying any secondary provenance qualifier:
+
+- **IMPLEMENTED**: source/runtime capability exists and is exercised by repository code/tests.
+- **CONFIGURED ONLY**: configuration, integration, or deployment contract exists, but repository evidence does not prove an external service or environment is actively operating.
+- **DOCUMENTED / REFERENCE ONLY**: documentation, historical reference, report, or design evidence exists, but it is not a currently demonstrated runtime capability.
+
+The repository also contains these secondary provenance classes, which must remain separate from the primary status:
 
 - MEASURED: numeric evidence recorded in repo artifacts
 - HISTORICAL CERTIFICATION: prior phase artifacts that record pass/fail status in repository history
@@ -14,6 +20,31 @@ The repository contains multiple provenance classes, and they must remain separa
 - READINESS TARGET: release gate status that says a human approval gate exists, not live production SLO attainment
 - NOT MEASURED: metric or environment fact not directly available in repo artifacts
 - NOT PROVEN LIVE: no current evidence of a running production deployment or external operating environment
+
+## Canonical capability status table
+
+| Capability / Area | Status | Evidence | Boundary |
+|---|---|---|---|
+| Canonical data pipeline | IMPLEMENTED | Source pipeline, tests, and synthetic data-quality reports | Synthetic/public data; not real-bank evidence. |
+| Feature engineering | IMPLEMENTED | Point-in-time feature code, tests, and historical validation | Historical/synthetic model evidence is not a live benchmark. |
+| Tabular ML | IMPLEMENTED | Training/calibration code and MEASURED historical reports | No single live production champion or real-bank performance claim. |
+| Graph intelligence | IMPLEMENTED | Graph code, current service tests, MEASURED historical artifacts | Not a demonstrated live graph-database deployment. |
+| TGN / temporal research | IMPLEMENTED | TGN/fusion source and MEASURED, SYNTHETIC historical reports | Not freshly retrained or re-certified by current CI. |
+| Case queue / investigation | IMPLEMENTED | Current CI fixtures and service-contract tests; STATIC DEMO evidence | CI data is TEST-ONLY. |
+| Evidence retrieval | IMPLEMENTED | Retrieval code and current investigation/explainability tests | Evidence is investigation support, not proof of wrongdoing. |
+| Policy retrieval | IMPLEMENTED | Retriever/index implementation and historical certification evidence | Not exercised by the current deterministic CI fixture suite; corpus freshness and legal completeness are not guaranteed. |
+| Explainability | IMPLEMENTED | Phase 11 code and current CI tests | TreeSHAP applies only to the graph-LightGBM component. |
+| Bounded investigation agent | IMPLEMENTED | Phase 12 code and current CI grounding/audit tests | Read-only; unsupported answers are withheld. |
+| Governance controls | IMPLEMENTED | Phase 13–15 code and current CI contract tests | Controls are not regulatory certification or production operations. |
+| FastAPI backend | IMPLEMENTED | API routes and current CI service tests | Not proof of public-service availability or production reliability. |
+| Analyst frontend | IMPLEMENTED | Frontend source and static/demo evidence | Current CI does not perform automated browser/end-to-end UI validation. |
+| Docker/Compose | CONFIGURED ONLY | Compose files and CI syntax validation | No active container environment is demonstrated. |
+| Kubernetes | CONFIGURED ONLY | Manifests and readiness/deployment contracts | No running cluster or achieved SLO evidence. |
+| Neo4j | CONFIGURED ONLY | Optional loader and Compose profile | Not a demonstrated required or live dependency. |
+| Redis / Redpanda / MinIO / MLflow / Prometheus / Grafana / Keycloak | CONFIGURED ONLY | Compose profiles and integration/configuration code | No active external-service operation is proven. |
+| CI | IMPLEMENTED | GitHub Actions run #5 succeeded for commit `7c6e7b7`; deterministic fixtures; 83-test suite | Contract validation only; not production or regulatory validation. |
+| Public demo deployment | IMPLEMENTED | Public Vercel/Railway deployment endpoints documented in README | Portfolio/demo hosting only; availability is not continuously monitored and this is not a regulated production banking deployment. |
+| Regulatory/production banking deployment | DOCUMENTED / REFERENCE ONLY (explicit non-claim) | No repository evidence of such a deployment | No real-bank deployment, certification, or regulatory approval is claimed. |
 
 ## 1. Data evidence
 

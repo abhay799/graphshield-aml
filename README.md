@@ -2,7 +2,7 @@
 
 GraphShield AML is a graph-native, human-controlled anti-money-laundering investigation-support prototype. It prioritizes transaction alerts and assembles point-in-time graph, model, case, and policy evidence for a human investigator. It is a portfolio/research system built with synthetic or public material.
 
-**Live Demo**
+**Public portfolio demo (not production banking)**
 * UI: https://portfolio-sandy-eta-4ipb9hl1lz.vercel.app
 * API: https://graphshield-api-production.up.railway.app
 * Docs: https://graphshield-api-production.up.railway.app/docs
@@ -10,7 +10,7 @@ GraphShield AML is a graph-native, human-controlled anti-money-laundering invest
 Public capabilities:
 case queue, overview, graph/path investigation, explainability, evidence search, policy search.
 
-Architecture:
+Demo architecture:
 Vercel → Railway FastAPI → GraphShield models/artifacts.
 
 > Decision support only. GraphShield does not block accounts, close cases, file SAR/STRs, submit regulatory reports, or replace legal, compliance, or investigator judgement.
@@ -100,7 +100,7 @@ These are historical artifacts, not a claim that this checkout has freshly rerun
 
 - The repository contains 34 test files with 83 test functions, primarily covering service contracts and Phases 11–15.
 - Earlier phases retain validation scripts, reports, hashes, and certification artifacts.
-- Current CI is lightweight and does not execute the full test suite; the active branch is also outside its configured `master`/`main` triggers.
+- Current CI runs on `master`, `main`, and `graphshield-v2`. It prepares deterministic CI-only runtime fixtures and runs `python -m pytest -q`; the fresh verified suite result is 83 passed. This validates repository contracts, not real-bank performance, production reliability, regulatory certification, or historical-model retraining/re-certification.
 - Stored Phase 15 smoke evidence is explicitly in-process and does not establish cloud networking, production traffic, or achieved SLOs.
 
 Read [Validation](docs/VALIDATION.md), [Safety Invariants](docs/architecture/SAFETY_INVARIANTS.md), and [Limitations](docs/LIMITATIONS.md) before relying on the system or its reported artifacts.

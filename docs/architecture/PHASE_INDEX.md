@@ -2,7 +2,7 @@
 
 ## Reading this index
 
-Statuses reflect repository evidence: source modules, tests, validation/certification reports, and Git history. A stored certification is historical evidence, not a fresh verification performed when this document is read.
+Statuses reflect repository evidence: source modules, tests, validation/certification reports, and Git history. A stored certification is historical evidence, not a fresh verification performed when this document is read. Current CI now verifies deterministic CI-only fixtures and the 83-test suite on `master`, `main`, and `graphshield-v2`; that contract coverage does not re-certify historical phase artifacts.
 
 For the dependency view, see [Phase Architecture](PHASE_ARCHITECTURE.md).
 

@@ -36,7 +36,7 @@ Readiness/liveness, artifact-integrity, recovery, HPA/PDB, and release gates est
 
 ## Validation limitations
 
-Stored certifications are historical artifacts. The active CI workflow is lightweight, does not run the full test suite, and is configured for `master`/`main` rather than the recovered `graphshield-v2` branch. A future release should run and record fresh checks in its own environment rather than relying on this documentation or historical reports.
+Stored certifications are historical artifacts. Current CI triggers on `master`, `main`, and `graphshield-v2`, prepares deterministic CI-only runtime fixtures, and runs the 83-test suite. Those fixtures are test-only and are not production datasets or models. A future release still needs its own environment-specific evidence rather than relying on CI, this documentation, or historical reports to establish real-bank performance, production reliability, regulatory certification, or full historical-model retraining/re-certification.
 
 ## Documentation boundary
 

@@ -16,7 +16,9 @@ GraphShield contains several forms of validation evidence. They answer different
 
 The repository contains 34 `tests/test_*.py` files and 83 test functions. Coverage is strongest for Phase 7 service contracts and Phases 11–15: explainability, bounded-agent grounding/audit behavior, governance, deployment/integrity contracts, recovery, and release gates.
 
-The GitHub Actions workflow compiles selected source files, validates Compose syntax, and performs basic repository checks. It does not run the full pytest suite. Its configured branch triggers are `master` and `main`, whereas the recovered active branch is `graphshield-v2`; this is a current CI coverage limitation.
+The GitHub Actions workflow triggers on `master`, `main`, and `graphshield-v2` for pushes and pull requests. It compiles source, validates selected syntax, repository safety, and Compose syntax; then it prepares deterministic CI-only runtime artifacts with `python scripts/ci/prepare_ci_test_artifacts.py` and runs `python -m pytest -q`.
+
+Fresh evidence for commit `7c6e7b7` is GitHub Actions run #5, whose full-suite test step succeeded. The matching fresh local validation result was **83 passed**. This verifies the repository's tested contracts using test-only fixtures; it does not prove real-bank performance, production reliability, regulatory certification, or full historical-model retraining/re-certification.
 
 ## Historical certification artifacts
 

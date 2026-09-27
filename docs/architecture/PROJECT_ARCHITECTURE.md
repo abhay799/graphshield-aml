@@ -2,7 +2,7 @@
 
 ## Scope and evidence boundary
 
-This document describes the code and local artifacts present in GraphShield AML. It distinguishes implemented repository capabilities from optional infrastructure configuration. It does not claim a production deployment, regulatory certification, or performance on real banking data.
+This document describes the code and local artifacts present in GraphShield AML. It distinguishes implemented repository capabilities from optional infrastructure configuration. Primary status terminology follows the [canonical evidence taxonomy](../evidence/BENCHMARKS_AND_EVIDENCE.md#evidence-taxonomy). It does not claim a production deployment, regulatory certification, or performance on real banking data.
 
 ## Diagram set
 
