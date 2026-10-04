@@ -1,0 +1,51 @@
+# requirements-repro.in
+
+# Reproducibility input for GraphShield AML — scope: Python 3.12 CPU demo + API + test
+
+# contract only. Excludes GPU/TGN research, streaming, and notebook/dev tooling.
+
+#
+
+# Compile with (from a clean Python 3.12 env):
+
+# uv pip compile requirements-repro.in -o requirements-repro.lock.txt
+
+# Do not hand-edit requirements-repro.lock.txt — regenerate it instead.
+
+-r requirements-runtime.txt
+
+# neo4j: imported directly by src/services/online\_graph\_service.py and by
+
+# src/graph/load\_transactions\_neo4j.py, load\_suspicious\_communities\_neo4j.py,
+
+# load\_risk\_propagation\_neo4j.py, load\_account\_risk\_neo4j.py,
+
+# load\_account\_motif\_intelligence\_neo4j.py. CI installs this explicitly (neo4j==6.3.0).
+
+# online\_graph\_service.py is also imported by src/streaming/online\_graph\_consumer.py —
+
+# a separate streaming-scope module, not the demo API's own import path (src/api/app.py
+
+# does not import it). Included here because it's a hard dependency of an in-scope
+
+# src/services module regardless of which caller currently exercises it, not because
+
+# the FastAPI demo app imports it transitively.
+
+neo4j==6.3.0
+
+# pytest: no src/ module imports pytest; only tests/test\_phase11\_explainability.py and
+
+# tests/test\_phase13\_governance.py do. Included because running the verification suite
+
+# (`python -m pytest -q`, expected: 83 passed) is part of this contract's definition of
+
+# reproducibility, not because it's a production runtime dependency.
+
+pytest==9.1.1
+
+# torch: pulled in transitively by sentence-transformers, which hard-requires
+# it with no CPU/GPU choice of its own. Pinned explicitly here to the CPU-only
+# build matching the Dockerfile's pinned torch==2.13.0, so this reproducibility
+# contract doesn't silently diverge into a CUDA-enabled multi-GB install.
+torch==2.13.0

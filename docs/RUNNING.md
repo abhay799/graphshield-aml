@@ -107,7 +107,7 @@ Do not treat these as a fresh ground truth unless you have rerun the pipeline in
 
 ### Important boundary
 
-The repo intentionally does not include a single private lockfile or a complete artifact registry. A fresh clone is not enough to reproduce the entire runtime without the required local files or approved artifact handoff.
+The CPU/demo/API/test dependency contract is now captured in `requirements-repro.in` and `requirements-repro.lock.txt`. The minimum out-of-band runtime artifact handoff is documented in `docs/reproducibility/ARTIFACT_HANDOFF.md`. A fresh clone is still not enough to run the full analyst demo locally until those out-of-band artifacts are supplied.
 
 ## 4. Start the API
 
@@ -169,7 +169,7 @@ This keeps the demo and UI honest without pretending the runtime is live when on
 
 ## 6. Run deterministic demo scenarios
 
-The repo includes a deterministic demo runner for the Step 4 scenario package.
+The repo includes the deterministic demo runner produced by the Step 3 scenario work.
 
 ### List scenarios
 

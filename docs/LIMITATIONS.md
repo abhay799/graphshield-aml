@@ -14,7 +14,7 @@ The repository intentionally ignores `data/**`, model binaries, checkpoints, SQL
 
 Historical manifests reference artifacts that are present locally but untracked. The project also contains old/stale artifact filenames alongside current paths; manifests and phase reports should determine provenance, not a filename alone.
 
-Environment evidence is inconsistent: Docker/CI specify Python 3.12, while historical certification snapshots record Python 3.14.5. Dependency files are pinned, but there is no single lockfile or committed artifact registry that makes the full historical environment independently reproducible.
+Environment evidence is inconsistent across history: Docker/CI specify Python 3.12, while historical certification snapshots record Python 3.14.5. CPU/demo/API/test reproducibility is now covered by `requirements-repro.in` and `requirements-repro.lock.txt` and was verified in a disposable clean checkout with 83 tests passing. Historical/GPU/TGN environment reproducibility is still not claimed, and runtime model/data artifacts remain out-of-band as documented in `docs/reproducibility/ARTIFACT_HANDOFF.md`.
 
 ## Model limitations
 
