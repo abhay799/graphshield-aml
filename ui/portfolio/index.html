@@ -32,6 +32,7 @@
           <a href="#architecture">Architecture</a>
           <a href="#graph-intelligence">Graph Intelligence</a>
           <a href="#evidence">Evidence</a>
+          <a href="#live-scoring">Score Transaction</a>
           <a href="#status">Status</a>
         </nav>
       </div>
@@ -352,6 +353,190 @@
         </div>
       </section>
 
+      <section id="live-scoring" class="section alt">
+        <div class="container">
+          <div class="section-header">
+            <p class="eyebrow dark">Public research scorer</p>
+            <h2>Score a synthetic transaction</h2>
+            <p class="scoring-intro">
+              <strong>Synthetic-data research scoring — not real fraud detection.</strong>
+              This public demo surface sends one transaction to <code>POST /score/transaction</code>
+              and shows the frozen-model score plus the model inputs used for that request.
+            </p>
+          </div>
+
+          <div class="research-boundary scoring-project-safety" role="note" aria-label="Research safety boundary">
+            <h3>Research / portfolio safety boundary</h3>
+            <p>GraphShield AML is a research / portfolio decision-support platform.
+              Use public or synthetic data only for portfolio/academic demonstrations.
+              It supports human review; it is not a production fraud-detection or AML enforcement system.</p>
+            <p>It does not autonomously block transactions or accounts, close cases,
+              file regulatory reports (including SAR/STR), or replace legal/compliance judgment.
+              Human review remains required for investigation outcomes.</p>
+          </div>
+
+          <div class="scoring-safety">
+            <strong>Signal boundary:</strong>
+            First-time/unknown accounts have structurally limited signal because historical,
+            pair, velocity, and network context may not exist yet. The result is decision-support
+            demo output, not an enforcement or compliance decision.
+          </div>
+
+          <div class="scoring-deployment-note">
+            <strong>Public research demo:</strong> live transaction scoring is deployed on Railway. Runtime history is Redis-backed and forward-only; synthetic/research demo only.
+          </div>
+
+          <div class="scoring-layout">
+            <form id="live-scoring-form" class="scoring-form">
+              <div class="form-field scoring-api-field">
+                <label for="scoring-api-base">Scoring API URL</label>
+                <input id="scoring-api-base" type="url" value="https://graphshield-api-production.up.railway.app" aria-describedby="scoring-health-note" required />
+                <button id="scoring-health-check" class="button scoring-health-button" type="button">Check selected API health</button>
+                <p id="scoring-health-note" class="scoring-help">Health confirms API availability and project mode; it does not guarantee that an individual scoring request will succeed.</p>
+                <div id="scoring-health-results" aria-live="polite" aria-busy="false">
+                  <p class="empty">Check health to inspect metadata from the selected API URL.</p>
+                </div>
+              </div>
+
+              <div class="form-field">
+                <label for="score-transaction-id">Transaction ID</label>
+                <input id="score-transaction-id" name="transaction_id" type="text" value="" required />
+              </div>
+              <div class="form-field">
+                <label for="score-event-ts">Event timestamp</label>
+                <input id="score-event-ts" name="event_ts" type="text" value="" aria-describedby="score-event-ts-help" required />
+                <p id="score-event-ts-help" class="scoring-help">Use an ISO timestamp, for example 2026-10-07T12:00:00Z or 2026-10-07T12:00:00+05:30. Your timezone offset is preserved; timestamps without an offset are interpreted as UTC by the backend.</p>
+              </div>
+              <div class="form-field">
+                <label for="score-from-bank">From bank</label>
+                <input id="score-from-bank" name="from_bank" type="text" value="DEMO_BANK_A" required />
+              </div>
+              <div class="form-field">
+                <label for="score-from-account">From account</label>
+                <input id="score-from-account" name="from_account" type="text" value="DEMO_SENDER_001" required />
+              </div>
+              <div class="form-field">
+                <label for="score-to-bank">To bank</label>
+                <input id="score-to-bank" name="to_bank" type="text" value="DEMO_BANK_B" required />
+              </div>
+              <div class="form-field">
+                <label for="score-to-account">To account</label>
+                <input id="score-to-account" name="to_account" type="text" value="DEMO_RECEIVER_001" required />
+              </div>
+              <div class="form-field">
+                <label for="score-amount-paid">Amount paid</label>
+                <input id="score-amount-paid" name="amount_paid" type="number" min="0" step="0.01" value="1000" required />
+              </div>
+              <div class="form-field">
+                <label for="score-amount-received">Amount received</label>
+                <input id="score-amount-received" name="amount_received" type="number" min="0" step="0.01" value="1000" required />
+              </div>
+              <div class="form-field">
+                <label for="score-payment-currency">Payment currency</label>
+                <input id="score-payment-currency" name="payment_currency" type="text" value="US Dollar" required />
+              </div>
+              <div class="form-field">
+                <label for="score-receiving-currency">Receiving currency</label>
+                <input id="score-receiving-currency" name="receiving_currency" type="text" value="US Dollar" required />
+              </div>
+              <div class="form-field">
+                <label for="score-payment-format">Payment format</label>
+                <input id="score-payment-format" name="payment_format" type="text" value="ACH" required />
+              </div>
+
+              <div class="scoring-submit-row">
+                <button id="score-submit" class="button scoring-submit" type="submit">Score research transaction</button>
+                <span class="scoring-runtime-note">Successful requests update Redis runtime history only.</span>
+              </div>
+            </form>
+
+            <div id="live-scoring-results" class="scoring-results" aria-live="polite" aria-busy="false">
+              <div class="scoring-empty">
+                Submit a synthetic transaction to inspect the calibrated research score,
+                account-history coverage, and grouped feature breakdown.
+              </div>
+            </div>
+          </div>
+
+          <div id="batch-scoring" class="batch-section" aria-labelledby="batch-title">
+            <h2 id="batch-title">Upload Transaction Dataset</h2>
+            <div class="research-boundary" role="note" aria-label="CSV research and privacy boundary">
+              <p><strong>Use only synthetic or anonymized transaction data.</strong></p>
+              <p>Do not upload real bank account numbers, card numbers, UPI IDs, customer names,
+                addresses, phone numbers, email addresses, government identifiers,
+                or other personally identifying financial data.</p>
+              <p>The original CSV file is parsed locally in the browser and is not uploaded or stored by this UI.
+                Only validated transaction rows selected for scoring are sent as JSON to the existing scoring API.
+                Successful scoring can update Redis runtime history. This is not a promise of zero server-side retention.</p>
+              <p>GraphShield AML is a research / portfolio decision-support platform. Use public or synthetic data
+                only for portfolio/academic demonstrations. Human review remains required; no autonomous blocking,
+                case closure, regulatory filing, or replacement of legal/compliance judgment.</p>
+            </div>
+            <details class="batch-schema">
+              <summary>CSV schema and execution help</summary>
+              <p>Required case-sensitive headers, in any order:</p>
+              <code>transaction_id,event_ts,from_bank,from_account,to_bank,to_account,amount_paid,amount_received,payment_currency,receiving_currency,payment_format</code>
+              <p>UTF-8 CSV ? maximum 256 KiB ? 100 nonblank records (including invalid rows) ?
+                32 columns ? 1024 characters per cell. Extra non-label columns are ignored and never sent.</p>
+              <p>Required cells cannot be blank. Identifiers retain leading zeros and case.
+                Amounts must be finite nonnegative decimals without currency symbols or grouping separators.</p>
+              <p>Use YYYY-MM-DDTHH:mm:ss with optional fractional seconds (up to 6 digits), Z or ?HH:mm.
+                If no timezone offset is provided, the backend interprets the timestamp as UTC.
+                Timestamps and offsets are preserved in requests.</p>
+              <p>Duplicate transaction IDs are rejected because the scoring endpoint is stateful and does not provide transaction-ID idempotency.</p>
+              <p>Valid rows must have nondecreasing UTC timestamps. Rows are never automatically sorted.
+                Equal timestamps remain in CSV order; separate requests do not reproduce complete timestamp-group offline parity.</p>
+              <p>Batch scoring is an ordered sequence of live scoring requests and is not an atomic historical replay.</p>
+              <p>Stopping prevents future submissions only. Already submitted transactions cannot be rolled back by the browser.
+                No automatic retry occurs. Timeout or connection loss can leave backend completion uncertain;
+                further scoring in this page is disabled after an uncertain batch request.</p>
+              <p>Use the Scoring API URL above. Existing Redis history and other clients can affect results.
+                Check backend completion before reloading after uncertainty; reload does not clear Redis or undo transactions.</p>
+            </details>
+            <div class="batch-controls">
+              <div class="form-field">
+                <label for="batch-file">Synthetic transaction CSV</label>
+                <input id="batch-file" type="file" accept=".csv,text/csv" aria-describedby="batch-parse-status" />
+              </div>
+              <button id="batch-template" class="button" type="button">Download CSV Template</button>
+              <button id="batch-selected" class="button" type="button" disabled>Score selected row</button>
+              <button id="batch-all" class="button" type="button" disabled>Score all valid rows</button>
+              <button id="batch-stop" class="button" type="button" disabled>Stop after current request</button>
+              <button id="batch-clear" class="button" type="button" disabled>Clear / Reset</button>
+            </div>
+            <p id="batch-parse-status" class="scoring-help" aria-live="polite">Choose a CSV to parse locally. No transactions are sent until you select a scoring action.</p>
+            <p id="batch-summary">0 total rows ? 0 valid ? 0 invalid</p>
+            <p id="batch-ignored" class="scoring-help"></p>
+            <p id="batch-order-error" class="batch-order-error" role="alert"></p>
+            <p id="batch-progress" aria-live="polite" aria-busy="false">0 completed</p>
+            <div class="batch-table-scroll" role="region" aria-label="Transaction preview and scoring results" tabindex="0">
+              <table class="batch-table">
+                <caption>CSV records, validation, execution status, and actual backend results</caption>
+                <thead><tr>
+                  <th scope="col">Record</th><th scope="col">Select</th>
+                  <th scope="col">transaction_id</th><th scope="col">event_ts</th>
+                  <th scope="col">from_bank</th><th scope="col">from_account</th>
+                  <th scope="col">to_bank</th><th scope="col">to_account</th>
+                  <th scope="col">amount_paid</th><th scope="col">amount_received</th>
+                  <th scope="col">Validation</th><th scope="col">Execution</th>
+                  <th scope="col">raw_model_score</th><th scope="col">calibrated_score</th>
+                  <th scope="col">Sender history</th><th scope="col">Receiver history</th>
+                  <th scope="col">limited_signal</th><th scope="col">scoring_mode</th>
+                  <th scope="col">boundary</th><th scope="col">runtime_state_updated</th>
+                  <th scope="col">canonical_artifacts_modified</th><th scope="col">synthetic_research_demo_only</th>
+                  <th scope="col">Failure message</th>
+                </tr></thead>
+                <tbody id="batch-body"></tbody>
+              </table>
+            </div>
+            <h3>Selected row detail</h3>
+            <div id="batch-detail" class="scoring-results" aria-live="polite">
+              <p class="empty">Select a valid row to inspect its result.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section id="live-status" class="section">
         <div class="container">
           <div class="section-header">
@@ -444,7 +629,7 @@
             </div>
             <div class="status-card neutral">
               <h3>Not claimed</h3>
-              <p>Live deployment, regulatory filing, autonomous enforcement, or real-bank production suitability.</p>
+              <p>Regulatory filing, autonomous enforcement, or real-bank production suitability.</p>
             </div>
           </div>
         </div>
@@ -667,6 +852,8 @@
       });
       updateLiveStatus();
     </script>
+    <script src="batch-scoring.js"></script>
+    <script src="live-scoring.js"></script>
   </body>
 </html>
 

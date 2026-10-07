@@ -11,9 +11,11 @@ scorer does not autonomously block accounts, close cases, file SAR/STR reports,
 submit regulatory reports, or replace legal/compliance judgment. Human review
 remains required for investigation outcomes.
 
-The live-scoring endpoint currently exists in the local development environment.
-It is **not yet deployed as part of the public Railway demo** and this document
-does not claim that POST /score/transaction is reachable at the public demo URL.
+The live-scoring endpoint is deployed on the public Railway research demo at
+`https://graphshield-api-production.up.railway.app/score/transaction`.
+Public verification confirmed health, cold-start scoring, warm-state scoring,
+duplicate transaction rejection, and out-of-order watermark rejection. This is
+still a synthetic/research demo surface, not a production banking service.
 
 ## Endpoint: POST /score/transaction
 
@@ -31,7 +33,7 @@ POST /score/transaction accepts one raw transaction with:
 - receiving_currency
 - payment_format
 
-The local scoring path is:
+The live scoring path is:
 
 1. validate and normalize the raw transaction with the existing online feature contract
 2. read pre-existing Redis history for sender, receiver, pair, bank-pair, counterparty, graph-neighbor, velocity, and pass-through state
@@ -283,6 +285,7 @@ metadata is Unavailable, not a fabricated default. Selected-row details show
 the backend feature breakdown for read-only input inspection, not causality.
 No fraud verdict or enforcement recommendation is generated.
 
-The CSV UI has no public deployment or production-readiness certification.
-Stateful real API batch verification belongs to L6A Step 3; Step 2 uses
-controlled transport tests only.
+The CSV UI is deployed as part of the public portfolio demo. Browser-origin
+CORS verification against the Railway scorer passed for
+`https://graphshield-aml.vercel.app`. This remains research/portfolio
+functionality and is not production-readiness certification.

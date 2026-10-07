@@ -3,12 +3,12 @@
 GraphShield AML is a graph-native, human-controlled anti-money-laundering investigation-support prototype. It prioritizes transaction alerts and assembles point-in-time graph, model, case, and policy evidence for a human investigator. It is a portfolio/research system built with synthetic or public material.
 
 **Public portfolio demo (not production banking)**
-* UI: https://portfolio-sandy-eta-4ipb9hl1lz.vercel.app
+* UI: https://graphshield-aml.vercel.app
 * API: https://graphshield-api-production.up.railway.app
 * Docs: https://graphshield-api-production.up.railway.app/docs
 
 Public capabilities:
-case queue, overview, graph/path investigation, explainability, evidence search, policy search.
+case queue, overview, graph/path investigation, explainability, evidence search, policy search, and forward-only synthetic live transaction scoring.
 
 Demo architecture:
 Vercel → Railway FastAPI → GraphShield models/artifacts.
@@ -28,7 +28,7 @@ The repo contains implemented data normalization, feature engineering, model pip
 This project uses synthetic IBM AML-style data, local processed artifacts, historical certification reports, and demo outputs. Those artifacts are useful evidence for workflow design and repository validation, but they are not fresh live-bank evidence.
 
 ### WHAT IS NOT CLAIMED?
-GraphShield does not claim autonomous compliance enforcement, regulatory filing, customer blocking, legal conclusions, or a production banking deployment. It also does not claim live cloud readiness or external-system security certification.
+GraphShield does not claim autonomous compliance enforcement, regulatory filing, customer blocking, legal conclusions, or a production banking deployment. It also does not claim production cloud readiness or external-system security certification.
 
 ### WHERE SHOULD A REVIEWER START?
 - [Project Architecture](docs/architecture/PROJECT_ARCHITECTURE.md)
