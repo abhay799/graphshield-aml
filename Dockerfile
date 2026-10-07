@@ -13,6 +13,8 @@ ENV HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1
 FROM ml-base AS runtime
 COPY requirements-core.txt ./requirements-core.txt
 RUN --mount=type=cache,target=/root/.cache/pip python -m pip install -r requirements-core.txt
+COPY requirements-live-scoring.txt ./requirements-live-scoring.txt
+RUN --mount=type=cache,target=/root/.cache/pip python -m pip install -r requirements-live-scoring.txt
 COPY src ./src
 EXPOSE 8000 8501
 CMD ["python","-m","uvicorn","api.app:app","--host","0.0.0.0","--port","8000"]
