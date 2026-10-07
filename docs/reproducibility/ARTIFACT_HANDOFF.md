@@ -21,6 +21,12 @@ The CPU/demo/API/test dependency contract is defined by:
 
 A fresh clone still needs the out-of-band runtime artifacts in section B for the full analyst demo.
 
+### Optional live-scoring dependency scope
+
+The CPU/demo/API/test reproducibility contract above does **not** include the optional live-scoring runtime dependencies. Live transaction scoring is a separate capability with its own dependency file, `requirements-live-scoring.txt`, and requires Redis at runtime.
+
+The live-scoring dependency scope is intentionally separate from `requirements-repro.in` / `requirements-repro.lock.txt`; it must not be treated as part of the core reproducible demo contract established by the clean Python 3.12 verification. Enabling live scoring adds an optional Redis-backed runtime surface, while the core analyst/demo/test reproducibility contract remains unchanged.
+
 ## B. Out-of-band runtime artifacts
 
 These files are not assumed to be present in a fresh Git checkout. Only the runtime artifacts consumed by current code paths are listed here.

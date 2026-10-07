@@ -1,0 +1,66 @@
+{
+  "status": "PASS",
+  "model_feature_count": 70,
+  "total_comparisons": 210,
+  "total_mismatches": 0,
+  "related_pass_through_all_match": true,
+  "cases": [
+    {
+      "case_id": "CASE_IBM_LI_SMALL_4623711",
+      "transaction_id": "IBM_LI_SMALL_4623711",
+      "timestamp_group_size": 435,
+      "comparisons": 70,
+      "mismatch_count": 0,
+      "mismatches": [],
+      "pass_through_compat": {
+        "sender_recent_inbound_count_24h": 0,
+        "sender_recent_inbound_amount_24h": 0.0,
+        "sender_last_inbound_ts_24h": null
+      },
+      "offline_related_pass_through": {
+        "sender_recent_inbound_count_24h": 0,
+        "sender_recent_inbound_amount_24h": 0.0,
+        "sender_last_inbound_ts_24h": null
+      },
+      "related_pass_through_match": true
+    },
+    {
+      "case_id": "CASE_IBM_LI_SMALL_4884658",
+      "transaction_id": "IBM_LI_SMALL_4884658",
+      "timestamp_group_size": 606,
+      "comparisons": 70,
+      "mismatch_count": 0,
+      "mismatches": [],
+      "pass_through_compat": {
+        "sender_recent_inbound_count_24h": 0,
+        "sender_recent_inbound_amount_24h": 0.0,
+        "sender_last_inbound_ts_24h": null
+      },
+      "offline_related_pass_through": {
+        "sender_recent_inbound_count_24h": 0,
+        "sender_recent_inbound_amount_24h": 0.0,
+        "sender_last_inbound_ts_24h": null
+      },
+      "related_pass_through_match": true
+    },
+    {
+      "case_id": "CASE_IBM_LI_SMALL_4857102",
+      "transaction_id": "IBM_LI_SMALL_4857102",
+      "timestamp_group_size": 479,
+      "comparisons": 70,
+      "mismatch_count": 0,
+      "mismatches": [],
+      "pass_through_compat": {
+        "sender_recent_inbound_count_24h": 4,
+        "sender_recent_inbound_amount_24h": 23722.800000000003,
+        "sender_last_inbound_ts_24h": 1662766680.0
+      },
+      "offline_related_pass_through": {
+        "sender_recent_inbound_count_24h": 4,
+        "sender_recent_inbound_amount_24h": 23722.800000000003,
+        "sender_last_inbound_ts_24h": "2022-09-09 23:38:00"
+      },
+      "related_pass_through_match": true
+    }
+  ]
+}

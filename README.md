@@ -128,6 +128,7 @@ This is a local demonstration path, not a production deployment guide. Runtime a
 - [Validation](docs/VALIDATION.md) — what is tested, certified historically, and not freshly verified.
 - [Limitations](docs/LIMITATIONS.md) — operational, data, model, and reproducibility limitations.
 - [Demo script](docs/DEMO_SCRIPT.md) — a bounded portfolio demonstration.
+- [Live scoring](LIVE_SCORING.md) — local synthetic/research transaction scoring, Redis state, and frozen-model compatibility boundaries.
 
 ## Scope
 

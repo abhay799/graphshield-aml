@@ -37,6 +37,7 @@ The repository also contains these secondary provenance classes, which must rema
 | Bounded investigation agent | IMPLEMENTED | Phase 12 code and current CI grounding/audit tests | Read-only; unsupported answers are withheld. |
 | Governance controls | IMPLEMENTED | Phase 13–15 code and current CI contract tests | Controls are not regulatory certification or production operations. |
 | FastAPI backend | IMPLEMENTED | API routes and current CI service tests | Not proof of public-service availability or production reliability. |
+| Live transaction scoring | IMPLEMENTED | Local L3 API verification: 2 endpoint tests passed; full-history warm replay (3,727 rows / 2,852 timestamp groups) vs fresh cold/unknown namespace; calibrated scores `0.02738545245606547` vs `0.0006321802023871719` = `43.3190605347x` differentiation | Synthetic/research demo only; Redis-backed local runtime state; not yet deployed on the public Railway demo. |
 | Analyst frontend | IMPLEMENTED | Frontend source and static/demo evidence | Current CI does not perform automated browser/end-to-end UI validation. |
 | Docker/Compose | CONFIGURED ONLY | Compose files and CI syntax validation | No active container environment is demonstrated. |
 | Kubernetes | CONFIGURED ONLY | Manifests and readiness/deployment contracts | No running cluster or achieved SLO evidence. |

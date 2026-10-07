@@ -39,8 +39,8 @@ app = FastAPI(
     title="GraphShield AML API",
     version="0.1.0",
     description=(
-        "Read-only analyst API for GraphShield AML. "
-        "Certified artifacts are treated as immutable inputs."
+        "Read-only analyst/case API plus live research transaction scoring. "
+        "Certified artifacts remain immutable; live scoring state is Redis-only."
     ),
 )
 
@@ -68,7 +68,6 @@ app.include_router(
 app.include_router(
     online_graph_router
 )
-
 
 @lru_cache(maxsize=1)
 def get_service() -> GraphShieldService:
@@ -136,6 +135,9 @@ def root() -> dict[str, Any]:
         "mode":
             "read_only",
 
+        "scoring_mode":
+            "live_research_only",
+
         "docs":
             "/docs",
     }
@@ -147,7 +149,11 @@ def root() -> dict[str, Any]:
 )
 def health() -> dict[str, Any]:
 
-    return get_service().health()
+    payload = get_service().health()
+    payload["scoring_mode"] = "live_research_only"
+    payload["scoring_state"] = "redis_runtime_only"
+    payload["synthetic_research_demo_only"] = True
+    return payload
 
 
 @app.get(
@@ -488,3 +494,9 @@ from api.phase14_routes import router as phase14_enterprise_router
 from enterprise.phase14_runtime import install_enterprise_security
 app.include_router(phase14_enterprise_router)
 install_enterprise_security(app)
+
+# Register live research scoring after the full app import graph has settled.
+# Deferring the router import avoids copying a partially initialized router
+# during the API module's circular/heavy import lifecycle.
+from api.live_scoring_routes import router as live_scoring_router
+app.include_router(live_scoring_router)
