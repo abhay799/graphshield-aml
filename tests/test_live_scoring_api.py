@@ -153,3 +153,95 @@ def test_normal_current_timestamp_still_scores_after_future_guard():
     assert response.status_code == 200
     assert response.json()["runtime_state_updated"] is True
     assert list(service.state_writer.redis.scan_iter(match=f"{namespace}:*"))
+
+
+def test_rate_limit_31st_request_returns_429_and_uses_forwarded_client_ip():
+    live_scoring_routes._rate_limiter.clear()
+    calls = 0
+
+    class FakeService:
+        def score_transaction(self, raw: dict, *, commit_runtime_state: bool) -> dict:
+            nonlocal calls
+            calls += 1
+            return {
+                "transaction_id": raw["transaction_id"],
+                "runtime_state_updated": commit_runtime_state,
+            }
+
+    live_scoring_routes.get_live_scoring_service = lambda: FakeService()
+    client = TestClient(app)
+    headers = {"X-Forwarded-For": "203.0.113.10, 10.0.0.9"}
+    now = datetime.now(UTC)
+
+    for index in range(30):
+        response = client.post(
+            "/score/transaction",
+            json=_forward_request(f"TEST_RATE_{index:02d}", now),
+            headers=headers,
+        )
+        assert response.status_code == 200
+
+    rejected = client.post(
+        "/score/transaction",
+        json=_forward_request("TEST_RATE_31", now),
+        headers=headers,
+    )
+    assert rejected.status_code == 429
+    assert "maximum 30 requests per minute per client IP" in rejected.json()["detail"]
+    assert calls == 30
+
+    other_client = client.post(
+        "/score/transaction",
+        json=_forward_request("TEST_RATE_OTHER_IP", now),
+        headers={"X-Forwarded-For": "203.0.113.11, 10.0.0.9"},
+    )
+    assert other_client.status_code == 200
+    assert calls == 31
+
+
+def test_rate_limited_request_leaves_fresh_redis_namespace_untouched():
+    live_scoring_routes._rate_limiter.clear()
+    client_ip = "203.0.113.12"
+    for _ in range(30):
+        assert live_scoring_routes._rate_limiter.allow(client_ip)
+
+    namespace = f"gs:test:rate-limit-reject:{uuid4().hex}"
+    service = LiveTransactionScoringService(redis_url=REDIS_URL, namespace=namespace)
+    client = _client_with_service(service)
+    redis = service.state_writer.redis
+    assert list(redis.scan_iter(match=f"{namespace}:*")) == []
+
+    response = client.post(
+        "/score/transaction",
+        json=_forward_request("TEST_RATE_REDIS_31", datetime.now(UTC)),
+        headers={"X-Forwarded-For": client_ip},
+    )
+
+    assert response.status_code == 429
+    assert list(redis.scan_iter(match=f"{namespace}:*")) == []
+
+
+def test_oversized_live_scoring_body_is_rejected_before_service_call():
+    live_scoring_routes._rate_limiter.clear()
+    service_reached = False
+
+    class FakeService:
+        def score_transaction(self, raw: dict, *, commit_runtime_state: bool) -> dict:
+            nonlocal service_reached
+            service_reached = True
+            return {"transaction_id": raw["transaction_id"]}
+
+    live_scoring_routes.get_live_scoring_service = lambda: FakeService()
+    client = TestClient(app)
+    request = _forward_request("TEST_OVERSIZE", datetime.now(UTC))
+    request["from_account"] = "A" * (live_scoring_routes.MAX_REQUEST_BODY_BYTES + 1024)
+
+    response = client.post(
+        "/score/transaction",
+        json=request,
+        headers={"X-Forwarded-For": "203.0.113.13"},
+    )
+
+    assert response.status_code == 413
+    assert "16 KiB limit" in response.json()["detail"]
+    assert service_reached is False

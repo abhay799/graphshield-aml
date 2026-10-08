@@ -27,6 +27,12 @@ The CPU/demo/API/test reproducibility contract above does **not** include the op
 
 The live-scoring dependency scope is intentionally separate from `requirements-repro.in` / `requirements-repro.lock.txt`; it must not be treated as part of the core reproducible demo contract established by the clean Python 3.12 verification. Enabling live scoring adds an optional Redis-backed runtime surface, while the core analyst/demo/test reproducibility contract remains unchanged.
 
+### Railway deployment bundle reproducibility
+
+The successful Railway live-scoring deployment was built from a bounded local deployment bundle, not directly from GitHub alone. The Dockerfile used by that bundle is preserved at `deploy/railway/Dockerfile`.
+
+That bundle includes runtime inputs under `models/`, `data/`, and `reports/` that are intentionally outside the normal Git checkout or may be Git-ignored. Therefore, the deployed Railway image cannot be reproduced from the GitHub repository alone. Rebuilding it requires the corresponding out-of-band artifacts described in this handoff document. Those artifacts must remain external; copying the deployment Dockerfile into Git does not make the model/data/report artifacts part of source control.
+
 ## B. Out-of-band runtime artifacts
 
 These files are not assumed to be present in a fresh Git checkout. Only the runtime artifacts consumed by current code paths are listed here.
