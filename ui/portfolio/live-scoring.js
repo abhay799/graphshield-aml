@@ -11,6 +11,7 @@
   let healthActive = false;
   let scoringUncertain = false;
   let batchUI = null;
+  let previousManualResult = null;
 
   function syncScoringControls() {
     const locked = scoringActive || scoringUncertain;
@@ -87,7 +88,49 @@
     return rendered || '<p class="empty">Feature breakdown unavailable.</p>';
   }
 
-  function renderScoringResult(data) {
+  function renderStateJourney(data, payload) {
+    const history = isRecord(data.account_history) ? data.account_history : {};
+    const sender = historyValue(history.sender);
+    const receiver = historyValue(history.receiver);
+    const warm = sender === "known" && receiver === "known";
+    const cold = sender === "unknown" || receiver === "unknown";
+    const samePair = previousManualResult && payload &&
+      previousManualResult.from_account === payload.from_account &&
+      previousManualResult.to_account === payload.to_account;
+
+    let comparison = "";
+    if (samePair && validScore(previousManualResult.calibrated_score) &&
+        validScore(data.calibrated_score)) {
+      const delta = data.calibrated_score - previousManualResult.calibrated_score;
+      comparison = '<div class="state-score-compare"><span>Previous calibrated score</span><strong>' +
+        escapeHTML(previousManualResult.calibrated_score) + '</strong><span>Current calibrated score</span><strong>' +
+        escapeHTML(data.calibrated_score) + '</strong><span>Change</span><strong>' +
+        escapeHTML((delta >= 0 ? "+" : "") + delta.toFixed(6)) + '</strong></div>';
+    }
+
+    if (warm) {
+      return '<div class="state-journey state-journey-warm">' +
+        '<div class="state-journey-step done"><span>1</span><div><strong>Prior state exists</strong>' +
+        '<p>Both accounts had Redis history before this transaction was scored.</p></div></div>' +
+        '<div class="state-journey-step done"><span>2</span><div><strong>Warm-state scoring</strong>' +
+        '<p>History-aware features were available for this request.</p></div></div>' +
+        comparison +
+        '<p class="state-journey-note">The score difference is a model-output change, not a fraud verdict or causal explanation.</p>' +
+        '</div>';
+    }
+    if (cold) {
+      return '<div class="state-journey state-journey-cold">' +
+        '<div class="state-journey-step done"><span>1</span><div><strong>Cold-start transaction scored</strong>' +
+        '<p>At least one account had no prior Redis history before scoring.</p></div></div>' +
+        '<div class="state-journey-step"><span>2</span><div><strong>Build warm state</strong>' +
+        '<p>Submit one more transaction with the same sender and receiver to see history-aware scoring.</p></div></div>' +
+        '<button id="prepare-warm-followup" class="button scoring-followup" type="button">Prepare warm-state follow-up</button>' +
+        '</div>';
+    }
+    return "";
+  }
+
+  function renderScoringResult(data, payload = null) {
     // Core scoring fields must be valid before showing a result. Optional
     // metadata remains visible as Unavailable when absent or malformed.
     if (!isRecord(data) || typeof data.transaction_id !== "string" || !data.transaction_id.trim() ||
@@ -111,6 +154,7 @@
       '% (formatted calibrated score)</div></div></div>' +
       '<p class="signal-flag ' + signalClass + '">' + context + "</p>" +
       '<p class="scoring-help">UI explanation derived from account_history; not a separate backend field.</p>' +
+      renderStateJourney(data, payload) +
       '<div class="score-meta-grid">' +
       metadataCard("transaction_id", data.transaction_id) +
       metadataCard("raw_model_score", String(data.raw_model_score)) +
@@ -222,6 +266,18 @@
     }
   }
 
+  function prepareWarmFollowup() {
+    const transactionId = document.getElementById("score-transaction-id");
+    const eventTs = document.getElementById("score-event-ts");
+    if (transactionId) transactionId.value = "DEMO_WARM_" + Date.now();
+    if (eventTs) eventTs.value = new Date().toISOString().replace(/\.\d{3}Z$/, "Z");
+    const submit = document.getElementById("score-submit");
+    if (submit) {
+      submit.textContent = "Score warm-state follow-up";
+      submit.focus?.();
+    }
+  }
+
   async function scoreResearchTransaction(event) {
     event.preventDefault();
     if (scoringActive) return;
@@ -256,7 +312,21 @@
         headers: { Accept: "application/json", "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
-      result.innerHTML = response.ok ? renderScoringResult(data) : httpError(response, data);
+      if (response.ok) {
+        result.innerHTML = renderScoringResult(data, payload);
+        if (isRecord(data) && typeof data.transaction_id === "string" &&
+            validScore(data.calibrated_score) && validScore(data.raw_model_score)) {
+          const followup = document.getElementById("prepare-warm-followup");
+          if (followup) followup.addEventListener("click", prepareWarmFollowup);
+          previousManualResult = {
+            from_account: payload.from_account,
+            to_account: payload.to_account,
+            calibrated_score: data.calibrated_score,
+          };
+        }
+      } else {
+        result.innerHTML = httpError(response, data);
+      }
       result.innerHTML += '<p class="scoring-help">Request API: ' + escapeHTML(base) + "</p>";
     } catch (error) {
       result.innerHTML = requestError(error, true);

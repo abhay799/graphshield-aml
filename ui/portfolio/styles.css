@@ -1149,3 +1149,108 @@ a {
     grid-template-columns: 1fr;
   }
 }
+
+#live-scoring .scoring-demo-path {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin: 18px 0 6px;
+}
+#live-scoring .scoring-demo-path > div {
+  position: relative;
+  min-height: 118px;
+  padding: 18px 16px 16px 54px;
+  border: 1px solid rgba(15, 126, 252, 0.14);
+  border-radius: 14px;
+  background: linear-gradient(180deg, #ffffff, #f5f9fd);
+}
+#live-scoring .scoring-demo-path span,
+#live-scoring .state-journey-step > span {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #0f7efc;
+  color: white;
+  font-weight: 800;
+  font-size: 0.78rem;
+}
+#live-scoring .scoring-demo-path > div > span {
+  position: absolute;
+  top: 18px;
+  left: 16px;
+}
+#live-scoring .scoring-demo-path strong {
+  display: block;
+  margin-bottom: 4px;
+}
+#live-scoring .scoring-demo-path p,
+#live-scoring .state-journey-step p,
+#live-scoring .state-journey-note {
+  margin: 0;
+  color: #425b73;
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+#live-scoring .state-journey {
+  margin: 14px 0 18px;
+  padding: 16px;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+}
+#live-scoring .state-journey-cold {
+  background: rgba(244, 201, 93, 0.07);
+}
+#live-scoring .state-journey-warm {
+  background: rgba(46, 185, 122, 0.06);
+}
+#live-scoring .state-journey-step {
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr);
+  gap: 12px;
+  align-items: start;
+}
+#live-scoring .state-journey-step + .state-journey-step {
+  margin-top: 12px;
+}
+#live-scoring .state-journey-step.done > span {
+  background: #2eb97a;
+}
+#live-scoring .state-journey-step strong {
+  display: block;
+  margin-bottom: 3px;
+}
+#live-scoring .scoring-followup {
+  margin-top: 14px;
+  border: 1px solid var(--primary);
+  background: white;
+  color: var(--primary-strong);
+  cursor: pointer;
+}
+#live-scoring .state-score-compare {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 7px 16px;
+  margin-top: 14px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: white;
+  border: 1px solid rgba(46, 185, 122, 0.18);
+}
+#live-scoring .state-score-compare span {
+  color: #425b73;
+  font-size: 0.8rem;
+}
+#live-scoring .state-score-compare strong {
+  font-size: 0.82rem;
+  text-align: right;
+}
+#live-scoring .state-journey-note {
+  margin-top: 12px;
+}
+@media (max-width: 760px) {
+  #live-scoring .scoring-demo-path {
+    grid-template-columns: 1fr;
+  }
+}

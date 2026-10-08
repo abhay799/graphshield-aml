@@ -475,6 +475,12 @@
             <strong>Public research demo:</strong> live transaction scoring is deployed on Railway. Runtime history is Redis-backed and forward-only; synthetic/research demo only.
           </div>
 
+          <div class="scoring-demo-path" aria-label="Cold to warm scoring demo">
+            <div><span>1</span><strong>Score a fresh pair</strong><p>See cold-start / limited-history behavior.</p></div>
+            <div><span>2</span><strong>Keep the same accounts</strong><p>GraphShield stores runtime history after a successful request.</p></div>
+            <div><span>3</span><strong>Score the follow-up</strong><p>See when both accounts become warm-state / known.</p></div>
+          </div>
+
           <div class="scoring-layout">
             <form id="live-scoring-form" class="scoring-form">
               <details class="batch-schema scoring-advanced">

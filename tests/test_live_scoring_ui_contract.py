@@ -73,6 +73,12 @@ def test_live_scoring_request_health_and_accessibility_contract():
     assert "currentIso" in JS
     assert "This timestamp is older than the live state's current time. Use the current time." in JS
     assert "This timestamp is more than 5 minutes ahead of server time. Use the current time." in JS
+    assert "Prepare warm-state follow-up" in JS
+    assert "Both accounts had Redis history before this transaction was scored." in JS
+    assert "Cold-start transaction scored" in JS
+    assert "Score a fresh pair" in HTML
+    assert "Keep the same accounts" in HTML
+    assert "Score the follow-up" in HTML
 
 
 # The actual browser script runs with DOM/transport adapters; no API/Redis writes.
@@ -149,6 +155,7 @@ ready();
     {"includes": ["DEMO_RESPONSE", "live_research_only", "synthetic_research_demo_only",
                   "canonical_artifacts_modified", "false", "Backend boundary &lt;safe&gt;",
                   "Warm-state context", "UI explanation derived from account_history",
+                  "Prior state exists", "Warm-state scoring",
                   "Null (missing)", "0.02738545245606547"]},
     {"patch": {"scoring_mode": None, "boundary": {}, "synthetic_research_demo_only": "true",
                "canonical_artifacts_modified": None, "runtime_state_updated": None,
@@ -156,7 +163,8 @@ ready();
      "includes": ["Unavailable"], "excludes": ["Warm-state context", "Redis updated"]},
     {"patch": {"account_history": {"sender": "unknown", "receiver": "known"},
                "limited_signal": True, "limitation_note": "First-time <account>"},
-     "includes": ["Limited-history / cold-start context", "First-time &lt;account&gt;"]},
+     "includes": ["Limited-history / cold-start context", "First-time &lt;account&gt;",
+                  "Cold-start transaction scored", "Prepare warm-state follow-up"]},
     {"patch": {"limited_signal": False, "limitation_note": "Never invent this warning"},
      "excludes": ["limited-signal-warning", "Never invent this warning"]},
     *[{"patch": {field: value}, "includes": ["Unexpected API response"],
