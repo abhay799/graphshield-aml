@@ -9,7 +9,34 @@
   const MAX_ROWS = 100;
   const MAX_COLUMNS = 32;
   const MAX_CELL = 1024;
-  const TEMPLATE = FIELDS.join(",") + "\r\n";
+  const TEMPLATE_HEADER = FIELDS.join(",") + "\r\n";
+
+  function isoSecond(date) {
+    return date.toISOString().replace(/\.\d{3}Z$/, "Z");
+  }
+
+  function buildTemplate() {
+    const now = new Date();
+    now.setMilliseconds(0);
+    const nonce = now.getTime();
+    const sample = [0, 1, 2].map((offset, index) => {
+      const event = new Date(now.getTime() + offset * 1000);
+      return [
+        "DEMO_CSV_" + nonce + "_" + (index + 1),
+        isoSecond(event),
+        "DEMO_BANK_A",
+        "DEMO_SENDER_001",
+        "DEMO_BANK_B",
+        "DEMO_RECEIVER_001",
+        String(100 + index * 25),
+        String(100 + index * 25),
+        "US Dollar",
+        "US Dollar",
+        "ACH",
+      ].join(",");
+    }).join("\r\n");
+    return TEMPLATE_HEADER + sample + "\r\n";
+  }
 
   function timestamp(text) {
     const match = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(?:\.(\d{1,6}))?(Z|[+-]\d{2}:\d{2})?$/.exec(text);
@@ -318,7 +345,8 @@
       el("batch-parse-status").textContent = "Dataset cleared from this page. Submitted transactions were not rolled back.";
     });
     el("batch-template").addEventListener("click", () => {
-      const url = URL.createObjectURL(new Blob([TEMPLATE], { type: "text/csv;charset=utf-8" }));
+      const template = buildTemplate();
+      const url = URL.createObjectURL(new Blob([template], { type: "text/csv;charset=utf-8" }));
       const link = document.createElement("a");
       link.href = url; link.download = "graphshield-synthetic-transactions-template.csv";
       link.click(); URL.revokeObjectURL(url);
@@ -338,5 +366,7 @@
     return Object.freeze({ refresh: render, importCSVText });
   }
 
-  globalThis.GraphShieldBatch = Object.freeze({ parse, readFile, createController, mount, template: TEMPLATE });
+  globalThis.GraphShieldBatch = Object.freeze({
+    parse, readFile, createController, mount, buildTemplate, templateHeader: TEMPLATE_HEADER
+  });
 })();

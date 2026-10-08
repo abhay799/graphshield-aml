@@ -111,7 +111,8 @@
   }
 
   async function convert(rows, mapping, options) {
-    const owner = String(options.accountAlias || "MY_ACCOUNT").trim() || "MY_ACCOUNT";
+    const ownerInput = String(options.accountAlias || "MY_ACCOUNT").trim() || "MY_ACCOUNT";
+    const owner = (await token("owner|" + ownerInput)).replace("CP_", "ACCT_");
     const bank = String(options.bankName || "MY_BANK").trim() || "MY_BANK";
     const currency = String(options.currency || "INR").trim().toUpperCase() || "INR";
     const converted = [];

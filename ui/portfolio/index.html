@@ -53,7 +53,7 @@
               <a class="button primary" href="#architecture">Explore Architecture</a>
               <a class="button secondary" href="#evidence">View Evidence</a>
               <a class="button ghost" href="https://github.com/abhay799/graphshield-aml" target="_blank" rel="noopener noreferrer">View Repository</a>
-              <a class="button ghost" href="https://github.com/abhay799/graphshield-aml/blob/graphshield-v2/README.md" target="_blank" rel="noopener noreferrer">Control Center — Local Demo</a>
+              <a class="button ghost" href="https://github.com/abhay799/graphshield-aml/blob/graphshield-v2/README.md" target="_blank" rel="noopener noreferrer">Project README / Control Center</a>
             </div>
 
             <ul class="hero-facts" aria-label="Project facts">
@@ -94,12 +94,12 @@
             <span>Laundering rows in the project’s data-quality evidence</span>
           </div>
           <div class="stat-card">
-            <strong>34</strong>
-            <span>Documented test files in repository validation evidence</span>
+            <strong>42</strong>
+            <span>Current pytest test files in the repository</span>
           </div>
           <div class="stat-card">
-            <strong>83</strong>
-            <span>Test functions recorded in the repo validation summary</span>
+            <strong>224</strong>
+            <span>Tests passing in the final live-scoring synchronization suite</span>
           </div>
         </div>
       </section>
@@ -259,7 +259,7 @@
             <div class="evidence-card demo"><span>STATIC DEMO</span><p>Deterministic scenario outputs and analyst review examples.</p></div>
             <div class="evidence-card target"><span>READINESS TARGET</span><p>Human approval and release gates are documented as targets, not SLO attainment.</p></div>
             <div class="evidence-card notmeasured"><span>NOT MEASURED</span><p>Values or conditions absent from repo evidence remain unproven.</p></div>
-            <div class="evidence-card notlive"><span>NOT PROVEN LIVE</span><p>No evidence of production operation or live external hosting in this repo state.</p></div>
+            <div class="evidence-card notlive"><span>NOT PROVEN PRODUCTION</span><p>The public Railway/Vercel research demo is live; production-bank operation, achieved SLOs, and regulatory readiness remain unproven.</p></div>
           </div>
 
           <div class="evidence-note">
@@ -345,9 +345,9 @@
               <p>Source-of-truth labels and evidence boundaries.</p>
             </div>
             <div class="ui-card placeholder">
-              <span class="ui-label">Local preview</span>
+              <span class="ui-label">Public demo</span>
               <h3>Control Center</h3>
-              <p>Local launch placeholder for a later GitHub Pages deployment.</p>
+              <p>Public Vercel/Railway research surface is live; the broader analyst control-center workflow remains repository-backed tooling.</p>
             </div>
           </div>
         </div>
@@ -388,15 +388,18 @@
 
           <div class="scoring-layout">
             <form id="live-scoring-form" class="scoring-form">
-              <div class="form-field scoring-api-field">
-                <label for="scoring-api-base">Scoring API URL</label>
-                <input id="scoring-api-base" type="url" value="https://graphshield-api-production.up.railway.app" aria-describedby="scoring-health-note" required />
-                <button id="scoring-health-check" class="button scoring-health-button" type="button">Check selected API health</button>
-                <p id="scoring-health-note" class="scoring-help">Health confirms API availability and project mode; it does not guarantee that an individual scoring request will succeed.</p>
-                <div id="scoring-health-results" aria-live="polite" aria-busy="false">
-                  <p class="empty">Check health to inspect metadata from the selected API URL.</p>
+              <details class="batch-schema scoring-advanced">
+                <summary>Advanced</summary>
+                <div class="form-field scoring-api-field">
+                  <label for="scoring-api-base">Scoring API URL</label>
+                  <input id="scoring-api-base" type="url" value="https://graphshield-api-production.up.railway.app" aria-describedby="scoring-health-note" required />
+                  <button id="scoring-health-check" class="button scoring-health-button" type="button">Check selected API health</button>
+                  <p id="scoring-health-note" class="scoring-help">Health confirms API availability and project mode; it does not guarantee that an individual scoring request will succeed.</p>
+                  <div id="scoring-health-results" aria-live="polite" aria-busy="false">
+                    <p class="empty">Check health to inspect metadata from the selected API URL.</p>
+                  </div>
                 </div>
-              </div>
+              </details>
 
               <div class="form-field">
                 <label for="score-transaction-id">Transaction ID</label>
@@ -404,8 +407,11 @@
               </div>
               <div class="form-field">
                 <label for="score-event-ts">Event timestamp</label>
-                <input id="score-event-ts" name="event_ts" type="text" value="" aria-describedby="score-event-ts-help" required />
-                <p id="score-event-ts-help" class="scoring-help">Use an ISO timestamp, for example 2026-10-07T12:00:00Z or 2026-10-07T12:00:00+05:30. Your timezone offset is preserved; timestamps without an offset are interpreted as UTC by the backend.</p>
+                <div class="scoring-inline-control">
+                  <input id="score-event-ts" name="event_ts" type="text" value="" aria-describedby="score-event-ts-help" required />
+                  <button id="score-event-ts-now" class="button" type="button">Use now</button>
+                </div>
+                <p id="score-event-ts-help" class="scoring-help">Defaults to current UTC time. Use an ISO timestamp or an explicit timezone offset. Events more than 5 minutes ahead of server UTC are rejected.</p>
               </div>
               <div class="form-field">
                 <label for="score-from-bank">From bank</label>
@@ -461,12 +467,13 @@
           <div id="statement-import" class="batch-section" aria-labelledby="statement-title">
             <h2 id="statement-title">Import Bank Statement</h2>
             <p class="scoring-help">
-              Import your own CSV/XLSX/XLS statement locally in the browser. GraphShield auto-detects common
+              Import a sample or anonymized CSV/XLSX/XLS statement locally in the browser. GraphShield auto-detects common
               date, narration, debit, credit, amount, reference and payment-mode columns, hashes counterparties
               and references, then converts the result into the existing scoring schema.
             </p>
             <div class="research-boundary" role="note" aria-label="Bank statement privacy boundary">
               <p><strong>Your original statement file is not uploaded by this importer.</strong></p>
+              <p><strong>Do not use an unredacted real bank statement in this public demo.</strong> Use a sample or anonymized copy with personal and account-identifying information removed.</p>
               <p>Raw narration, names, UTR/reference values and account numbers should not be sent to the scoring API.
                 Use a non-identifying account alias below. Counterparty text and detected references are hashed locally
                 before converted rows are loaded into the scoring table.</p>

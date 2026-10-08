@@ -25,6 +25,10 @@ def test_bank_statement_privacy_and_mapping_contract():
         "counterparty",
         "hashed",
         "account alias",
+        "sample or anonymized",
+        "do not use an unredacted real bank statement",
+        "historical statement timestamps cannot be sent directly",
+        "not historical point-in-time scoring",
         "csv",
         "xlsx",
     ):
@@ -32,6 +36,10 @@ def test_bank_statement_privacy_and_mapping_contract():
     assert "detectMapping" in JS
     assert "toGraphShieldCSV" in JS
     assert "GraphShieldBatchUI.importCSVText" in JS
+    assert "crypto.subtle.digest" in JS
+    assert 'await token("owner|" + ownerInput)' in JS
+    assert "await token(rawReference" in JS
+    assert "projectForLiveDemo" in JS
 
 
 def test_bank_statement_js_syntax():

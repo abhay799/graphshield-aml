@@ -68,6 +68,11 @@ def test_live_scoring_request_health_and_accessibility_contract():
     assert "does not guarantee that an individual scoring request will succeed" in HTML
     assert "Backend model inputs used for this scoring request." in JS
     assert 'aria-describedby="score-event-ts-help"' in HTML
+    assert 'id="score-event-ts-now"' in HTML
+    assert ">Advanced</summary>" in HTML
+    assert "currentIso" in JS
+    assert "This timestamp is older than the live state's current time. Use the current time." in JS
+    assert "This timestamp is more than 5 minutes ahead of server time. Use the current time." in JS
 
 
 # The actual browser script runs with DOM/transport adapters; no API/Redis writes.
@@ -181,6 +186,13 @@ ready();
     {"kind": "invalid_json", "includes": ["Unexpected API response"]},
     {"kind": "http", "status": 400, "body": {"detail": "Invalid timestamp <input>"},
      "includes": ["Invalid timestamp &lt;input&gt;"], "excludes": ["GS_ALLOWED_ORIGINS"]},
+    {"kind": "http", "status": 409, "body": {"detail": "event predates current live state frontier"},
+     "includes": ["This timestamp is older than the live state", "Use the current time."],
+     "excludes": ["GS_ALLOWED_ORIGINS"]},
+    {"kind": "http", "status": 422, "body": {"detail":
+        "event_ts is more than 5 minutes ahead of server UTC time; use the current time"},
+     "includes": ["more than 5 minutes ahead of server time", "Use the current time."],
+     "excludes": ["GS_ALLOWED_ORIGINS"]},
     {"kind": "http", "status": 422, "body": {"detail": [
         {"loc": ["body", "event_ts"], "msg": "Field required"},
         {"loc": ["body", "amount_paid"], "msg": "Input should be a valid number"}]},

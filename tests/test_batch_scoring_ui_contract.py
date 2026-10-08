@@ -224,7 +224,7 @@ const ctx={document,URL:TestURL,Blob,TextDecoder,TextEncoder,Uint8Array,ArrayBuf
 vm.runInNewContext(fs.readFileSync('ui/portfolio/batch-scoring.js','utf8'),ctx);
 vm.runInNewContext(fs.readFileSync('ui/portfolio/live-scoring.js','utf8'),ctx);
 ready();
-const csv=ctx.GraphShieldBatch.template+
+const csv=ctx.GraphShieldBatch.templateHeader+
  'A,2026-10-07T12:00:00Z,BANK,0001,BANK,0002,1,1,USD,USD,ACH,ignored\n'+
  'B,2026-10-07T12:00:01Z,BANK,0001,BANK,0002,1,1,USD,USD,ACH,ignored\n';
 const withExtra=csv.replace('payment_format\r\n','payment_format,comment\r\n');
@@ -234,8 +234,14 @@ function success(id){return {transaction_id:id,raw_model_score:0,calibrated_scor
 async function load(){await el('batch-file').listeners.change({target:{files:[file]}});}
 (async()=>{
  if(mode==='template'){
-  el('batch-template').listeners.click();assert.equal(await blob.text(),ctx.GraphShieldBatch.template);
-  assert.equal(ctx.GraphShieldBatch.template.trim().split(',').length,11);
+  const before=Date.now();el('batch-template').listeners.click();const text=await blob.text();
+  const lines=text.trim().split(/\r?\n/);assert.equal(lines.length,4);
+  assert.equal(lines[0].split(',').length,11);
+  const rows=lines.slice(1).map(line=>line.split(','));
+  const times=rows.map(row=>Date.parse(row[1]));
+  assert.ok(times[0]>=before-1000 && times[0]<=Date.now()+1000);
+  assert.equal(times[1]-times[0],1000);assert.equal(times[2]-times[1],1000);
+  assert.ok(rows.every(row=>row[0].startsWith('DEMO_CSV_')));
   assert.ok(downloaded.endsWith('.csv'));assert.equal(revoked,'blob:local-template');assert.equal(calls.length,0);return;
  }
  if(mode==='race'){

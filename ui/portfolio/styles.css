@@ -1059,3 +1059,18 @@ a {
 @media (max-width: 600px) {
   #live-scoring .statement-import-grid { grid-template-columns: 1fr; }
 }
+
+#live-scoring .scoring-advanced { margin: 0 0 18px; }
+#live-scoring .scoring-advanced > summary { margin-bottom: 12px; }
+#live-scoring .scoring-inline-control {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+#live-scoring .scoring-inline-control input { flex: 1 1 auto; min-width: 0; }
+#live-scoring .scoring-inline-control .button { flex: 0 0 auto; }
+@media (max-width: 600px) {
+  #live-scoring .scoring-inline-control { align-items: stretch; flex-direction: column; }
+}
+
+#live-scoring .scoring-advanced .scoring-api-field { margin-top: 14px; }

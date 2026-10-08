@@ -135,6 +135,19 @@
   }
 
   function httpError(response, data) {
+    if (response.status === 409) {
+      return scoringError(
+        "Live-state timestamp conflict (HTTP 409)",
+        "This timestamp is older than the live state's current time. Use the current time."
+      );
+    }
+    if (response.status === 422 && typeof data?.detail === "string" &&
+        data.detail.includes("more than 5 minutes ahead")) {
+      return scoringError(
+        "Timestamp too far in the future (HTTP 422)",
+        "This timestamp is more than 5 minutes ahead of server time. Use the current time."
+      );
+    }
     if (response.status === 422) {
       const details = Array.isArray(data?.detail) ? data.detail : [];
       const messages = details.filter(isRecord).map(item => {
@@ -143,7 +156,7 @@
         return (field || "Request") + ": " + textValue(item.msg);
       });
       return scoringError("Request validation failed (HTTP 422)",
-        messages.length ? messages.join("\n") : "Validation details unavailable.");
+        messages.length ? messages.join("\n") : textValue(data?.detail));
     }
     if (response.status === 400) {
       return scoringError("Scoring request rejected (HTTP 400)", textValue(data?.detail));
@@ -299,14 +312,21 @@
     const form = document.getElementById("live-scoring-form");
     if (!form) return;
 
+    const currentIso = () => new Date().toISOString().replace(/\.\d{3}Z$/, "Z");
     const now = new Date();
     const transactionId = document.getElementById("score-transaction-id");
     const eventTs = document.getElementById("score-event-ts");
+    const useNow = document.getElementById("score-event-ts-now");
     if (transactionId && !transactionId.value.trim()) {
       transactionId.value = "DEMO_LIVE_" + now.getTime();
     }
     if (eventTs && !eventTs.value.trim()) {
-      eventTs.value = now.toISOString().replace(/\.\d{3}Z$/, "Z");
+      eventTs.value = currentIso();
+    }
+    if (useNow && eventTs) {
+      useNow.addEventListener("click", () => {
+        eventTs.value = currentIso();
+      });
     }
     if (typeof GraphShieldBatch !== "undefined") {
       batchUI = GraphShieldBatch.mount({

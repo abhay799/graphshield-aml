@@ -138,48 +138,39 @@ def test_phase11_case_explanation_endpoint_if_available():
     if case_column is None or transaction_column is None:
         pytest.skip("Unsupported case queue schema.")
 
-    prediction_ids = set(
-        pl.read_parquet(
-            PREDICTIONS,
-            columns=["transaction_id"],
-        )
-        .get_column("transaction_id")
-        .cast(pl.String)
-        .to_list()
-    )
-
+    # Keep this overlap lookup inside Polars. Materializing the full prediction
+    # ID column (~761k rows) into a Python set can exhaust memory in a full-suite
+    # run and trigger a PyO3 panic even though the application behavior is fine.
     candidates = (
-        pl.read_parquet(
-            CASE_QUEUE,
-            columns=[
-                case_column,
-                transaction_column,
-            ],
-        )
-        .with_columns(
-            [
-                pl.col(case_column)
-                .cast(pl.String),
-                pl.col(transaction_column)
-                .cast(pl.String),
-            ]
+        pl.scan_parquet(CASE_QUEUE)
+        .select(
+            pl.col(case_column).cast(pl.String),
+            pl.col(transaction_column).cast(pl.String),
         )
     )
+    predictions = (
+        pl.scan_parquet(PREDICTIONS)
+        .select(pl.col("transaction_id").cast(pl.String))
+        .unique()
+    )
+    match_frame = (
+        candidates.join(
+            predictions,
+            left_on=transaction_column,
+            right_on="transaction_id",
+            how="semi",
+        )
+        .limit(1)
+        .collect()
+    )
 
-    match = None
-
-    for row in candidates.iter_rows(named=True):
-        if row[transaction_column] in prediction_ids:
-            match = row
-            break
-
-    if match is None:
+    if match_frame.is_empty():
         pytest.skip(
             "No case queue transaction overlaps the "
             "locked Phase 10 prediction artifact."
         )
 
-    case_id = str(match[case_column])
+    case_id = str(match_frame.row(0, named=True)[case_column])
 
     response = _client().get(
         f"/explainability/cases/{case_id}",
