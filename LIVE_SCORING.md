@@ -17,6 +17,25 @@ Public verification confirmed health, cold-start scoring, warm-state scoring,
 duplicate transaction rejection, and out-of-order watermark rejection. This is
 still a synthetic/research demo surface, not a production banking service.
 
+The current public Railway deployment was verified live after deployment
+`390b68ed-d3ae-4c12-a6e5-d1ae00eaf29a` reached `SUCCESS`:
+
+- `GET /health` returned HTTP 200 with `scoring_mode: live_research_only`.
+- An event one hour ahead of server UTC returned HTTP 422. Reusing that same
+  transaction ID immediately at the current UTC time returned HTTP 200, proving
+  the future-time rejection had not committed the transaction into live state.
+- Repeating the successfully committed transaction ID returned HTTP 409.
+- A 35-request public burst was limited at request 31 both with no
+  `X-Forwarded-For` header and when every request supplied a different
+  `X-Forwarded-For` value. This verifies the deployed 30-request/minute
+  per-client-IP backstop for the observed Railway proxy path.
+- A browser-origin CORS preflight from
+  `https://graphshield-aml.vercel.app` returned HTTP 200 with the matching
+  `Access-Control-Allow-Origin` value.
+
+These observations are deployment verification only; they are not a production
+SLO, abuse-resistance, or banking-readiness certification.
+
 ## Endpoint: POST /score/transaction
 
 POST /score/transaction accepts one raw transaction with:
@@ -61,6 +80,12 @@ is rejected with HTTP 409 and is not committed. Reuse of a transaction_id that
 has already been committed in the namespace is also rejected with HTTP 409.
 Same-timestamp events are supported by the guard as one commit_group; the
 watermark advances only after the group commit succeeds.
+
+Before the scoring service or Redis state writer is reached, the API route also
+rejects any event_ts more than five minutes ahead of server UTC time with HTTP
+422. This prevents a client clock or malicious request from advancing the shared
+live frontier far into the future and locking out otherwise valid current-time
+traffic.
 
 The guard deliberately wraps the certified Engine rather than modifying
 src/streaming/phase10_b3_online_feature_parity.py or
