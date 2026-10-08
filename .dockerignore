@@ -28,3 +28,6 @@ dist
 
 # Allow required production evidence artifact
 !data/processed/cases/evidence_documents.parquet
+
+# Allow required production evidence index
+!data/processed/cases/evidence_tfidf_index.joblib

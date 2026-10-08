@@ -90,3 +90,6 @@ reports/phase7_runtime/
 
 # Railway production evidence artifact
 !data/processed/cases/evidence_documents.parquet
+
+# Railway production evidence index
+!data/processed/cases/evidence_tfidf_index.joblib
