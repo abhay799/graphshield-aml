@@ -18,13 +18,15 @@ duplicate transaction rejection, and out-of-order watermark rejection. This is
 still a synthetic/research demo surface, not a production banking service.
 
 The current public Railway deployment was verified live after deployment
-`390b68ed-d3ae-4c12-a6e5-d1ae00eaf29a` reached `SUCCESS`:
+`555fc5e7-7067-4c8a-8b08-84e94339ad23` reached `SUCCESS` on
+2026-10-08 (health check HTTP 200 at 19:48:19 IST):
 
 - `GET /health` returned HTTP 200 with `scoring_mode: live_research_only`.
 - An event one hour ahead of server UTC returned HTTP 422. Reusing that same
   transaction ID immediately at the current UTC time returned HTTP 200, proving
   the future-time rejection had not committed the transaction into live state.
 - Repeating the successfully committed transaction ID returned HTTP 409.
+- An oversized scoring request returned HTTP 413 with the 16 KiB limit detail.
 - A 35-request public burst was limited at request 31 both with no
   `X-Forwarded-For` header and when every request supplied a different
   `X-Forwarded-For` value. This verifies the deployed 30-request/minute
@@ -32,6 +34,17 @@ The current public Railway deployment was verified live after deployment
 - A browser-origin CORS preflight from
   `https://graphshield-aml.vercel.app` returned HTTP 200 with the matching
   `Access-Control-Allow-Origin` value.
+
+The deployed API also includes a 300-request/minute global backstop across all
+client IPs. The local API test accepts 300 requests across rotating IPs and
+rejects request 301 before the fake scoring service is called. A 301-request
+public burst was not performed; global rejection has not been independently
+observed live. Both quotas are in-process, rather than shared across replicas.
+
+Client-IP resolution uses the leftmost `X-Forwarded-For` value, falling back to
+`X-Real-IP` and then the connection peer. Changing the supplied forwarded value
+on every request did not bypass the quota on the observed Railway proxy path;
+this observation does not establish trust for other deployment/proxy paths.
 
 These observations are deployment verification only; they are not a production
 SLO, abuse-resistance, or banking-readiness certification.
