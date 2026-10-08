@@ -87,3 +87,6 @@ reports/phase7_runtime/
 !data/processed/
 !data/processed/cases/
 !data/processed/cases/case_queue.parquet
+
+# Railway production evidence artifact
+!data/processed/cases/evidence_documents.parquet

@@ -45,6 +45,7 @@ COPY src ./src
 COPY models ./models
 COPY reports ./reports
 COPY data/processed/cases/case_queue.parquet ./data/processed/cases/case_queue.parquet
+COPY data/processed/cases/evidence_documents.parquet ./data/processed/cases/evidence_documents.parquet
 EXPOSE 8080
 
 CMD ["python","-m","uvicorn","api.app:app","--host","0.0.0.0","--port","8080"]

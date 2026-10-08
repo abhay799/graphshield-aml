@@ -25,3 +25,6 @@ dist
 !data/processed/
 !data/processed/cases/
 !data/processed/cases/case_queue.parquet
+
+# Allow required production evidence artifact
+!data/processed/cases/evidence_documents.parquet
