@@ -30,6 +30,7 @@
         <nav class="main-nav" aria-label="Main navigation">
           <a href="#problem">Problem</a>
           <a href="#architecture">Architecture</a>
+          <a href="#case-study">Case Study</a>
           <a href="#graph-intelligence">Graph Intelligence</a>
           <a href="#evidence">Evidence</a>
           <a href="#live-scoring">Score Transaction</a>
@@ -51,6 +52,7 @@
 
             <div class="cta-row">
               <a class="button primary" href="#architecture">Explore Architecture</a>
+              <a class="button secondary" href="#case-study">Read Engineering Case Study</a>
               <a class="button secondary" href="#evidence">View Evidence</a>
               <a class="button ghost" href="https://github.com/abhay799/graphshield-aml" target="_blank" rel="noopener noreferrer">View Repository</a>
               <a class="button ghost" href="https://github.com/abhay799/graphshield-aml/blob/graphshield-v2/README.md" target="_blank" rel="noopener noreferrer">Project README / Control Center</a>
@@ -98,8 +100,8 @@
             <span>Current pytest test files in the repository</span>
           </div>
           <div class="stat-card">
-            <strong>224</strong>
-            <span>Tests passing in the final live-scoring synchronization suite</span>
+            <strong>229</strong>
+            <span>Tests passing in the final verified full suite</span>
           </div>
         </div>
       </section>
@@ -165,6 +167,93 @@
             <div class="flow-node">Bounded agent assistance</div>
             <div class="flow-node">Human decision</div>
             <div class="flow-node">Audit / governance</div>
+          </div>
+        </div>
+      </section>
+
+      <section id="case-study" class="section case-study-section">
+        <div class="container">
+          <div class="section-header">
+            <p class="eyebrow dark">Engineering case study</p>
+            <h2>Finding a point-in-time bug and redesigning the live scorer around it</h2>
+            <p>
+              The hardest live-scoring problem was not model inference. It was preserving
+              point-in-time correctness once mutable Redis state, historical replay, and
+              public demo traffic shared the same system boundary.
+            </p>
+          </div>
+
+          <div class="case-study-grid">
+            <article class="case-study-card">
+              <span class="tag">1 · Failure discovered</span>
+              <h3>Shared historical state corrupted model inputs</h3>
+              <p>
+                A global Redis bootstrap mixed future history into older transactions and
+                pruned state needed for rolling features. One corrupted pair-recency feature
+                was enough to collapse the IBM reference score from near 1.0 to the cold-start range.
+              </p>
+            </article>
+            <article class="case-study-card">
+              <span class="tag">2 · Root-cause proof</span>
+              <h3>Ablation isolated the failure</h3>
+              <p>
+                The team reproduced the reference transaction, compared online and certified
+                point-in-time features, and proved that incorrect mutable state — not the frozen
+                LightGBM model — caused the score divergence.
+              </p>
+            </article>
+            <article class="case-study-card">
+              <span class="tag">3 · Architectural fix</span>
+              <h3>Mode A / Mode B split</h3>
+              <p>
+                Mode A is a guarded forward-only live scorer with Redis runtime state.
+                Mode B is an isolated historical point-in-time replay used only for certification.
+                The certified Engine remained unchanged.
+              </p>
+            </article>
+            <article class="case-study-card">
+              <span class="tag">4 · Certification</span>
+              <h3>Exact IBM reference reproduced</h3>
+              <p>
+                Historical replay reconstructed 3,727 prior rows across 2,852 timestamp groups
+                with 0 / 70 feature mismatches and reproduced the certified score exactly.
+              </p>
+            </article>
+          </div>
+
+          <div class="case-study-metrics" aria-label="GraphShield verification metrics">
+            <div><strong>0 / 70</strong><span>feature mismatches in certified PIT replay</span></div>
+            <div><strong>229</strong><span>tests passing in the final verified full suite</span></div>
+            <div><strong>30/min</strong><span>per-client live scoring limit</span></div>
+            <div><strong>300/min</strong><span>global per-process backstop</span></div>
+          </div>
+
+          <div class="case-study-split">
+            <div class="case-study-mode">
+              <span class="tag">Mode A · Public</span>
+              <h3>Forward-only live scoring</h3>
+              <p>
+                Fresh runtime state builds organically as synthetic demo transactions arrive.
+                Guards reject duplicate IDs, out-of-order events, and timestamps more than five
+                minutes ahead of server UTC before Redis mutation.
+              </p>
+            </div>
+            <div class="case-study-mode">
+              <span class="tag">Mode B · Certification only</span>
+              <h3>Historical point-in-time replay</h3>
+              <p>
+                An isolated namespace replays only strictly prior history, scores the target
+                before committing it, and is cleaned after evidence capture. It is not exposed
+                as a public historical scoring endpoint.
+              </p>
+            </div>
+          </div>
+
+          <div class="case-study-proof">
+            <strong>Why this matters:</strong>
+            this project did not patch around a score mismatch. It traced a subtle state-modeling
+            error to its source, proved the failure with feature-level evidence, redesigned the
+            serving architecture, and independently verified the corrected public system.
           </div>
         </div>
       </section>
@@ -497,6 +586,7 @@
               </div>
             </div>
             <div class="batch-controls">
+              <a class="button" href="sample-anonymized-statement.csv" download>Download sample statement</a>
               <button id="statement-analyze" class="button" type="button">Analyze statement</button>
               <button id="statement-load" class="button" type="button" disabled>Load demo-safe projection</button>
             </div>
