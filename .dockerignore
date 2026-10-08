@@ -12,3 +12,10 @@ reports/phase7_runtime
 build
 dist
 *.egg-info
+
+# Allow only required GraphShield production model artifacts
+!models/
+!models/lightgbm_graph_v1.joblib
+!models/probability_calibrator_graph_v1.joblib
+!models/v2/
+!models/v2/phase10_fusion_calibrator_v1.joblib

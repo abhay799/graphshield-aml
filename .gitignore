@@ -77,3 +77,7 @@ reports/phase7_runtime/
 /runpodctl.exe
 .vercel
 .env*
+
+# Railway production readiness artifact
+!models/v2/
+!models/v2/phase10_fusion_calibrator_v1.joblib
