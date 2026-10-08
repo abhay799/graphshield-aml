@@ -229,6 +229,22 @@ so their shared training-pipeline behavior remains explicit without changing the
 model feature-vector width.
 
 
+## Bank Statement Import
+
+The public portfolio includes a browser-local bank-statement import layer for
+CSV, XLSX, and XLS files. It auto-detects common date, narration, debit, credit,
+amount, reference, and payment-mode columns, converts usable rows to the existing
+11-field scoring schema, and lets the user review the converted rows before any
+scoring request is sent.
+
+The original statement file is parsed in the browser. Users should enter a
+non-identifying bank/account alias. Counterparty text and detected transaction
+references are hashed locally before converted scoring rows are loaded. Raw
+narration and reference values are not sent by the importer.
+
+The importer is a presentation/orchestration layer only. It does not modify the
+frozen feature contract, model, calibrator, or Redis guard semantics.
+
 ## CSV Batch Demo
 
 The static portfolio supports frontend-only CSV orchestration through the

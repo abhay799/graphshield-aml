@@ -326,6 +326,7 @@
           body: JSON.stringify(payload),
         }),
       });
+      globalThis.GraphShieldBatchUI = batchUI;
     }
     form.addEventListener("submit", scoreResearchTransaction);
     document.getElementById("scoring-health-check").addEventListener("click", checkScoringHealth);

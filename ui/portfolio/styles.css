@@ -1043,3 +1043,19 @@ a {
 #live-scoring .batch-table-scroll:focus-visible, #live-scoring .batch-section input:focus-visible { outline: 3px solid var(--primary-strong); outline-offset: 3px; }
 #live-scoring .batch-section p, #live-scoring .batch-section .scoring-results { overflow-wrap: anywhere; }
 #live-scoring #batch-detail { margin-top: 12px; }
+
+#live-scoring .statement-import-grid {
+  display: grid;
+  grid-template-columns: minmax(260px, 2fr) repeat(3, minmax(150px, 1fr));
+  gap: 14px;
+  margin: 20px 0;
+}
+#live-scoring .statement-import-grid .form-field { min-width: 0; }
+#live-scoring #statement-preview { margin-top: 16px; }
+#live-scoring #statement-mapping { font-weight: 600; }
+@media (max-width: 900px) {
+  #live-scoring .statement-import-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 600px) {
+  #live-scoring .statement-import-grid { grid-template-columns: 1fr; }
+}

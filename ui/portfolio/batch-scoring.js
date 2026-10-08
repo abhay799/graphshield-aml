@@ -323,8 +323,19 @@
       link.href = url; link.download = "graphshield-synthetic-transactions-template.csv";
       link.click(); URL.revokeObjectURL(url);
     });
+    function importCSVText(text) {
+      if (io.busy() || reading) throw new Error("Scoring UI is busy.");
+      generation++;
+      const data = parse(text);
+      if (!controller.load(data)) throw new Error("Could not load converted transactions.");
+      el("batch-file").value = "";
+      el("batch-parse-status").textContent =
+        "Converted bank-statement transactions loaded. Review them before scoring.";
+      render();
+      return data;
+    }
     render();
-    return Object.freeze({ refresh: render });
+    return Object.freeze({ refresh: render, importCSVText });
   }
 
   globalThis.GraphShieldBatch = Object.freeze({ parse, readFile, createController, mount, template: TEMPLATE });

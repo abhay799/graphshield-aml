@@ -458,8 +458,65 @@
             </div>
           </div>
 
+          <div id="statement-import" class="batch-section" aria-labelledby="statement-title">
+            <h2 id="statement-title">Import Bank Statement</h2>
+            <p class="scoring-help">
+              Import your own CSV/XLSX/XLS statement locally in the browser. GraphShield auto-detects common
+              date, narration, debit, credit, amount, reference and payment-mode columns, hashes counterparties
+              and references, then converts the result into the existing scoring schema.
+            </p>
+            <div class="research-boundary" role="note" aria-label="Bank statement privacy boundary">
+              <p><strong>Your original statement file is not uploaded by this importer.</strong></p>
+              <p>Raw narration, names, UTR/reference values and account numbers should not be sent to the scoring API.
+                Use a non-identifying account alias below. Counterparty text and detected references are hashed locally
+                before converted rows are loaded into the scoring table.</p>
+            </div>
+            <div class="statement-import-grid">
+              <div class="form-field">
+                <label for="statement-file">Bank statement</label>
+                <input id="statement-file" type="file" accept=".csv,.xlsx,.xls,text/csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel" />
+              </div>
+              <div class="form-field">
+                <label for="statement-bank">Bank alias</label>
+                <input id="statement-bank" type="text" value="MY_BANK" />
+              </div>
+              <div class="form-field">
+                <label for="statement-account-alias">Your account alias</label>
+                <input id="statement-account-alias" type="text" value="MY_ACCOUNT" />
+              </div>
+              <div class="form-field">
+                <label for="statement-currency">Currency</label>
+                <input id="statement-currency" type="text" value="INR" maxlength="16" />
+              </div>
+            </div>
+            <div class="batch-controls">
+              <button id="statement-analyze" class="button" type="button">Analyze statement</button>
+              <button id="statement-load" class="button" type="button" disabled>Load demo-safe projection</button>
+            </div>
+            <p id="statement-status" class="scoring-help" aria-live="polite">
+              Choose a CSV/XLSX/XLS statement, then analyze it locally.
+            </p>
+            <p id="statement-mapping" class="scoring-help"></p>
+            <p class="scoring-help">
+              Historical statement timestamps cannot be sent directly to the shared forward-only live scorer.
+              Loading creates an explicit synthetic demo projection at the current live time while preserving row order,
+              amounts, direction and anonymized counterparties. It is not historical point-in-time scoring.
+            </p>
+            <div id="statement-preview" class="batch-table-scroll" hidden>
+              <table class="batch-table">
+                <caption>Converted preview — first 10 usable transactions</caption>
+                <thead><tr>
+                  <th>Date</th><th>Direction</th><th>Local description preview</th>
+                  <th>Amount</th><th>Mapped format</th><th>Anonymized flow</th>
+                </tr></thead>
+                <tbody id="statement-preview-body"></tbody>
+              </table>
+            </div>
+          </div>
+
           <div id="batch-scoring" class="batch-section" aria-labelledby="batch-title">
             <h2 id="batch-title">Upload Transaction Dataset</h2>
+            <p class="scoring-help">Converted bank-statement rows can be loaded here for review and scoring.</p>
             <div class="research-boundary" role="note" aria-label="CSV research and privacy boundary">
               <p><strong>Use only synthetic or anonymized transaction data.</strong></p>
               <p>Do not upload real bank account numbers, card numbers, UPI IDs, customer names,
@@ -853,8 +910,10 @@
       });
       updateLiveStatus();
     </script>
+    <script src="xlsx.full.min.js"></script>
     <script src="batch-scoring.js"></script>
     <script src="live-scoring.js"></script>
+    <script src="bank-statement-import.js"></script>
   </body>
 </html>
 
