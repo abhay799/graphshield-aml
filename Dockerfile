@@ -14,16 +14,16 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends libgomp1 \
     && rm -rf /var/lib/apt/lists/*
 
-RUN --mount=type=cache,target=/root/.cache/pip \
+RUN --mount=type=cache,id=pip-cache,target=/root/.cache/pip \
     python -m pip install --upgrade pip
 
-RUN --mount=type=cache,target=/root/.cache/pip \
+RUN --mount=type=cache,id=pip-cache,target=/root/.cache/pip \
     python -m pip install torch==${TORCH_VERSION} \
     --index-url https://download.pytorch.org/whl/cpu
 
 COPY requirements-ml.txt ./requirements-ml.txt
 
-RUN --mount=type=cache,target=/root/.cache/pip \
+RUN --mount=type=cache,id=pip-cache,target=/root/.cache/pip \
     python -m pip install -r requirements-ml.txt
 
 RUN python -c "from sentence_transformers import SentenceTransformer; SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2')"
@@ -34,11 +34,11 @@ ENV HF_HUB_OFFLINE=1 \
 FROM ml-base AS runtime
 
 COPY requirements-core.txt ./requirements-core.txt
-RUN --mount=type=cache,target=/root/.cache/pip \
+RUN --mount=type=cache,id=pip-cache,target=/root/.cache/pip \
     python -m pip install -r requirements-core.txt
 
 COPY requirements-live-scoring.txt ./requirements-live-scoring.txt
-RUN --mount=type=cache,target=/root/.cache/pip \
+RUN --mount=type=cache,id=pip-cache,target=/root/.cache/pip \
     python -m pip install -r requirements-live-scoring.txt
 
 COPY src ./src
