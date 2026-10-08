@@ -81,3 +81,9 @@ reports/phase7_runtime/
 # Railway production readiness artifact
 !models/v2/
 !models/v2/phase10_fusion_calibrator_v1.joblib
+
+# Railway production case queue artifact
+!data/
+!data/processed/
+!data/processed/cases/
+!data/processed/cases/case_queue.parquet
