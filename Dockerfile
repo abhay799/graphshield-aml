@@ -44,7 +44,7 @@ RUN --mount=type=cache,id=s/db3c35a5-8a95-48b8-a69f-0d6a73f2b738-/root/cache/pip
 COPY src ./src
 COPY models ./models
 COPY reports ./reports
-
+COPY data/processed/cases/case_queue.parquet ./data/processed/cases/case_queue.parquet
 EXPOSE 8080
 
 CMD ["python","-m","uvicorn","api.app:app","--host","0.0.0.0","--port","8080"]

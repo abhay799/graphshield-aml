@@ -19,3 +19,9 @@ dist
 !models/probability_calibrator_graph_v1.joblib
 !models/v2/
 !models/v2/phase10_fusion_calibrator_v1.joblib
+
+# Allow required production case queue
+!data/
+!data/processed/
+!data/processed/cases/
+!data/processed/cases/case_queue.parquet
