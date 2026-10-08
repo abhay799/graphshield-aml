@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from collections import defaultdict, deque
+from collections import deque
 from datetime import UTC, datetime, timedelta
 from functools import lru_cache
 from threading import Lock
@@ -20,38 +20,61 @@ if TYPE_CHECKING:
     )
 
 RATE_LIMIT_REQUESTS = 30
+GLOBAL_RATE_LIMIT_REQUESTS = 300
 RATE_LIMIT_WINDOW_SECONDS = 60.0
 MAX_REQUEST_BODY_BYTES = 16 * 1024
 
 
-class _PerIpRateLimiter:
+class _LiveScoringRateLimiter:
     def __init__(self) -> None:
-        self._events: dict[str, deque[float]] = defaultdict(deque)
+        self._events: dict[str, deque[float]] = {}
+        self._global_events: deque[float] = deque()
         self._lock = Lock()
 
-    def allow(self, client_ip: str, *, now: float | None = None) -> bool:
+    @staticmethod
+    def _prune(events: deque[float], cutoff: float) -> None:
+        while events and events[0] <= cutoff:
+            events.popleft()
+
+    def _evict_idle_locked(self, cutoff: float) -> None:
+        for client_ip, events in list(self._events.items()):
+            self._prune(events, cutoff)
+            if not events:
+                del self._events[client_ip]
+
+    def decision(self, client_ip: str, *, now: float | None = None) -> str | None:
         current = monotonic() if now is None else now
         cutoff = current - RATE_LIMIT_WINDOW_SECONDS
         with self._lock:
-            events = self._events[client_ip]
-            while events and events[0] <= cutoff:
-                events.popleft()
+            self._prune(self._global_events, cutoff)
+            self._evict_idle_locked(cutoff)
+
+            if len(self._global_events) >= GLOBAL_RATE_LIMIT_REQUESTS:
+                return "global"
+
+            events = self._events.setdefault(client_ip, deque())
             if len(events) >= RATE_LIMIT_REQUESTS:
-                return False
+                return "per_ip"
+
             events.append(current)
-            return True
+            self._global_events.append(current)
+            return None
+
+    def allow(self, client_ip: str, *, now: float | None = None) -> bool:
+        return self.decision(client_ip, now=now) is None
 
     def clear(self) -> None:
         with self._lock:
             self._events.clear()
+            self._global_events.clear()
 
 
-_rate_limiter = _PerIpRateLimiter()
+_rate_limiter = _LiveScoringRateLimiter()
 
 
 def _client_ip(request: Request) -> str:
-    # Railway's edge proxy provides X-Forwarded-For. Use the first/leftmost
-    # address so each real visitor gets an independent bucket behind Railway.
+    # Railway's edge proxy provides X-Forwarded-For. The public spoof test
+    # verifies which hop is authoritative before relying on this in production.
     forwarded = request.headers.get("x-forwarded-for")
     if forwarded:
         first = forwarded.split(",", 1)[0].strip()
@@ -83,7 +106,18 @@ class LiveScoringGuardRoute(APIRoute):
                 )
 
             client_ip = _client_ip(request)
-            if not _rate_limiter.allow(client_ip):
+            rate_limit = _rate_limiter.decision(client_ip)
+            if rate_limit == "global":
+                return JSONResponse(
+                    status_code=429,
+                    content={
+                        "detail": (
+                            "global rate limit exceeded for POST /score/transaction: "
+                            "maximum 300 requests per minute total"
+                        )
+                    },
+                )
+            if rate_limit == "per_ip":
                 return JSONResponse(
                     status_code=429,
                     content={

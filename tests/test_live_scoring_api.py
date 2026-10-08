@@ -245,3 +245,49 @@ def test_oversized_live_scoring_body_is_rejected_before_service_call():
     assert response.status_code == 413
     assert "16 KiB limit" in response.json()["detail"]
     assert service_reached is False
+
+
+def test_global_rate_limit_301st_request_returns_429_across_rotating_ips():
+    live_scoring_routes._rate_limiter.clear()
+    calls = 0
+
+    class FakeService:
+        def score_transaction(self, raw: dict, *, commit_runtime_state: bool) -> dict:
+            nonlocal calls
+            calls += 1
+            return {
+                "transaction_id": raw["transaction_id"],
+                "runtime_state_updated": commit_runtime_state,
+            }
+
+    live_scoring_routes.get_live_scoring_service = lambda: FakeService()
+    client = TestClient(app)
+    now = datetime.now(UTC)
+
+    for index in range(300):
+        response = client.post(
+            "/score/transaction",
+            json=_forward_request(f"TEST_GLOBAL_{index:03d}", now),
+            headers={"X-Forwarded-For": f"198.51.{index // 250}.{index % 250 + 1}"},
+        )
+        assert response.status_code == 200
+
+    rejected = client.post(
+        "/score/transaction",
+        json=_forward_request("TEST_GLOBAL_301", now),
+        headers={"X-Forwarded-For": "203.0.113.200"},
+    )
+    assert rejected.status_code == 429
+    assert "maximum 300 requests per minute total" in rejected.json()["detail"]
+    assert calls == 300
+
+
+def test_rate_limiter_evicts_idle_per_ip_buckets():
+    limiter = live_scoring_routes._LiveScoringRateLimiter()
+
+    assert limiter.allow("198.51.100.1", now=100.0)
+    assert "198.51.100.1" in limiter._events
+
+    assert limiter.allow("198.51.100.2", now=161.0)
+    assert "198.51.100.1" not in limiter._events
+    assert "198.51.100.2" in limiter._events
