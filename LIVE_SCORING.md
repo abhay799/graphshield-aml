@@ -35,8 +35,8 @@ The current public Railway deployment was verified live after deployment
   `https://graphshield-aml.vercel.app` returned HTTP 200 with the matching
   `Access-Control-Allow-Origin` value.
 
-Each fresh 35-request burst returned 200 for requests 1?30 and 429 for requests
-31?35, including the burst with 35 different random forwarded IPs. Evidence is
+Each fresh 35-request burst returned 200 for requests 1-30 and 429 for requests
+31-35, including the burst with 35 different random forwarded IPs. Evidence is
 saved in `tmp/public-verification-20261010-{base,spoof,normal}.json`.
 
 The deployed API also includes a 300-request/minute global backstop across all
