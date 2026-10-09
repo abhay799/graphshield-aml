@@ -101,7 +101,7 @@
           </div>
           <div class="stat-card">
             <strong>229</strong>
-            <span>Tests passing in the final verified full suite</span>
+            <span>Tests passing in the full suite verified 10 Oct 2026</span>
           </div>
         </div>
       </section>
@@ -197,7 +197,7 @@
               <span class="tag">2 · Root-cause proof</span>
               <h3>Ablation isolated the failure</h3>
               <p>
-                The team reproduced the reference transaction, compared online and certified
+                I reproduced the reference transaction, compared online and certified
                 point-in-time features, and proved that incorrect mutable state — not the frozen
                 LightGBM model — caused the score divergence.
               </p>
@@ -223,9 +223,8 @@
 
           <div class="case-study-metrics" aria-label="GraphShield verification metrics">
             <div><strong>0 / 70</strong><span>feature mismatches in certified PIT replay</span></div>
-            <div><strong>229</strong><span>tests passing in the final verified full suite</span></div>
-            <div><strong>30/min</strong><span>per-client live scoring limit</span></div>
-            <div><strong>300/min</strong><span>global per-process backstop</span></div>
+            <div><strong>229</strong><span>tests passing in the full suite verified 10 Oct 2026</span></div>
+            <div><strong>Pending</strong><span>public rate-limit verification after Railway redeploy</span></div>
           </div>
 
           <div class="case-study-split">
@@ -636,11 +635,11 @@
               <summary>CSV schema and execution help</summary>
               <p>Required case-sensitive headers, in any order:</p>
               <code>transaction_id,event_ts,from_bank,from_account,to_bank,to_account,amount_paid,amount_received,payment_currency,receiving_currency,payment_format</code>
-              <p>UTF-8 CSV ? maximum 256 KiB ? 100 nonblank records (including invalid rows) ?
-                32 columns ? 1024 characters per cell. Extra non-label columns are ignored and never sent.</p>
+              <p>UTF-8 CSV &middot; maximum 256 KiB &middot; 100 nonblank records (including invalid rows) &middot;
+                32 columns &middot; 1024 characters per cell. Extra non-label columns are ignored and never sent.</p>
               <p>Required cells cannot be blank. Identifiers retain leading zeros and case.
                 Amounts must be finite nonnegative decimals without currency symbols or grouping separators.</p>
-              <p>Use YYYY-MM-DDTHH:mm:ss with optional fractional seconds (up to 6 digits), Z or ?HH:mm.
+              <p>Use YYYY-MM-DDTHH:mm:ss with optional fractional seconds (up to 6 digits), Z or &plusmn;HH:mm.
                 If no timezone offset is provided, the backend interprets the timestamp as UTC.
                 Timestamps and offsets are preserved in requests.</p>
               <p>Duplicate transaction IDs are rejected because the scoring endpoint is stateful and does not provide transaction-ID idempotency.</p>
@@ -666,7 +665,7 @@
               <button id="batch-clear" class="button" type="button" disabled>Clear / Reset</button>
             </div>
             <p id="batch-parse-status" class="scoring-help" aria-live="polite">Choose a CSV to parse locally. No transactions are sent until you select a scoring action.</p>
-            <p id="batch-summary">0 total rows ? 0 valid ? 0 invalid</p>
+            <p id="batch-summary">0 total rows &middot; 0 valid &middot; 0 invalid</p>
             <p id="batch-ignored" class="scoring-help"></p>
             <p id="batch-order-error" class="batch-order-error" role="alert"></p>
             <p id="batch-progress" aria-live="polite" aria-busy="false">0 completed</p>
