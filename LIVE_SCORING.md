@@ -18,8 +18,8 @@ duplicate transaction rejection, and out-of-order watermark rejection. This is
 still a synthetic/research demo surface, not a production banking service.
 
 The current public Railway deployment was verified live after deployment
-`555fc5e7-7067-4c8a-8b08-84e94339ad23` reached `SUCCESS` on
-2026-10-08 (health check HTTP 200 at 19:48:19 IST):
+`99af4126-479e-47b2-b35f-3e543a2129ac` reached `SUCCESS` on
+2026-10-10 (public checks completed at 02:24:17 IST; API commit `55c370d4e44df33ba7373bcd57e3be5a9ece945f`):
 
 - `GET /health` returned HTTP 200 with `scoring_mode: live_research_only`.
 - An event one hour ahead of server UTC returned HTTP 422. Reusing that same
@@ -34,6 +34,10 @@ The current public Railway deployment was verified live after deployment
 - A browser-origin CORS preflight from
   `https://graphshield-aml.vercel.app` returned HTTP 200 with the matching
   `Access-Control-Allow-Origin` value.
+
+Each fresh 35-request burst returned 200 for requests 1?30 and 429 for requests
+31?35, including the burst with 35 different random forwarded IPs. Evidence is
+saved in `tmp/public-verification-20261010-{base,spoof,normal}.json`.
 
 The deployed API also includes a 300-request/minute global backstop across all
 client IPs. The local API test accepts 300 requests across rotating IPs and
