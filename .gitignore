@@ -93,3 +93,8 @@ reports/phase7_runtime/
 
 # Railway production evidence index
 !data/processed/cases/evidence_tfidf_index.joblib
+
+# Railway production champion model artifacts
+!models/
+!models/lightgbm_graph_v1.joblib
+!models/probability_calibrator_graph_v1.joblib
