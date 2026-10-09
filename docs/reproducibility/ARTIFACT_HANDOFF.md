@@ -33,6 +33,64 @@ The successful Railway live-scoring deployment was built from a bounded local de
 
 That bundle includes runtime inputs under `models/`, `data/`, and `reports/` that are intentionally outside the normal Git checkout or may be Git-ignored. Therefore, the deployed Railway image cannot be reproduced from the GitHub repository alone. Rebuilding it requires the corresponding out-of-band artifacts described in this handoff document. Those artifacts must remain external; copying the deployment Dockerfile into Git does not make the model/data/report artifacts part of source control.
 
+### Manual Railway releases
+
+GitHub auto-deploy is disabled for `graphshield-api`: its source repository is null. Documentation and UI pushes do not start builds. Releases are manual bounded-bundle uploads through the Railway CLI, using `deploy/railway/Dockerfile` as the bundle's root `Dockerfile`. The repository root Dockerfile is a separate build.
+
+Release procedure (PowerShell, from the repository root):
+
+1. Commit and push the reviewed release; record `git rev-parse HEAD`. Prepare a vetted, bounded artifact directory containing the required `models/`, `data/`, and `reports/` inputs listed below. Do not use CI fixtures or the entire working data tree.
+2. Set the artifact path and create a fresh HEAD bundle. Overlay external artifacts, then re-extract tracked files so HEAD remains authoritative:
+
+```powershell
+$releaseArtifacts = 'C:/path/to/verified-bounded-artifacts'
+$releaseSha = git rev-parse HEAD
+$releaseBundle = Join-Path (Get-Location) "tmp/railway-release-$releaseSha"
+$releaseArchive = Join-Path (Get-Location) "tmp/railway-release-$releaseSha.zip"
+git archive --format=zip --output=$releaseArchive HEAD src reports models data/processed/cases requirements-core.txt requirements-ml.txt requirements-live-scoring.txt deploy/railway/Dockerfile
+if ($LASTEXITCODE -ne 0) { throw 'git archive failed' }
+New-Item -ItemType Directory -Path $releaseBundle -ErrorAction Stop | Out-Null
+Expand-Archive -LiteralPath $releaseArchive -DestinationPath $releaseBundle
+foreach ($artifactRoot in @('models', 'data', 'reports')) {
+    Copy-Item -LiteralPath (Join-Path $releaseArtifacts $artifactRoot) -Destination $releaseBundle -Recurse -Force
+}
+Expand-Archive -LiteralPath $releaseArchive -DestinationPath $releaseBundle -Force
+Copy-Item -LiteralPath (Join-Path $releaseBundle 'deploy/railway/Dockerfile') -Destination (Join-Path $releaseBundle 'Dockerfile')
+@'
+from pathlib import Path
+import sys
+bundle = Path(sys.argv[1])
+(bundle / '.dockerignore').write_text('__pycache__\n*.pyc\n*.log\n', encoding='utf-8')
+(bundle / 'run_api.py').write_text('import os\nimport uvicorn\nuvicorn.run("api.app:app", host="0.0.0.0", port=int(os.environ.get("PORT", "8080")))\n', encoding='utf-8')
+'@ | python - $releaseBundle
+```
+
+3. Review the bundle manifest and artifact hashes; exclude credentials, mutable databases, test fixtures, and unrelated datasets. If Docker Hub returns 429, select the official ECR mirror in the generated bundle only:
+
+```powershell
+@'
+from pathlib import Path
+import sys
+p = Path(sys.argv[1]) / 'Dockerfile'
+p.write_text(p.read_text(encoding='utf-8').replace('ARG BASE_IMAGE=python:3.12-slim', 'ARG BASE_IMAGE=public.ecr.aws/docker/library/python:3.12-slim'), encoding='utf-8')
+'@ | python - $releaseBundle
+```
+
+For a local Docker build, use `docker build --build-arg BASE_IMAGE=public.ecr.aws/docker/library/python:3.12-slim -t graphshield-release $releaseBundle`. The override leaves application COPY instructions and artifact payloads unchanged; it does not promise identical complete image digests or dependency-install layers across registries or later rebuilds.
+
+4. Upload explicitly to the existing service. `--no-gitignore` is required so ignored runtime binaries are included:
+
+```powershell
+railway.cmd up $releaseBundle --path-as-root --no-gitignore --project f9a59c1b-62ab-4f63-a7e7-794d5a20c973 --service graphshield-api --environment production --detach --message "HEAD $releaseSha manual bounded bundle"
+railway.cmd deployment list --service graphshield-api --environment production --json
+```
+
+5. Wait for the returned deployment ID to reach `SUCCESS`; inspect build/runtime logs if it fails. Confirm that the active deployment is that ID and GitHub remains disconnected. Run public health, future-time/no-commit, valid/duplicate, oversized-body, rate-limit (with and without spoofing), and browser-origin CORS checks with unique synthetic IDs and current timestamps. Leave at least 60 seconds between bursts. Record the commit, deployment ID, manifest hashes, and results.
+
+### Railway client-IP trust boundary
+
+Client-IP resolution uses the leftmost `X-Forwarded-For` value, then `X-Real-IP`, then the connection peer. The verified Railway edge replaces caller-supplied forwarding headers: the resolved IP matched the caller's public egress IP, while the connection peer was a shared `100.64.0.x` proxy. This depends on Railway's edge replacing `X-Forwarded-For`. Re-test received headers, real-IP resolution, and rotating-header rate-limit bypass attempts whenever the proxy chain, edge configuration, or hosting platform changes. Remove temporary debug views after verification.
+
 ## B. Out-of-band runtime artifacts
 
 These files are not assumed to be present in a fresh Git checkout. Only the runtime artifacts consumed by current code paths are listed here.

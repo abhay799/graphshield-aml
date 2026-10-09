@@ -1,4 +1,6 @@
-FROM python:3.12-slim
+# Docker Hub 429 fallback: --build-arg BASE_IMAGE=public.ecr.aws/docker/library/python:3.12-slim
+ARG BASE_IMAGE=python:3.12-slim
+FROM ${BASE_IMAGE}
 ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 PYTHONPATH=/app/src
 WORKDIR /app
 
